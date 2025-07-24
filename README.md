@@ -1,13 +1,13 @@
 # Exalted: Essence Character Manager
 
-[![Version](https://img.shields.io/badge/version-0.1.0--alpha-orange.svg)](https://github.com/yourusername/exalted-character-manager/releases)
+[![Version](https://img.shields.io/badge/version-0.1.0--alpha-orange.svg)](https://github.com/AlexanderExter/exalted-charsheet/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.2.2-blue.svg)](https://www.typescriptlang.org/)
 
 > **🎲 A comprehensive digital character sheet manager for the Exalted: Essence tabletop RPG system**
 
-![Screenshot](https://via.placeholder.com/800x400/4F46E5/FFFFFF?text=Character+Manager+Screenshot)
+<!-- Screenshot will be added in future version -->
 
 ## ✨ Features
 
@@ -46,8 +46,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/exalted-character-manager.git
-cd exalted-character-manager
+git clone https://github.com/AlexanderExter/exalted-charsheet.git
+cd exalted-charsheet
 
 # Install dependencies
 npm install
@@ -56,7 +56,7 @@ npm install
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+The application will be available at `http://localhost:3001` (or another port if 3001 is in use)
 
 ### Alternative: Standalone Demo
 For a quick demo without setup, open `standalone.html` directly in your browser.
@@ -119,7 +119,9 @@ npm run preview
 
 ## 📖 Documentation
 
-- **[Complete Documentation](docs/exalted-complete-documentation.md)**: Comprehensive feature guide
+- **[Complete Documentation](docs/exalted-complete-documentation.md)**: Comprehensive feature guide and user manual
+- **[Technical Requirements](docs/TECHNICAL_REQUIREMENTS.md)**: Setup, architecture, and implementation details
+- **[Functional Requirements](docs/FUNCTIONAL_REQUIREMENTS.md)**: Feature specifications and acceptance criteria
 - **[Game Rules](https://www.drivethrurpg.com/product/162759/Exalted-Essence)**: Official Exalted: Essence rulebook
 - **[Contributing Guide](CONTRIBUTING.md)**: How to contribute to the project
 
