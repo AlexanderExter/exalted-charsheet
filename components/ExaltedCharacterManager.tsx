@@ -193,7 +193,7 @@ const ExaltedCharacterManager = () => {
         setShowCharacterSelect(false);
       }
     }
-  }, []);
+  }, [setCharacters]);
 
   // Save characters to localStorage whenever characters change
   useEffect(() => {

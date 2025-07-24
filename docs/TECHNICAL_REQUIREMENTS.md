@@ -12,10 +12,10 @@
   - Edge 90+
 
 ### Development Environment
-- **TypeScript**: 5.2.2+
-- **React**: 18.2.0+
-- **Vite**: 4.5.0+ (build tool)
-- **Tailwind CSS**: 3.3.5+ (styling)
+- **TypeScript**: 5.0+
+- **React**: 19.1.0+
+- **Next.js**: 15.4.3+ (full-stack framework)
+- **Tailwind CSS**: 4.0+ (styling)
 
 ## Installation & Setup
 
@@ -30,7 +30,7 @@ npm install
 
 # Start development server
 npm run dev
-# Server starts on http://localhost:3001 (or next available port)
+# Server starts on http://localhost:3000 (or next available port)
 ```
 
 ### Production Build
@@ -38,29 +38,28 @@ npm run dev
 # Build for production
 npm run build
 
-# Preview production build locally
-npm run preview
-
-# Serve built files (optional)
-npm run serve
+# Start production server
+npm start
 ```
 
 ### Project Structure
 ```
 exalted-charsheet/
-├── src/
-│   ├── ExaltedCharacterManager.tsx  # Main application component
-│   ├── main.tsx                     # React app entry point
-│   └── index.css                    # Global styles & Tailwind imports
+├── app/
+│   ├── layout.tsx                   # Next.js root layout
+│   ├── page.tsx                     # Main page component
+│   └── globals.css                  # Global styles & Tailwind imports
+├── components/
+│   └── ExaltedCharacterManager.tsx  # Main application component
+├── hooks/
+│   └── useLocalStorage.ts           # Custom localStorage hook
 ├── docs/                            # Documentation
-├── dist/                            # Production build output
-├── public/                          # Static assets (if any)
-├── index.html                       # Main HTML template
-├── standalone.html                  # Self-contained demo version
+├── out/                             # Static export build output
+├── public/                          # Static assets
 ├── package.json                     # Dependencies and scripts
-├── vite.config.ts                   # Vite configuration
+├── next.config.ts                   # Next.js configuration
 ├── tailwind.config.js               # Tailwind CSS configuration
-├── postcss.config.js                # PostCSS configuration
+├── postcss.config.mjs               # PostCSS configuration
 └── tsconfig.json                    # TypeScript configuration
 ```
 
@@ -76,7 +75,7 @@ exalted-charsheet/
 - **Single Component Design**: Simplified maintenance for hobby project
 - **TypeScript**: Type safety and better development experience  
 - **Tailwind CSS**: Utility-first styling for rapid development
-- **Vite**: Fast development server and optimized builds
+- **Next.js**: Full-stack React framework with static export
 - **localStorage**: Simple persistence without server requirements
 
 ### Data Flow
@@ -141,7 +140,7 @@ exalted-charsheet/
 ## Troubleshooting
 
 ### Common Issues
-1. **Port 3001 in use**: Vite will automatically find next available port
+1. **Port 3000 in use**: Next.js will automatically find next available port
 2. **localStorage Full**: Browser storage limit (~5-10MB)
 3. **Import Errors**: Ensure JSON files are valid character exports
 4. **Build Failures**: Check Node.js version (16+ required)

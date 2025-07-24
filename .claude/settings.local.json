@@ -13,7 +13,11 @@
       "Bash(taskkill:*)",
       "Bash(python:*)",
       "Bash(mv:*)",
-      "Bash(true)"
+      "Bash(true)",
+      "mcp__ide__getDiagnostics",
+      "Bash(npm run lint)",
+      "Bash(npm outdated)",
+      "Bash(timeout 10 npm run dev)"
     ],
     "deny": []
   }
