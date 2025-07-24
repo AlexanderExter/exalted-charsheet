@@ -100,107 +100,92 @@ const ExaltedCharacterManager = () => {
     rulings: []
   });
 
-  // Load characters from localStorage on mount
+  // Migrate and initialize characters when loaded
   useEffect(() => {
-    const savedCharacters = localStorage.getItem('exalted-characters');
-    if (savedCharacters) {
-      const parsed = JSON.parse(savedCharacters);
-      // Ensure all characters have the latest structure
-      const updatedCharacters = parsed.map(char => ({
-        ...createNewCharacter(char.name),
-        ...char,
-        essence: {
-          motes: 5,
-          commitments: 0,
-          spent: 0,
-          anima: 0,
-          rating: 1,
-          ...char.essence
-        },
-        staticValues: {
-          defenseModifier: 0,
-          evasionModifier: 0,
-          parryModifier: 0,
-          resolveModifier: 0,
-          soakModifier: 0,
-          hardnessModifier: 0,
-          ...char.staticValues
-        },
-        health: {
-          baseline: { zero: 2, minusOne: 2, minusTwo: 2, incap: 1 },
-          oxBodyLevels: 0,
-          exaltType: 'lunar',
-          bashingDamage: 0,
-          lethalDamage: 0,
-          aggravatedDamage: 0,
-          dramaticInjuries: [],
-          ...(char.health || {})
-        },
-        armor: char.armor || [],
-        weapons: char.weapons || [],
-        milestones: {
-          personal: 0,
-          exalt: 0,
-          minor: 0,
-          major: 0,
-          ...char.milestones
-        },
-        advancement: char.advancement || [],
-        dicePool: char.dicePool || {
-          attribute: 'fortitude',
-          ability: 'athletics',
-          targetNumber: 7,
-          doublesThreshold: 10,
-          extraDiceBonus: 0,
-          extraDiceNonBonus: 0,
-          extraSuccessBonus: 0,
-          extraSuccessNonBonus: 0
-        },
-        charms: char.charms || [],
-        spells: char.spells || [],
-        combat: char.combat || {
-          power: 0,
-          joinBattleBonus: 0
-        },
-        social: (() => {
-          if (!char.social) {
-            return {
-              virtues: { major: null, minor: null },
-              intimacies: []
-            };
+    if (charactersLoaded) {
+      // Migrate existing characters to ensure they have the latest structure
+      if (characters.length > 0) {
+        const migratedCharacters = characters.map(char => {
+          // If character is already fully structured, return as is
+          if (char.essence && char.staticValues && char.health && char.social && char.social.virtues && !Array.isArray(char.social.virtues)) {
+            return char;
           }
-          // Handle old array format for virtues
-          if (Array.isArray(char.social.virtues)) {
-            return {
-              virtues: {
-                major: char.social.virtues[0] || null,
-                minor: char.social.virtues[1] || null
-              },
-              intimacies: char.social.intimacies || []
-            };
-          }
-          // Already in new format
+          
+          // Otherwise, apply migration
           return {
-            virtues: char.social.virtues || { major: null, minor: null },
-            intimacies: char.social.intimacies || []
+            ...createNewCharacter(char.name || 'Unnamed Character'),
+            ...char,
+            essence: {
+              motes: 5,
+              commitments: 0,
+              spent: 0,
+              anima: 0,
+              rating: 1,
+              ...char.essence
+            },
+            staticValues: {
+              defenseModifier: 0,
+              evasionModifier: 0,
+              parryModifier: 0,
+              resolveModifier: 0,
+              soakModifier: 0,
+              hardnessModifier: 0,
+              ...char.staticValues
+            },
+            health: {
+              baseline: { zero: 2, minusOne: 2, minusTwo: 2, incap: 1 },
+              oxBodyLevels: 0,
+              exaltType: 'lunar',
+              bashingDamage: 0,
+              lethalDamage: 0,
+              aggravatedDamage: 0,
+              dramaticInjuries: [],
+              ...(char.health || {})
+            },
+            social: (() => {
+              if (!char.social) {
+                return {
+                  virtues: { major: null, minor: null },
+                  intimacies: []
+                };
+              }
+              // Handle old array format for virtues
+              if (Array.isArray(char.social.virtues)) {
+                return {
+                  virtues: {
+                    major: char.social.virtues[0] || null,
+                    minor: char.social.virtues[1] || null
+                  },
+                  intimacies: char.social.intimacies || []
+                };
+              }
+              // Already in new format
+              return {
+                virtues: char.social.virtues || { major: null, minor: null },
+                intimacies: char.social.intimacies || []
+              };
+            })()
           };
-        })(),
-        rulings: char.rulings || []
-      }));
-      setCharacters(updatedCharacters);
-      if (updatedCharacters.length > 0) {
-        setCurrentCharacter(updatedCharacters[0]);
-        setShowCharacterSelect(false);
+        });
+
+        // Only update if migration was needed
+        const needsMigration = migratedCharacters.some((char, index) => 
+          JSON.stringify(char) !== JSON.stringify(characters[index])
+        );
+        
+        if (needsMigration) {
+          setCharacters(migratedCharacters);
+        }
+        
+        // Set current character if none selected
+        if (!currentCharacter) {
+          setCurrentCharacter(migratedCharacters[0]);
+          setShowCharacterSelect(false);
+        }
       }
     }
-  }, [setCharacters]);
+  }, [charactersLoaded, characters, currentCharacter, setCharacters]);
 
-  // Save characters to localStorage whenever characters change
-  useEffect(() => {
-    if (characters.length > 0) {
-      localStorage.setItem('exalted-characters', JSON.stringify(characters));
-    }
-  }, [characters]);
 
   const handleCreateCharacter = () => {
     if (!newCharacterName.trim()) return;
