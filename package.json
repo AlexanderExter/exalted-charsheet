@@ -1,16 +1,16 @@
 {
-  "name": "exalted-character-manager",
+  "name": "exalted-charsheet",
   "version": "0.1.0-alpha",
   "type": "module",
   "description": "A comprehensive digital character sheet manager for the Exalted: Essence tabletop RPG system",
   "main": "index.js",
-  "homepage": "https://github.com/yourusername/exalted-character-manager",
+  "homepage": "https://github.com/AlexanderExter/exalted-charsheet",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/exalted-character-manager.git"
+    "url": "https://github.com/AlexanderExter/exalted-charsheet.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/exalted-character-manager/issues"
+    "url": "https://github.com/AlexanderExter/exalted-charsheet/issues"
   },
   "scripts": {
     "dev": "vite",
