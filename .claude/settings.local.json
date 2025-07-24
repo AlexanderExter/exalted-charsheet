@@ -9,7 +9,11 @@
       "Bash(cp:*)",
       "Bash(npm run build:*)",
       "Bash(rm:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(taskkill:*)",
+      "Bash(python:*)",
+      "Bash(mv:*)",
+      "Bash(true)"
     ],
     "deny": []
   }
