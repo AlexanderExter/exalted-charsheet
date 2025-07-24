@@ -11,11 +11,13 @@
   - Safari 14+
   - Edge 90+
 
-### Development Environment
+### Development Environment  
 - **TypeScript**: 5.0+
 - **React**: 19.1.0+
 - **Next.js**: 15.4.3+ (full-stack framework)
-- **Tailwind CSS**: 4.0+ (styling)
+- **shadcn/ui**: Component library with Radix UI primitives
+- **Tailwind CSS**: 4.0+ (styling with CSS variables)
+- **Lucide React**: 0.525.0+ (icons)
 
 ## Installation & Setup
 
@@ -48,6 +50,21 @@ exalted-charsheet/
 ├── app/
 │   ├── layout.tsx                   # Next.js root layout
 │   ├── page.tsx                     # Main page component
+│   └── globals.css                  # Tailwind CSS with shadcn/ui variables
+├── components/
+│   ├── ExaltedCharacterManager.tsx  # Main V0-generated character manager
+│   └── ui/                          # shadcn/ui component library
+│       ├── button.tsx               # Button primitive
+│       ├── card.tsx                 # Card layout components
+│       ├── input.tsx                # Form input components
+│       ├── select.tsx               # Select dropdown components
+│       ├── tabs.tsx                 # Tab navigation components
+│       └── ...                      # Additional UI primitives
+├── hooks/
+│   └── useLocalStorage.tsx          # Custom localStorage hook
+├── lib/
+│   └── utils.ts                     # Utility functions (cn helper)
+├── components.json                  # shadcn/ui configuration
 │   └── globals.css                  # Global styles & Tailwind imports
 ├── components/
 │   └── ExaltedCharacterManager.tsx  # Main application component
