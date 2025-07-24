@@ -2,8 +2,9 @@
 
 [![Version](https://img.shields.io/badge/version-0.1.0--alpha-orange.svg)](https://github.com/AlexanderExter/exalted-charsheet/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.2.2-blue.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19.1.0-blue.svg)](https://reactjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15.4.3-black.svg)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
 > **🎲 A comprehensive digital character sheet manager for the Exalted: Essence tabletop RPG system**
 
@@ -56,10 +57,7 @@ npm install
 npm run dev
 ```
 
-The application will be available at `http://localhost:3001` (or another port if 3001 is in use)
-
-### Alternative: Standalone Demo
-For a quick demo without setup, open `standalone.html` directly in your browser.
+The application will be available at `http://localhost:3000` (or another port if 3000 is in use)
 
 ## 🏗️ Development
 
@@ -67,11 +65,11 @@ For a quick demo without setup, open `standalone.html` directly in your browser.
 # Development server
 npm run dev
 
-# Production build
+# Production build (static export)
 npm run build
 
-# Preview production build
-npm run preview
+# Start production server (optional)
+npm run start
 ```
 
 ## 📋 Tab Overview
@@ -127,12 +125,13 @@ npm run preview
 
 ## 🛠️ Technical Stack
 
-- **Frontend**: React 18 with TypeScript
-- **Build Tool**: Vite
+- **Frontend**: React 19 with TypeScript
+- **Framework**: Next.js 15 with App Router
+- **Build Tool**: Turbopack (development) / Next.js (production)
 - **Styling**: Tailwind CSS
 - **Icons**: Lucide React
 - **Storage**: Browser localStorage
-- **Deployment**: Static hosting ready
+- **Deployment**: Static export ready
 
 ## 🎮 Game System
 
