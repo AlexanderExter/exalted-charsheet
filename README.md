@@ -127,10 +127,11 @@ npm run start
 
 - **Frontend**: React 19 with TypeScript
 - **Framework**: Next.js 15 with App Router
+- **UI Components**: shadcn/ui with Radix UI primitives
 - **Build Tool**: Turbopack (development) / Next.js (production)
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS 4 with CSS variables
 - **Icons**: Lucide React
-- **Storage**: Browser localStorage
+- **Storage**: Browser localStorage with custom hooks
 - **Deployment**: Static export ready
 
 ## 🎮 Game System
@@ -157,12 +158,14 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ## 📝 Changelog
 
 ### v0.1.0-alpha (Current)
-- ✅ Initial release
+- ✅ V0-accelerated character manager implementation
+- ✅ Modern shadcn/ui component architecture  
 - ✅ Complete character sheet functionality
 - ✅ All 8 tab system implemented
 - ✅ Import/export system
-- ✅ Local storage persistence
-- ✅ Mobile-responsive design
+- ✅ Local storage persistence with custom hooks
+- ✅ Mobile-responsive design with Tailwind CSS 4
+- ✅ TypeScript integration with Radix UI primitives
 - ✅ Comprehensive documentation
 
 ## 🐛 Known Issues
