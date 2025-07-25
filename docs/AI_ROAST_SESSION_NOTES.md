@@ -10,6 +10,8 @@ This is an **AI-first development environment** designed as a stomping ground fo
 - **Hobby project**: Not enterprise software, doesn't need enterprise patterns
 - **Rapid prototyping**: Active development with frequent changes
 - **AI workforce**: Documentation serves as external memory for AI sessions that forget context
+- **Zero collateral**: Breaking changes have no external impact - embrace aggressive modernization
+- **Clean slate mindset**: Remove any holdovers or limitations that impede progress
 
 ### What NOT to Criticize
 
@@ -39,10 +41,10 @@ This is an **AI-first development environment** designed as a stomping ground fo
 - **Reality**: Single developer on hobby project
 - **Context**: Manual testing is appropriate for this scale
 
-#### Loose Typing During Development
-- **Don't roast**: Using `any` types during rapid development
-- **Reality**: Adding strict typing mid-sprint wastes token budget
-- **Context**: Type safety comes during stabilization, not prototyping
+#### Legacy Code Patterns
+- **Don't roast**: Presence of old patterns during modernization
+- **Reality**: We aggressively refactor and break compatibility for cleaner code
+- **Context**: Zero external dependencies means complete freedom to modernize
 
 ### Legitimate Areas for Roasting & Improvement
 
@@ -79,8 +81,8 @@ This is an **AI-first development environment** designed as a stomping ground fo
 1. **AI-generated patterns** - that's the point
 2. **Documentation quantity** - it's workflow optimization
 3. **Manual testing** - appropriate for project scale
-4. **Loose typing during development** - premature optimization
-5. **localStorage implementation** - it's local-first by design
+4. **localStorage implementation** - it's local-first by design
+5. **Breaking changes** - we actively embrace them for progress
 
 ## Post-Roast Action Items Template
 
