@@ -72,6 +72,9 @@ coverage/
 .next
 out
 
+# TypeScript build info
+tsconfig.tsbuildinfo
+
 # nuxt.js build output
 .nuxt
 
