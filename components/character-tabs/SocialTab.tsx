@@ -6,8 +6,21 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { Character, VirtueType, Intimacy } from "@/lib/character-types"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import type {
+  Character,
+  VirtueType,
+  Intimacy,
+  Background,
+  BackgroundType,
+  BackgroundLevel,
+} from "@/lib/character-types"
 
 interface SocialTabProps {
   character: Character | null
@@ -15,36 +28,40 @@ interface SocialTabProps {
   calculateResolve: () => number
 }
 
-const virtueOptions: Array<NonNullable<VirtueType>> = ["valor", "compassion", "temperance", "conviction"]
+const virtueOptions: Array<NonNullable<VirtueType>> = [
+  "courage",
+  "compassion",
+  "temperance",
+  "conviction",
+]
 
-export const SocialTab: React.FC<SocialTabProps> = React.memo(({ character, updateCharacter, calculateResolve }) => {
-  // Virtue management functions
-  const setVirtue = useCallback(
-    (type: "major" | "minor", virtue: VirtueType) => {
-      if (!character) return
+export const SocialTab: React.FC<SocialTabProps> = React.memo(
+  ({ character, updateCharacter, calculateResolve }) => {
+    // Virtue management functions
+    const setVirtue = useCallback(
+      (type: "major" | "minor", virtue: VirtueType) => {
+        if (!character) return
 
-      updateCharacter({
-        social: {
-          ...character.social,
-          virtues: {
-            ...character.social?.virtues,
-            [type]: virtue,
+        updateCharacter({
+          social: {
+            ...character.social,
+            virtues: {
+              ...character.social?.virtues,
+              [type]: virtue,
+            },
           },
-        },
-      })
-    },
-    [character, updateCharacter],
-  )
+        })
+      },
+      [character, updateCharacter]
+    )
 
-  // Intimacy management functions
-  const addIntimacy = useCallback(
-    (type: "tie" | "principle") => {
+    // Intimacy management functions
+    const addIntimacy = useCallback(() => {
       if (!character) return
 
       const newIntimacy: Intimacy = {
         id: `intimacy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         description: "",
-        type: type,
         intensity: "minor",
       }
 
@@ -54,280 +71,344 @@ export const SocialTab: React.FC<SocialTabProps> = React.memo(({ character, upda
           intimacies: [...(character.social?.intimacies || []), newIntimacy],
         },
       })
-    },
-    [character, updateCharacter],
-  )
+    }, [character, updateCharacter])
 
-  const updateIntimacy = useCallback(
-    (id: string, field: keyof Intimacy, value: any) => {
+    const updateIntimacy = useCallback(
+      (id: string, field: keyof Intimacy, value: any) => {
+        if (!character) return
+
+        updateCharacter({
+          social: {
+            ...character.social,
+            intimacies: (character.social?.intimacies || []).map(intimacy =>
+              intimacy.id === id ? { ...intimacy, [field]: value } : intimacy
+            ),
+          },
+        })
+      },
+      [character, updateCharacter]
+    )
+
+    const deleteIntimacy = useCallback(
+      (id: string) => {
+        if (!character) return
+
+        updateCharacter({
+          social: {
+            ...character.social,
+            intimacies: (character.social?.intimacies || []).filter(intimacy => intimacy.id !== id),
+          },
+        })
+      },
+      [character, updateCharacter]
+    )
+
+    // Background management functions
+    const addBackground = useCallback(() => {
       if (!character) return
+
+      const newBackground: Background = {
+        id: `background_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        type: "artifact",
+        level: "tertiary",
+        description: "",
+      }
 
       updateCharacter({
         social: {
           ...character.social,
-          intimacies: (character.social?.intimacies || []).map((intimacy) =>
-            intimacy.id === id ? { ...intimacy, [field]: value } : intimacy,
-          ),
+          backgrounds: [...(character.social?.backgrounds || []), newBackground],
         },
       })
-    },
-    [character, updateCharacter],
-  )
+    }, [character, updateCharacter])
 
-  const deleteIntimacy = useCallback(
-    (id: string) => {
-      if (!character) return
+    const updateBackground = useCallback(
+      (id: string, field: keyof Background, value: any) => {
+        if (!character) return
 
-      updateCharacter({
-        social: {
-          ...character.social,
-          intimacies: (character.social?.intimacies || []).filter((intimacy) => intimacy.id !== id),
-        },
-      })
-    },
-    [character, updateCharacter],
-  )
+        updateCharacter({
+          social: {
+            ...character.social,
+            backgrounds: (character.social?.backgrounds || []).map(background =>
+              background.id === id ? { ...background, [field]: value } : background
+            ),
+          },
+        })
+      },
+      [character, updateCharacter]
+    )
 
-  if (!character) {
+    const deleteBackground = useCallback(
+      (id: string) => {
+        if (!character) return
+
+        updateCharacter({
+          social: {
+            ...character.social,
+            backgrounds: (character.social?.backgrounds || []).filter(
+              background => background.id !== id
+            ),
+          },
+        })
+      },
+      [character, updateCharacter]
+    )
+
+    if (!character) {
+      return (
+        <div className="space-y-6">
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-gray-500 italic">No character selected.</p>
+            </CardContent>
+          </Card>
+        </div>
+      )
+    }
+
     return (
       <div className="space-y-6">
+        {/* Social Influence Reference */}
+        <div className="bg-blue-50 rounded-lg p-4 text-xs text-blue-700">
+          <div className="font-semibold mb-1">Social Influence Steps:</div>
+          <div>Step 1: The player declares her intention for the influence.</div>
+          <div>
+            Step 2: Form the dice pool for the action using an appropriate Attribute + Ability and
+            adding any modifiers.
+          </div>
+          <div>Step 3: The target determines if any Virtues or Intimacies adjust his Resolve.</div>
+          <div>
+            Step 4: On success, the player utilizes extra successes to determine the extent of her
+            influence action on the target. The target may choose to resist the social influence.
+          </div>
+          <div className="mt-2 font-semibold">
+            Resolve Modifiers: Minor = ±2, Major = ±3. Minimum Resolve against social action = 1.
+          </div>
+        </div>
+
+        {/* Resolve Display */}
         <Card>
-          <CardContent className="pt-6">
-            <p className="text-gray-500 italic">No character selected.</p>
+          <CardHeader>
+            <CardTitle>Base Resolve</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">{calculateResolve()}</div>
+                <div className="text-sm font-medium text-gray-700">Resolve</div>
+              </div>
+              <div className="text-xs text-gray-500 text-center">
+                <div>2 + Integrity bonuses</div>
+                <div>Integrity 1+ = +1, Integrity 3+ = +2</div>
+              </div>
+              <div className="flex items-center justify-center gap-1">
+                <Label className="text-xs text-gray-600">Mod:</Label>
+                <Input
+                  type="number"
+                  value={character?.staticValues?.resolveModifier || 0}
+                  onChange={e => {
+                    const value = Math.max(-5, Math.min(5, Number.parseInt(e.target.value) || 0))
+                    updateCharacter({
+                      staticValues: { ...character.staticValues, resolveModifier: value },
+                    })
+                  }}
+                  className="w-12 text-center text-xs"
+                  min={-5}
+                  max={5}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Intimacies */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>Intimacies</CardTitle>
+              {/* Virtues Header */}
+              <div className="flex items-center gap-3">
+                <Label className="text-sm font-medium text-gray-600">Virtues:</Label>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <Label className="text-xs text-purple-600">Major:</Label>
+                    <Select
+                      value={character?.social?.virtues?.major || "none"}
+                      onValueChange={(value: string) =>
+                        setVirtue("major", value === "none" ? null : value as VirtueType)
+                      }
+                    >
+                      <SelectTrigger className="w-24 h-7 text-xs">
+                        <SelectValue placeholder="None" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">None</SelectItem>
+                        {virtueOptions
+                          .filter(v => v !== character?.social?.virtues?.minor)
+                          .map(virtue => (
+                            <SelectItem key={virtue} value={virtue}>
+                              {virtue.charAt(0).toUpperCase() + virtue.slice(1)}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Label className="text-xs text-blue-600">Minor:</Label>
+                    <Select
+                      value={character?.social?.virtues?.minor || "none"}
+                      onValueChange={(value: string) =>
+                        setVirtue("minor", value === "none" ? null : value as VirtueType)
+                      }
+                    >
+                      <SelectTrigger className="w-24 h-7 text-xs">
+                        <SelectValue placeholder="None" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">None</SelectItem>
+                        {virtueOptions
+                          .filter(v => v !== character?.social?.virtues?.major)
+                          .map(virtue => (
+                            <SelectItem key={virtue} value={virtue}>
+                              {virtue.charAt(0).toUpperCase() + virtue.slice(1)}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm text-gray-600">
+                Intimacies represent emotional connections and core beliefs that motivate your
+                character.
+              </p>
+              <Button onClick={addIntimacy} size="sm" variant="outline">
+                <Plus className="w-4 h-4 mr-1" />
+                Add Intimacy
+              </Button>
+            </div>
+
+            {(character?.social?.intimacies || []).length === 0 ? (
+              <p className="text-gray-500 italic text-sm">No intimacies yet.</p>
+            ) : (
+              <div className="space-y-2">
+                {(character?.social?.intimacies || []).map(intimacy => (
+                  <div key={intimacy.id} className="flex items-center gap-2">
+                    <Input
+                      type="text"
+                      value={intimacy.description}
+                      onChange={e => updateIntimacy(intimacy.id, "description", e.target.value)}
+                      className="flex-1"
+                      placeholder="Intimacy description..."
+                    />
+                    <Select
+                      value={intimacy.intensity}
+                      onValueChange={(value: "minor" | "major") =>
+                        updateIntimacy(intimacy.id, "intensity", value)
+                      }
+                    >
+                      <SelectTrigger className="w-24">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="minor">Minor</SelectItem>
+                        <SelectItem value="major">Major</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      onClick={() => deleteIntimacy(intimacy.id)}
+                      size="sm"
+                      variant="destructive"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Backgrounds */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Backgrounds</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm text-gray-600">
+                Backgrounds represent resources, allies, and supernatural assets available to your
+                character.
+              </p>
+              <Button onClick={addBackground} size="sm" variant="outline">
+                <Plus className="w-4 h-4 mr-1" />
+                Add Background
+              </Button>
+            </div>
+
+            {(character?.social?.backgrounds || []).length === 0 ? (
+              <p className="text-gray-500 italic text-sm">No backgrounds yet.</p>
+            ) : (
+              <div className="space-y-2">
+                {(character?.social?.backgrounds || []).map(background => (
+                  <div key={background.id} className="flex items-center gap-2">
+                    <Select
+                      value={background.type}
+                      onValueChange={(value: BackgroundType) =>
+                        updateBackground(background.id, "type", value)
+                      }
+                    >
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="artifact">Artifact</SelectItem>
+                        <SelectItem value="resources">Resources</SelectItem>
+                        <SelectItem value="followers">Followers</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Select
+                      value={background.level}
+                      onValueChange={(value: BackgroundLevel) =>
+                        updateBackground(background.id, "level", value)
+                      }
+                    >
+                      <SelectTrigger className="w-28">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="tertiary">Tertiary</SelectItem>
+                        <SelectItem value="secondary">Secondary</SelectItem>
+                        <SelectItem value="primary">Primary</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      type="text"
+                      value={background.description}
+                      onChange={e => updateBackground(background.id, "description", e.target.value)}
+                      className="flex-1"
+                      placeholder="Background description..."
+                    />
+                    <Button
+                      onClick={() => deleteBackground(background.id)}
+                      size="sm"
+                      variant="destructive"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
     )
   }
-
-  return (
-    <div className="space-y-6">
-      {/* Social Influence Reference */}
-      <div className="bg-blue-50 rounded-lg p-4 text-xs text-blue-700">
-        <div className="font-semibold mb-1">Social Influence Steps:</div>
-        <div>Step 1: The player declares her intention for the influence.</div>
-        <div>
-          Step 2: Form the dice pool for the action using an appropriate Attribute + Ability and adding any
-          modifiers.
-        </div>
-        <div>Step 3: The target determines if any Virtues or Intimacies adjust his Resolve.</div>
-        <div>
-          Step 4: On success, the player utilizes extra successes to determine the extent of her influence
-          action on the target. The target may choose to resist the social influence.
-        </div>
-        <div className="mt-2 font-semibold">
-          Resolve Modifiers: Minor = ±2, Major = ±3. Minimum Resolve against social action = 1.
-        </div>
-      </div>
-
-      {/* Resolve Display */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Base Resolve</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">{calculateResolve()}</div>
-              <div className="text-sm font-medium text-gray-700">Resolve</div>
-            </div>
-            <div className="text-xs text-gray-500 text-center">
-              <div>2 + Integrity bonuses</div>
-              <div>Integrity 1+ = +1, Integrity 3+ = +2</div>
-            </div>
-            <div className="flex items-center justify-center gap-1">
-              <Label className="text-xs text-gray-600">Mod:</Label>
-              <Input
-                type="number"
-                value={character?.staticValues?.resolveModifier || 0}
-                onChange={(e) => {
-                  const value = Math.max(-5, Math.min(5, Number.parseInt(e.target.value) || 0))
-                  updateCharacter({
-                    staticValues: { ...character.staticValues, resolveModifier: value },
-                  })
-                }}
-                className="w-12 text-center text-xs"
-                min={-5}
-                max={5}
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Virtues */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Virtues</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Major Virtue */}
-          <div>
-            <h3 className="font-semibold text-gray-700 mb-2">Major Virtue</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {virtueOptions.map((virtue) => {
-                const isSelected = character?.social?.virtues?.major === virtue
-                const isMinor = character?.social?.virtues?.minor === virtue
-
-                return (
-                  <Button
-                    key={virtue}
-                    onClick={() => !isMinor && setVirtue("major", isSelected ? null : virtue)}
-                    disabled={isMinor}
-                    variant={isSelected ? "default" : "outline"}
-                    className={
-                      isSelected
-                        ? "bg-purple-600 hover:bg-purple-700"
-                        : isMinor
-                          ? "opacity-50 cursor-not-allowed"
-                          : ""
-                    }
-                  >
-                    {virtue.charAt(0).toUpperCase() + virtue.slice(1)}
-                  </Button>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* Minor Virtue */}
-          <div>
-            <h3 className="font-semibold text-gray-700 mb-2">Minor Virtue</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {virtueOptions.map((virtue) => {
-                const isSelected = character?.social?.virtues?.minor === virtue
-                const isMajor = character?.social?.virtues?.major === virtue
-
-                return (
-                  <Button
-                    key={virtue}
-                    onClick={() => !isMajor && setVirtue("minor", isSelected ? null : virtue)}
-                    disabled={isMajor}
-                    variant={isSelected ? "default" : "outline"}
-                    className={
-                      isSelected
-                        ? "bg-blue-600 hover:bg-blue-700"
-                        : isMajor
-                          ? "opacity-50 cursor-not-allowed"
-                          : ""
-                    }
-                  >
-                    {virtue.charAt(0).toUpperCase() + virtue.slice(1)}
-                  </Button>
-                )
-              })}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Intimacies */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Intimacies</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Ties */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-gray-700">Ties</h3>
-              <Button onClick={() => addIntimacy("tie")} size="sm" variant="outline">
-                <Plus className="w-4 h-4 mr-1" />
-                Add Tie
-              </Button>
-            </div>
-
-            {(character?.social?.intimacies || []).filter((i) => i.type === "tie").length === 0 ? (
-              <p className="text-gray-500 italic text-sm">No ties yet.</p>
-            ) : (
-              <div className="space-y-2">
-                {(character?.social?.intimacies || [])
-                  .filter((i) => i.type === "tie")
-                  .map((intimacy) => (
-                    <div key={intimacy.id} className="flex items-center gap-2">
-                      <Input
-                        type="text"
-                        value={intimacy.description}
-                        onChange={(e) => updateIntimacy(intimacy.id, "description", e.target.value)}
-                        className="flex-1"
-                        placeholder="Tie description..."
-                      />
-                      <Select
-                        value={intimacy.intensity}
-                        onValueChange={(value: "minor" | "major" | "defining") => 
-                          updateIntimacy(intimacy.id, "intensity", value)
-                        }
-                      >
-                        <SelectTrigger className="w-24">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="minor">Minor</SelectItem>
-                          <SelectItem value="major">Major</SelectItem>
-                          <SelectItem value="defining">Defining</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <Button onClick={() => deleteIntimacy(intimacy.id)} size="sm" variant="destructive">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ))}
-              </div>
-            )}
-          </div>
-
-          {/* Principles */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-gray-700">Principles</h3>
-              <Button onClick={() => addIntimacy("principle")} size="sm" variant="outline">
-                <Plus className="w-4 h-4 mr-1" />
-                Add Principle
-              </Button>
-            </div>
-
-            {(character?.social?.intimacies || []).filter((i) => i.type === "principle").length === 0 ? (
-              <p className="text-gray-500 italic text-sm">No principles yet.</p>
-            ) : (
-              <div className="space-y-2">
-                {(character?.social?.intimacies || [])
-                  .filter((i) => i.type === "principle")
-                  .map((intimacy) => (
-                    <div key={intimacy.id} className="flex items-center gap-2">
-                      <Input
-                        type="text"
-                        value={intimacy.description}
-                        onChange={(e) => updateIntimacy(intimacy.id, "description", e.target.value)}
-                        className="flex-1"
-                        placeholder="Principle description..."
-                      />
-                      <Select
-                        value={intimacy.intensity}
-                        onValueChange={(value: "minor" | "major" | "defining") => 
-                          updateIntimacy(intimacy.id, "intensity", value)
-                        }
-                      >
-                        <SelectTrigger className="w-24">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="minor">Minor</SelectItem>
-                          <SelectItem value="major">Major</SelectItem>
-                          <SelectItem value="defining">Defining</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <Button onClick={() => deleteIntimacy(intimacy.id)} size="sm" variant="destructive">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ))}
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-})
+)
 
 SocialTab.displayName = "SocialTab"

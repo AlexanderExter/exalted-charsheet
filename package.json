@@ -24,16 +24,13 @@
     "// Development": "Scripts for local development",
     "dev": "next dev --turbopack",
     "dev:debug": "NODE_OPTIONS='--inspect' next dev --turbopack",
-    
     "// Building": "Scripts for building the application",
     "build": "next build",
     "build:analyze": "ANALYZE=true next build",
     "export": "next build && next export",
-    
     "// Production": "Scripts for running in production",
     "start": "next start",
     "preview": "npm run build && npm run start",
-    
     "// Code Quality": "Scripts for maintaining code quality",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -41,7 +38,10 @@
     "check": "npm run type-check && npm run lint",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    
+    "// Process Management": "Scripts for managing development processes",
+    "monitor-dev": "node scripts/monitor-dev.js",
+    "kill-dev": "node scripts/kill-dev.js",
+    "kill-dev:force": "node scripts/kill-dev.js --force",
     "// Maintenance": "Scripts for project maintenance",
     "clean": "rimraf .next out node_modules/.cache",
     "deps:update": "npm update && npm audit",
@@ -53,6 +53,7 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.12",
+    "@radix-ui/react-tooltip": "^1.2.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.525.0",

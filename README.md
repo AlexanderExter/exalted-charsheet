@@ -13,6 +13,7 @@
 ## ✨ Features
 
 ### 🎯 Core Functionality
+
 - **Multi-Character Management**: Create, switch between, and manage multiple characters
 - **Complete Character Tracking**: All Exalted: Essence mechanics supported
 - **Persistent Storage**: Automatic saving to browser localStorage
@@ -21,6 +22,7 @@
 - **Social System**: Virtues and intimacies with resolve calculation
 
 ### 🎮 Game Mechanics Implemented
+
 - ⚡ **Attributes & Abilities**: Full 5-dot system with calculated totals
 - 🔮 **Essence Management**: Mote tracking, commitments, anima levels
 - ❤️ **Health System**: Damage tracking with Ox Body integration
@@ -31,6 +33,7 @@
 - 👥 **Social Mechanics**: Virtue system and intimacy management
 
 ### 📱 User Experience
+
 - 8 organized tabs for different character aspects
 - Mobile-responsive design
 - Real-time calculations
@@ -40,7 +43,8 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 16+ 
+
+- Node.js 16+
 - npm or yarn
 
 ### Installation
@@ -74,26 +78,28 @@ npm run start
 
 ## 📋 Tab Overview
 
-| Tab | Description | Key Features |
-|-----|-------------|--------------|
-| **Core Stats** | Primary character information | Attributes, Abilities, Essence |
-| **Combat** | Battle mechanics | Health, Dice pools, Static values |
-| **Equipment** | Gear management | Weapons, Armor, Tag references |
-| **Powers** | Magical abilities | Charms, Spells with descriptions |
-| **Socials** | Social mechanics | Virtues, Intimacies, Resolve |
-| **Advancement** | Character progression | Milestones, XP tracking |
-| **Rulings** | GM decisions | House rules, edge cases |
-| **WIP** | Experimental features | Combat step guidance |
+| Tab             | Description                   | Key Features                      |
+| --------------- | ----------------------------- | --------------------------------- |
+| **Core Stats**  | Primary character information | Attributes, Abilities, Essence    |
+| **Combat**      | Battle mechanics              | Health, Dice pools, Static values |
+| **Equipment**   | Gear management               | Weapons, Armor, Tag references    |
+| **Powers**      | Magical abilities             | Charms, Spells with descriptions  |
+| **Socials**     | Social mechanics              | Virtues, Intimacies, Resolve      |
+| **Advancement** | Character progression         | Milestones, XP tracking           |
+| **Rulings**     | GM decisions                  | House rules, edge cases           |
+| **WIP**         | Experimental features         | Combat step guidance              |
 
 ## 💾 Data Management
 
 ### Import/Export
+
 - Export single characters or entire roster
 - JSON format for portability
 - Automatic data migration for older formats
 - Backup and sharing capabilities
 
 ### Local Storage
+
 - Automatic saving after each change
 - Persistent across browser sessions
 - Migration handling for updates
@@ -101,6 +107,7 @@ npm run start
 ## 🎯 Testing
 
 ### Manual Testing Checklist
+
 - [ ] Character creation and deletion
 - [ ] Data persistence across sessions
 - [ ] Import/export functionality
@@ -109,6 +116,7 @@ npm run start
 - [ ] All tab functionality
 
 ### Key Features to Test
+
 1. **Character Management**: Create, switch, delete characters
 2. **Core Mechanics**: Verify all calculations (Defense, Soak, etc.)
 3. **Equipment System**: Add weapons/armor, check stat integration
@@ -149,6 +157,7 @@ This application is designed for **Exalted: Essence** by Onyx Path Publishing. I
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ### Development Setup
+
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
@@ -158,8 +167,9 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ## 📝 Changelog
 
 ### v0.1.0-alpha (Current)
+
 - ✅ V0-accelerated character manager implementation
-- ✅ Modern shadcn/ui component architecture  
+- ✅ Modern shadcn/ui component architecture
 - ✅ Complete character sheet functionality
 - ✅ All 8 tab system implemented
 - ✅ Import/export system
@@ -189,6 +199,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## ⭐ Support
 
 If you find this tool useful, please:
+
 - ⭐ Star the repository
 - 🐛 Report bugs via Issues
 - 💡 Suggest features via Discussions
@@ -198,4 +209,4 @@ If you find this tool useful, please:
 
 **🎲 Made with ❤️ for the Exalted community**
 
-> *"In the Time of Tumult, heroes arise..."*
+> _"In the Time of Tumult, heroes arise..."_

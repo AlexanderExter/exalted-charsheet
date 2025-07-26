@@ -1,7 +1,7 @@
 // Character calculation hook for derived values
 
-import { useMemo } from 'react'
-import type { Character } from '@/lib/character-types'
+import { useMemo } from "react"
+import type { Character } from "@/lib/character-types"
 import {
   calculateStatTotal,
   getHighestAttributeValue,
@@ -14,8 +14,8 @@ import {
   calculateHealthLevels,
   calculateHealthPenalty,
   calculateDicePool,
-  type DicePoolResult
-} from '@/lib/exalted-utils'
+  type DicePoolResult,
+} from "@/lib/exalted-utils"
 
 export interface CharacterCalculations {
   // Static values
@@ -25,7 +25,7 @@ export interface CharacterCalculations {
   resolve: number
   soak: number
   hardness: number
-  
+
   // Health calculations
   healthLevels: {
     zero: number
@@ -34,12 +34,12 @@ export interface CharacterCalculations {
     incap: number
   }
   healthPenalty: number
-  
+
   // Attribute/ability helpers
   highestAttribute: number
   getAttributeTotal: (attributeKey: string) => number
   getAbilityTotal: (abilityKey: string) => number
-  
+
   // Dice pool calculation
   dicePoolResult: DicePoolResult
 }
@@ -65,8 +65,8 @@ export const useCharacterCalculations = (character: Character | null): Character
           extraDice: 0,
           totalPool: 0,
           cappedBonusDice: 0,
-          actionPhrase: "Roll 0, TN 7 Double 10s"
-        }
+          actionPhrase: "Roll 0, TN 7 Double 10s",
+        },
       }
     }
 
@@ -97,11 +97,7 @@ export const useCharacterCalculations = (character: Character | null): Character
       character.staticValues.parryModifier
     )
 
-    const defense = calculateDefense(
-      evasion,
-      parry,
-      character.staticValues.defenseModifier
-    )
+    const defense = calculateDefense(evasion, parry, character.staticValues.defenseModifier)
 
     const resolve = calculateResolve(
       character.abilities.integrity,
@@ -146,7 +142,8 @@ export const useCharacterCalculations = (character: Character | null): Character
       character.dicePool.extraDiceBonus,
       character.dicePool.extraDiceNonBonus,
       character.dicePool.extraSuccessBonus,
-      character.dicePool.extraSuccessNonBonus
+      character.dicePool.extraSuccessNonBonus,
+      character.dicePool.isStunted
     )
 
     return {
@@ -161,7 +158,7 @@ export const useCharacterCalculations = (character: Character | null): Character
       highestAttribute,
       getAttributeTotal,
       getAbilityTotal,
-      dicePoolResult
+      dicePoolResult,
     }
   }, [character])
 }
@@ -186,9 +183,20 @@ export const useStaticValues = (character: Character | null) => {
     )
 
     const defense = calculateDefense(evasion, parry, character.staticValues.defenseModifier)
-    const resolve = calculateResolve(character.abilities.integrity, character.staticValues.resolveModifier)
-    const soak = calculateSoak(character.abilities.physique, character.armor, character.staticValues.soakModifier)
-    const hardness = calculateHardness(character.essence.rating, character.armor, character.staticValues.hardnessModifier)
+    const resolve = calculateResolve(
+      character.abilities.integrity,
+      character.staticValues.resolveModifier
+    )
+    const soak = calculateSoak(
+      character.abilities.physique,
+      character.armor,
+      character.staticValues.soakModifier
+    )
+    const hardness = calculateHardness(
+      character.essence.rating,
+      character.armor,
+      character.staticValues.hardnessModifier
+    )
 
     return { defense, evasion, parry, resolve, soak, hardness }
   }, [character])
@@ -201,7 +209,7 @@ export const useHealthCalculations = (character: Character | null) => {
         healthLevels: { zero: 2, minusOne: 2, minusTwo: 2, incap: 1 },
         healthPenalty: 0,
         totalHealthLevels: 7,
-        damageTotal: 0
+        damageTotal: 0,
       }
     }
 
@@ -218,14 +226,18 @@ export const useHealthCalculations = (character: Character | null) => {
       character.health.aggravatedDamage
     )
 
-    const totalHealthLevels = healthLevels.zero + healthLevels.minusOne + healthLevels.minusTwo + healthLevels.incap
-    const damageTotal = character.health.bashingDamage + character.health.lethalDamage + character.health.aggravatedDamage
+    const totalHealthLevels =
+      healthLevels.zero + healthLevels.minusOne + healthLevels.minusTwo + healthLevels.incap
+    const damageTotal =
+      character.health.bashingDamage +
+      character.health.lethalDamage +
+      character.health.aggravatedDamage
 
     return {
       healthLevels,
       healthPenalty,
       totalHealthLevels,
-      damageTotal
+      damageTotal,
     }
   }, [character])
 }
@@ -238,12 +250,16 @@ export const useDicePoolCalculation = (character: Character | null) => {
         extraDice: 0,
         totalPool: 0,
         cappedBonusDice: 0,
-        actionPhrase: "Roll 0, TN 7 Double 10s"
+        actionPhrase: "Roll 0, TN 7 Double 10s",
       }
     }
 
-    const attributeValue = calculateStatTotal((character.attributes as any)[character.dicePool.attribute])
-    const abilityValue = calculateStatTotal((character.abilities as any)[character.dicePool.ability])
+    const attributeValue = calculateStatTotal(
+      (character.attributes as any)[character.dicePool.attribute]
+    )
+    const abilityValue = calculateStatTotal(
+      (character.abilities as any)[character.dicePool.ability]
+    )
 
     return calculateDicePool(
       attributeValue,
@@ -253,7 +269,8 @@ export const useDicePoolCalculation = (character: Character | null) => {
       character.dicePool.extraDiceBonus,
       character.dicePool.extraDiceNonBonus,
       character.dicePool.extraSuccessBonus,
-      character.dicePool.extraSuccessNonBonus
+      character.dicePool.extraSuccessNonBonus,
+      character.dicePool.isStunted
     )
   }, [character])
 }

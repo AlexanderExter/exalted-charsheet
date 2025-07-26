@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react"
 
-export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val: T) => T)) => void, boolean] {
+export function useLocalStorage<T>(
+  key: string,
+  initialValue: T
+): [T, (value: T | ((val: T) => T)) => void, boolean] {
   const [storedValue, setStoredValue] = useState<T>(initialValue)
   const [isLoaded, setIsLoaded] = useState(false)
 

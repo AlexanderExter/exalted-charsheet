@@ -1,31 +1,31 @@
 // Default character templates and values for Exalted: Essence
 
-import type { 
-  Character, 
-  StatBlock, 
-  Attributes, 
-  Abilities, 
-  Essence, 
-  StaticValues, 
-  Health, 
-  Milestones, 
-  DicePool, 
-  Combat, 
-  Social 
-} from './character-types'
+import type {
+  Character,
+  StatBlock,
+  Attributes,
+  Abilities,
+  Essence,
+  StaticValues,
+  Health,
+  Milestones,
+  DicePool,
+  Combat,
+  Social,
+} from "./character-types"
 
 // Default stat block
 const createDefaultStatBlock = (baseValue: number = 0): StatBlock => ({
   base: baseValue,
   added: 0,
-  bonus: 0
+  bonus: 0,
 })
 
 // Default attributes (minimum 1 for all)
 export const createDefaultAttributes = (): Attributes => ({
   fortitude: createDefaultStatBlock(1),
   finesse: createDefaultStatBlock(1),
-  force: createDefaultStatBlock(1)
+  force: createDefaultStatBlock(1),
 })
 
 // Default abilities (all start at 0)
@@ -43,7 +43,7 @@ export const createDefaultAbilities = (): Abilities => ({
   rangedCombat: createDefaultStatBlock(0),
   sagacity: createDefaultStatBlock(0),
   stealth: createDefaultStatBlock(0),
-  war: createDefaultStatBlock(0)
+  war: createDefaultStatBlock(0),
 })
 
 // Default essence pool
@@ -52,7 +52,7 @@ export const createDefaultEssence = (): Essence => ({
   commitments: 0,
   spent: 0,
   anima: 0,
-  rating: 1
+  rating: 1,
 })
 
 // Default static value modifiers
@@ -62,23 +62,23 @@ export const createDefaultStaticValues = (): StaticValues => ({
   parryModifier: 0,
   resolveModifier: 0,
   soakModifier: 0,
-  hardnessModifier: 0
+  hardnessModifier: 0,
 })
 
 // Default health configuration
 export const createDefaultHealth = (): Health => ({
-  baseline: { 
-    zero: 2, 
-    minusOne: 2, 
-    minusTwo: 2, 
-    incap: 1 
+  baseline: {
+    zero: 2,
+    minusOne: 2,
+    minusTwo: 2,
+    incap: 1,
   },
   oxBodyLevels: 0,
   exaltType: "lunar",
   bashingDamage: 0,
   lethalDamage: 0,
   aggravatedDamage: 0,
-  dramaticInjuries: []
+  dramaticInjuries: [],
 })
 
 // Default milestones
@@ -86,19 +86,20 @@ export const createDefaultMilestones = (): Milestones => ({
   personal: 0,
   exalt: 0,
   minor: 0,
-  major: 0
+  major: 0,
 })
 
 // Default dice pool configuration
 export const createDefaultDicePool = (): DicePool => ({
   attribute: "fortitude",
-  ability: "athletics", 
+  ability: "athletics",
   targetNumber: 7,
   doublesThreshold: 10,
   extraDiceBonus: 0,
   extraDiceNonBonus: 0,
   extraSuccessBonus: 0,
-  extraSuccessNonBonus: 0
+  extraSuccessNonBonus: 0,
+  isStunted: false,
 })
 
 // Default combat bonuses
@@ -108,16 +109,17 @@ export const createDefaultCombat = (): Combat => ({
   joinBattleDiceBonus: 0,
   joinBattleSuccessBonus: 0,
   decisiveExtraDice: 0,
-  decisiveExtraSuccess: 0
+  decisiveExtraSuccess: 0,
 })
 
 // Default social configuration
 export const createDefaultSocial = (): Social => ({
   virtues: {
     major: null,
-    minor: null
+    minor: null,
   },
-  intimacies: []
+  intimacies: [],
+  backgrounds: [],
 })
 
 // Complete character template
@@ -138,7 +140,7 @@ export const createNewCharacter = (name: string): Character => ({
   spells: [],
   combat: createDefaultCombat(),
   social: createDefaultSocial(),
-  rulings: []
+  rulings: [],
 })
 
 // Preset character templates for different Exalt types
@@ -194,14 +196,22 @@ export const createExigentCharacter = (name: string): Character => {
 // Character template selector
 export const createCharacterByType = (name: string, exaltType: string): Character => {
   switch (exaltType) {
-    case "solar": return createSolarCharacter(name)
-    case "dragon-blood": return createDragonBloodCharacter(name)
-    case "lunar": return createLunarCharacter(name)
-    case "sidereal": return createSiderealCharacter(name)
-    case "abyssal": return createAbyssalCharacter(name)
-    case "liminal": return createLiminalCharacter(name)
-    case "exigent": return createExigentCharacter(name)
-    default: return createLunarCharacter(name) // Default to Lunar
+    case "solar":
+      return createSolarCharacter(name)
+    case "dragon-blood":
+      return createDragonBloodCharacter(name)
+    case "lunar":
+      return createLunarCharacter(name)
+    case "sidereal":
+      return createSiderealCharacter(name)
+    case "abyssal":
+      return createAbyssalCharacter(name)
+    case "liminal":
+      return createLiminalCharacter(name)
+    case "exigent":
+      return createExigentCharacter(name)
+    default:
+      return createLunarCharacter(name) // Default to Lunar
   }
 }
 

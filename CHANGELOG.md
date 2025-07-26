@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0-alpha] - 2024-01-XX
 
 ### Added
+
 - ✨ **Initial Release** - Complete character sheet manager for Exalted: Essence
 - 🎯 **Multi-Character Management** - Create, switch, and manage multiple characters
 - 📊 **Complete Character Tracking** - All Exalted: Essence mechanics implemented
@@ -19,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 👥 **Social System** - Virtues and intimacies with resolve calculation
 
 ### Game Mechanics
+
 - ⚡ **Attributes & Abilities** - Full 5-dot system (Fortitude, Finesse, Force + 14 abilities)
 - 🔮 **Essence Management** - Mote tracking, commitments, anima levels, rating progression
 - ❤️ **Health System** - Damage tracking with Ox Body integration and penalty calculation
@@ -29,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🗣️ **Social Mechanics** - Major/Minor virtue system and intimacy management
 
 ### User Interface
+
 - 📱 **8-Tab Organization** - Core Stats, Combat, Equipment, Powers, Socials, Advancement, Rulings, WIP
 - 📱 **Mobile-Responsive Design** - Works across devices and screen sizes
 - 🎨 **Intuitive Interface** - Follows game terminology and logical organization
@@ -36,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🛡️ **Data Validation** - Prevents invalid inputs and provides helpful feedback
 
 ### Technical Features
+
 - ⚛️ **React 18** - Modern functional components with hooks
 - 🔷 **TypeScript** - Type safety and better development experience
 - 🎨 **Tailwind CSS** - Utility-first styling for consistent design
@@ -43,18 +47,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 📱 **Responsive Design** - Mobile-first approach with desktop enhancements
 
 ### Documentation
+
 - 📚 **Comprehensive Documentation** - Complete feature guide and technical details
 - 🤝 **Contributing Guide** - Clear guidelines for community contributions
 - 📝 **Detailed README** - Installation, usage, and development instructions
 - 🎯 **Testing Checklist** - Manual testing procedures for quality assurance
 
 ### Quality Assurance
+
 - ✅ **TypeScript Integration** - Fixed all compilation errors
 - 🧪 **Build Verification** - Confirmed successful production builds
 - 🌐 **Cross-Browser Testing** - Verified functionality across major browsers
 - 📱 **Mobile Testing** - Responsive design validation
 
 ### Known Limitations
+
 - 🏪 **Storage Constraints** - Limited by browser localStorage capacity
 - 📝 **Basic Markdown** - Simple header and paragraph support only
 - ⚔️ **Static Combat Steps** - Combat guidance not dynamic
@@ -65,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Release Notes Format
 
 ### Categories
+
 - **Added** - New features
 - **Changed** - Changes in existing functionality
 - **Deprecated** - Soon-to-be removed features
@@ -73,6 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Security** - Vulnerability fixes
 
 ### Emojis Legend
+
 - ✨ New features
 - 🐛 Bug fixes
 - 📚 Documentation

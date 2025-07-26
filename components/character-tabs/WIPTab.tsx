@@ -29,7 +29,7 @@ export const WIPTab: React.FC = React.memo(() => {
         <div className="font-semibold mb-1">Work In Progress</div>
         <div>This tab contains experimental features that are still being developed.</div>
       </div>
-      
+
       {/* Combat Steps Guide */}
       <Card>
         <CardHeader>
@@ -37,7 +37,7 @@ export const WIPTab: React.FC = React.memo(() => {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {COMBAT_STEPS.map((step) => (
+            {COMBAT_STEPS.map(step => (
               <div key={step.step} className="p-3 bg-white rounded border border-gray-200">
                 <h3 className="font-semibold text-gray-700 mb-2">Step {step.step}</h3>
                 <div className="space-y-1">
@@ -48,17 +48,15 @@ export const WIPTab: React.FC = React.memo(() => {
                       </div>
                     ))
                   ) : (
-                    <div className="text-sm text-gray-400 italic">
-                      No default actions defined
-                    </div>
+                    <div className="text-sm text-gray-400 italic">No default actions defined</div>
                   )}
                 </div>
               </div>
             ))}
           </div>
           <div className="mt-4 text-xs text-gray-500">
-            Note: This component will eventually allow dynamic addition of available actions per step based on
-            character abilities and current combat situation.
+            Note: This component will eventually allow dynamic addition of available actions per
+            step based on character abilities and current combat situation.
           </div>
         </CardContent>
       </Card>

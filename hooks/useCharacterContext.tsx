@@ -30,14 +30,12 @@ const characterReducer = (state: CharacterState, action: CharacterAction): Chara
       }
 
     case "UPDATE_CHARACTER":
-      const updatedCharacter = state.currentCharacter 
+      const updatedCharacter = state.currentCharacter
         ? { ...state.currentCharacter, ...action.payload }
         : null
-      
+
       const updatedCharacters = state.characters.map(char =>
-        char.id === state.currentCharacterId
-          ? { ...char, ...action.payload }
-          : char
+        char.id === state.currentCharacterId ? { ...char, ...action.payload } : char
       )
 
       return {
@@ -57,17 +55,18 @@ const characterReducer = (state: CharacterState, action: CharacterAction): Chara
     case "DELETE_CHARACTER":
       const filteredCharacters = state.characters.filter(char => char.id !== action.payload)
       const wasCurrentDeleted = state.currentCharacterId === action.payload
-      const newCurrentId = wasCurrentDeleted && filteredCharacters.length > 0 
-        ? filteredCharacters[0].id 
-        : wasCurrentDeleted 
-          ? null 
-          : state.currentCharacterId
-      
+      const newCurrentId =
+        wasCurrentDeleted && filteredCharacters.length > 0
+          ? filteredCharacters[0].id
+          : wasCurrentDeleted
+            ? null
+            : state.currentCharacterId
+
       return {
         ...state,
         characters: filteredCharacters,
         currentCharacterId: newCurrentId,
-        currentCharacter: newCurrentId 
+        currentCharacter: newCurrentId
           ? filteredCharacters.find(char => char.id === newCurrentId) || null
           : null,
       }
@@ -151,11 +150,7 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
     loadCharacters,
   }
 
-  return (
-    <CharacterContext.Provider value={contextValue}>
-      {children}
-    </CharacterContext.Provider>
-  )
+  return <CharacterContext.Provider value={contextValue}>{children}</CharacterContext.Provider>
 }
 
 // Hook to use the character context

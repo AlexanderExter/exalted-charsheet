@@ -1,15 +1,15 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  output: "export",
   trailingSlash: true,
   images: {
-    unoptimized: true
+    unoptimized: true,
   },
   // Disable server-side features for static export
   experimental: {
-    esmExternals: true
-  }
-};
+    esmExternals: true,
+  },
+}
 
-export default nextConfig;
+export default nextConfig

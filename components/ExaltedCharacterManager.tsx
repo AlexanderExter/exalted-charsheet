@@ -28,19 +28,26 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useLocalStorage } from "@/hooks/useLocalStorage"
 import { useCharacterCalculations } from "@/hooks/useCharacterCalculations"
 import { useAutoSave } from "@/hooks/useAutoSave"
 import { useCharacterContext } from "@/hooks/useCharacterContext"
 import type { Character, AttributeType, AbilityType } from "@/lib/character-types"
 import { createNewCharacter } from "@/lib/character-defaults"
-import { 
-  getAnimaLevel, 
-  getActiveAnimaRulings, 
+import {
+  getAnimaLevel,
+  getActiveAnimaRulings,
   calculateStatTotal,
-  clampModifier 
+  clampModifier,
 } from "@/lib/exalted-utils"
 import { RulingsTab } from "@/components/character-tabs/RulingsTab"
 import { WIPTab } from "@/components/character-tabs/WIPTab"
@@ -51,13 +58,19 @@ import { AdvancementTab } from "@/components/character-tabs/AdvancementTab"
 import { CombatTab } from "@/components/character-tabs/CombatTab"
 import { CoreStatsTab } from "@/components/character-tabs/CoreStatsTab"
 
-
 // Anima system functions - now imported from utils
 
 // Main component
 const ExaltedCharacterManager = () => {
   const [characters, setCharacters] = useLocalStorage<Character[]>("exalted-characters", [])
-  const { state, updateCurrentCharacter, addNewCharacter, deleteCharacter, setCurrentCharacter: setContextCurrentCharacter, loadCharacters } = useCharacterContext()
+  const {
+    state,
+    updateCurrentCharacter,
+    addNewCharacter,
+    deleteCharacter,
+    setCurrentCharacter: setContextCurrentCharacter,
+    loadCharacters,
+  } = useCharacterContext()
   const { currentCharacter } = state
   const [showCharacterSelect, setShowCharacterSelect] = useState(true)
   const [newCharacterName, setNewCharacterName] = useState("")
@@ -71,7 +84,7 @@ const ExaltedCharacterManager = () => {
 
   // Auto-save functionality
   const { isSaving, lastSaved } = useAutoSave(characters, "exalted-characters")
-  
+
   // Character calculations hook
   const calculations = useCharacterCalculations(currentCharacter)
 
@@ -104,7 +117,7 @@ const ExaltedCharacterManager = () => {
     (updates: any) => {
       updateCurrentCharacter(updates)
     },
-    [updateCurrentCharacter],
+    [updateCurrentCharacter]
   )
 
   // Calculation functions
@@ -138,7 +151,7 @@ const ExaltedCharacterManager = () => {
     if (physique >= 3) base += 1
     const armorSoak = (currentCharacter?.armor || []).reduce(
       (total: number, armor: any) => total + (Number.parseInt(armor.soak) || 0),
-      0,
+      0
     )
     const modifier = currentCharacter?.staticValues?.soakModifier || 0
     return Math.max(0, base + armorSoak + Math.max(-5, Math.min(5, modifier)))
@@ -149,12 +162,11 @@ const ExaltedCharacterManager = () => {
     const base = essence + 2
     const armorHardness = (currentCharacter?.armor || []).reduce(
       (total: number, armor: any) => total + (Number.parseInt(armor.hardness) || 0),
-      0,
+      0
     )
     const modifier = currentCharacter?.staticValues?.hardnessModifier || 0
     return Math.max(0, base + armorHardness + Math.max(-5, Math.min(5, modifier)))
   }, [currentCharacter])
-
 
   const calculateAbilityTotal = useCallback(
     (abilityKey: string) => {
@@ -170,23 +182,44 @@ const ExaltedCharacterManager = () => {
 
       return abilityTotal + calculateStatTotal(attribute)
     },
-    [currentCharacter, globalAbilityAttribute],
+    [currentCharacter, globalAbilityAttribute]
   )
 
   const calculateDicePool = useCallback(() => {
-    if (!currentCharacter?.dicePool || !currentCharacter?.attributes || !currentCharacter?.abilities) {
-      return { basePool: 0, extraDice: 0, totalPool: 0, cappedBonusDice: 0, actionPhrase: "Roll 0, TN 7 Double 10s" }
+    if (
+      !currentCharacter?.dicePool ||
+      !currentCharacter?.attributes ||
+      !currentCharacter?.abilities
+    ) {
+      return {
+        basePool: 0,
+        extraDice: 0,
+        totalPool: 0,
+        cappedBonusDice: 0,
+        actionPhrase: "Roll 0, TN 7 Double 10s",
+      }
     }
 
-    const { attribute, ability, targetNumber, doublesThreshold, extraSuccessBonus, extraSuccessNonBonus } =
-      currentCharacter.dicePool
-    const attributeTotal = calculateStatTotal(currentCharacter.attributes[attribute] || { base: 0, added: 0, bonus: 0 })
-    const abilityTotal = calculateStatTotal(currentCharacter.abilities[ability] || { base: 0, added: 0, bonus: 0 })
+    const {
+      attribute,
+      ability,
+      targetNumber,
+      doublesThreshold,
+      extraSuccessBonus,
+      extraSuccessNonBonus,
+    } = currentCharacter.dicePool
+    const attributeTotal = calculateStatTotal(
+      currentCharacter.attributes[attribute] || { base: 0, added: 0, bonus: 0 }
+    )
+    const abilityTotal = calculateStatTotal(
+      currentCharacter.abilities[ability] || { base: 0, added: 0, bonus: 0 }
+    )
     const basePool = attributeTotal + abilityTotal
 
-    const { extraDiceBonus, extraDiceNonBonus } = currentCharacter.dicePool
+    const { extraDiceBonus, extraDiceNonBonus, isStunted } = currentCharacter.dicePool
     const cappedBonusDice = Math.min(extraDiceBonus || 0, 10)
-    const totalExtraDice = cappedBonusDice + (extraDiceNonBonus || 0)
+    const stuntDice = isStunted ? 2 : 0
+    const totalExtraDice = cappedBonusDice + (extraDiceNonBonus || 0) + stuntDice
     const totalPool = basePool + totalExtraDice
 
     const totalExtraSuccess = (extraSuccessBonus || 0) + (extraSuccessNonBonus || 0)
@@ -217,8 +250,6 @@ const ExaltedCharacterManager = () => {
   // Powers management - moved to PowersTab component
 
   // Social management - moved to SocialTab component
-
-
 
   // Advancement management - moved to AdvancementTab component
 
@@ -253,7 +284,7 @@ const ExaltedCharacterManager = () => {
     if (!file) return
 
     const reader = new FileReader()
-    reader.onload = (e) => {
+    reader.onload = e => {
       try {
         const importedData = JSON.parse(e.target?.result as string)
 
@@ -299,7 +330,9 @@ const ExaltedCharacterManager = () => {
 
   // Filtered characters for search
   const filteredCharacters = useMemo(() => {
-    return state.characters.filter((char) => char.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    return state.characters.filter(char =>
+      char.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
   }, [state.characters, searchTerm])
 
   if (showCharacterSelect || !currentCharacter) {
@@ -308,23 +341,37 @@ const ExaltedCharacterManager = () => {
         <Card>
           <CardHeader>
             <CardTitle className="text-center">Exalted: Essence Character Manager</CardTitle>
-            <CardDescription className="text-center">Create and manage your Exalted characters</CardDescription>
+            <CardDescription className="text-center">
+              Create and manage your Exalted characters
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Auto-save indicator */}
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-              {isSaving ? (
-                <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                  Saving...
-                </>
-              ) : lastSaved ? (
-                <>
-                  <Save className="w-4 h-4" />
-                  Last saved: {lastSaved.toLocaleTimeString()}
-                </>
-              ) : null}
-            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center justify-center gap-2 text-sm text-gray-600 cursor-help">
+                    {isSaving ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        Saving...
+                      </>
+                    ) : lastSaved ? (
+                      <>
+                        <Save className="w-4 h-4" />
+                        Last saved: {lastSaved.toLocaleTimeString()}
+                      </>
+                    ) : null}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    Characters are automatically saved to your browser&apos;s local storage every 10
+                    minutes
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
             {/* Import/Export Controls */}
             <div className="flex justify-center gap-3">
@@ -332,7 +379,13 @@ const ExaltedCharacterManager = () => {
                 <Upload className="w-4 h-4 mr-2" />
                 Import Character(s)
               </Button>
-              <input ref={fileInputRef} type="file" accept=".json" onChange={importCharacter} className="hidden" />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json"
+                onChange={importCharacter}
+                className="hidden"
+              />
               {characters.length > 0 && (
                 <Button
                   variant="outline"
@@ -359,9 +412,9 @@ const ExaltedCharacterManager = () => {
               <div className="flex gap-3">
                 <Input
                   value={newCharacterName}
-                  onChange={(e) => setNewCharacterName(e.target.value)}
+                  onChange={e => setNewCharacterName(e.target.value)}
                   placeholder="Character name..."
-                  onKeyPress={(e) => e.key === "Enter" && handleCreateCharacter()}
+                  onKeyPress={e => e.key === "Enter" && handleCreateCharacter()}
                 />
                 <Button onClick={handleCreateCharacter} disabled={!newCharacterName.trim()}>
                   <Plus className="w-4 h-4 mr-2" />
@@ -380,14 +433,14 @@ const ExaltedCharacterManager = () => {
                     <Input
                       placeholder="Search characters..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={e => setSearchTerm(e.target.value)}
                       className="w-48"
                     />
                   </div>
                 </div>
 
                 <div className="grid gap-2">
-                  {filteredCharacters.map((character) => (
+                  {filteredCharacters.map(character => (
                     <div
                       key={character.id}
                       className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md hover:border-gray-300 transition-all cursor-pointer group"
@@ -400,14 +453,16 @@ const ExaltedCharacterManager = () => {
                         <User className="w-5 h-5 text-gray-600" />
                         <div>
                           <div className="font-medium">{character.name}</div>
-                          <div className="text-sm text-gray-600">Essence {character.essence?.rating || 1}</div>
+                          <div className="text-sm text-gray-600">
+                            Essence {character.essence?.rating || 1}
+                          </div>
                         </div>
                       </div>
                       <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={(e) => {
+                          onClick={e => {
                             e.stopPropagation()
                             exportCharacter(character)
                           }}
@@ -417,9 +472,11 @@ const ExaltedCharacterManager = () => {
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={(e) => {
+                          onClick={e => {
                             e.stopPropagation()
-                            setCharacters((prev) => prev.filter((char) => char.id !== character.id))
+                            if (window.confirm(`Are you sure you want to delete "${character.name}"? This action cannot be undone.`)) {
+                              deleteCharacter(character.id)
+                            }
                           }}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -446,7 +503,6 @@ const ExaltedCharacterManager = () => {
     { id: "rulings", label: "Rulings", icon: Scroll },
     { id: "wip", label: "WIP", icon: Construction },
   ]
-
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -475,21 +531,37 @@ const ExaltedCharacterManager = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  {isSaving ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 animate-spin" />
-                      Saving...
-                    </>
-                  ) : lastSaved ? (
-                    <>
-                      <Save className="w-4 h-4" />
-                      Saved {lastSaved.toLocaleTimeString()}
-                    </>
-                  ) : null}
-                </div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-2 text-sm text-gray-600 cursor-help">
+                        {isSaving ? (
+                          <>
+                            <RefreshCw className="w-4 h-4 animate-spin" />
+                            Saving...
+                          </>
+                        ) : lastSaved ? (
+                          <>
+                            <Save className="w-4 h-4" />
+                            Saved {lastSaved.toLocaleTimeString()}
+                          </>
+                        ) : null}
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        Characters are automatically saved to your browser&apos;s local storage
+                        every 10 minutes
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
 
-                <Button variant="outline" size="sm" onClick={() => exportCharacter(currentCharacter)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => exportCharacter(currentCharacter)}
+                >
                   <Download className="w-4 h-4 mr-1" />
                   Export
                 </Button>
@@ -508,12 +580,18 @@ const ExaltedCharacterManager = () => {
           </Card>
 
           {/* Hidden file input */}
-          <input ref={fileInputRef} type="file" accept=".json" onChange={importCharacter} className="hidden" />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            onChange={importCharacter}
+            className="hidden"
+          />
 
           {/* Main tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
-              {tabs.map((tab) => {
+              {tabs.map(tab => {
                 const Icon = tab.icon
                 return (
                   <TabsTrigger key={tab.id} value={tab.id} className="flex items-center gap-1">
@@ -525,8 +603,8 @@ const ExaltedCharacterManager = () => {
             </TabsList>
 
             <TabsContent value="core" className="space-y-6">
-              <CoreStatsTab 
-                character={currentCharacter} 
+              <CoreStatsTab
+                character={currentCharacter}
                 updateCharacter={updateCharacter}
                 calculateAbilityTotal={calculateAbilityTotal}
                 calculateDicePool={calculateDicePool}
@@ -536,8 +614,8 @@ const ExaltedCharacterManager = () => {
             </TabsContent>
 
             <TabsContent value="combat" className="space-y-6">
-              <CombatTab 
-                character={currentCharacter} 
+              <CombatTab
+                character={currentCharacter}
                 updateCharacter={updateCharacter}
                 calculations={calculations}
                 calculateSoak={calculateSoak}
@@ -553,9 +631,12 @@ const ExaltedCharacterManager = () => {
               <PowersTab character={currentCharacter} updateCharacter={updateCharacter} />
             </TabsContent>
 
-
             <TabsContent value="socials" className="space-y-6">
-              <SocialTab character={currentCharacter} updateCharacter={updateCharacter} calculateResolve={calculateResolve} />
+              <SocialTab
+                character={currentCharacter}
+                updateCharacter={updateCharacter}
+                calculateResolve={calculateResolve}
+              />
             </TabsContent>
 
             <TabsContent value="advancement" className="space-y-6">
@@ -578,10 +659,16 @@ const ExaltedCharacterManager = () => {
         <div className="max-w-7xl mx-auto flex items-center justify-between text-sm text-gray-600">
           <div>© 2024 Exalted Character Manager</div>
           <div className="flex gap-4">
-            <button onClick={() => setShowAboutModal(true)} className="hover:text-gray-800 underline">
+            <button
+              onClick={() => setShowAboutModal(true)}
+              className="hover:text-gray-800 underline"
+            >
               About
             </button>
-            <button onClick={() => setShowLegalModal(true)} className="hover:text-gray-800 underline">
+            <button
+              onClick={() => setShowLegalModal(true)}
+              className="hover:text-gray-800 underline"
+            >
               Legal
             </button>
           </div>

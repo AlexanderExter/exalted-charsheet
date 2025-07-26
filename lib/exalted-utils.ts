@@ -1,15 +1,15 @@
 // Pure utility functions for Exalted: Essence mechanics
 
-import type { 
-  AnimaLevel, 
-  StatBlock, 
-  Attributes, 
-  Health, 
-  HealthLevels, 
+import type {
+  AnimaLevel,
+  StatBlock,
+  Attributes,
+  Health,
+  HealthLevels,
   ExaltType,
   Character,
-  ArmorPiece 
-} from './character-types'
+  ArmorPiece,
+} from "./character-types"
 
 // Core calculation utilities
 export const calculateStatTotal = (stat: StatBlock): number => {
@@ -71,10 +71,7 @@ export const calculateDefense = (
   return Math.max(0, base + Math.max(-5, Math.min(5, defenseModifier)))
 }
 
-export const calculateResolve = (
-  integrity: StatBlock,
-  resolveModifier: number = 0
-): number => {
+export const calculateResolve = (integrity: StatBlock, resolveModifier: number = 0): number => {
   const integrityTotal = calculateStatTotal(integrity)
   let base = 2
   if (integrityTotal >= 1) base += 1
@@ -91,12 +88,12 @@ export const calculateSoak = (
   const physiqueTotal = calculateStatTotal(physique)
   let base = 1
   if (physiqueTotal >= 3) base += 1
-  
+
   const armorSoak = armor.reduce(
     (total, armorPiece) => total + (Number.parseInt(armorPiece.soak.toString()) || 0),
     0
   )
-  
+
   return Math.max(0, base + armorSoak + Math.max(-5, Math.min(5, soakModifier)))
 }
 
@@ -120,7 +117,7 @@ export const calculateHealthLevels = (
   exaltType: ExaltType
 ): HealthLevels => {
   const clampedOxBody = Math.max(0, Math.min(5, oxBodyLevels))
-  
+
   let oxBodyZero = 0
   let oxBodyMinusOne = 0
   let oxBodyMinusTwo = 0
@@ -130,11 +127,31 @@ export const calculateHealthLevels = (
   switch (exaltType) {
     case "lunar":
       // Lunar Ox-Body: +1 -0, +2 -1, +2 -2
-      if (clampedOxBody >= 1) { oxBodyZero += 1; oxBodyMinusOne += 2; oxBodyMinusTwo += 2 }
-      if (clampedOxBody >= 2) { oxBodyZero += 1; oxBodyMinusOne += 2; oxBodyMinusTwo += 2 }
-      if (clampedOxBody >= 3) { oxBodyZero += 1; oxBodyMinusOne += 2; oxBodyMinusTwo += 2 }
-      if (clampedOxBody >= 4) { oxBodyZero += 1; oxBodyMinusOne += 2; oxBodyMinusTwo += 2 }
-      if (clampedOxBody >= 5) { oxBodyZero += 1; oxBodyMinusOne += 2; oxBodyMinusTwo += 2 }
+      if (clampedOxBody >= 1) {
+        oxBodyZero += 1
+        oxBodyMinusOne += 2
+        oxBodyMinusTwo += 2
+      }
+      if (clampedOxBody >= 2) {
+        oxBodyZero += 1
+        oxBodyMinusOne += 2
+        oxBodyMinusTwo += 2
+      }
+      if (clampedOxBody >= 3) {
+        oxBodyZero += 1
+        oxBodyMinusOne += 2
+        oxBodyMinusTwo += 2
+      }
+      if (clampedOxBody >= 4) {
+        oxBodyZero += 1
+        oxBodyMinusOne += 2
+        oxBodyMinusTwo += 2
+      }
+      if (clampedOxBody >= 5) {
+        oxBodyZero += 1
+        oxBodyMinusOne += 2
+        oxBodyMinusTwo += 2
+      }
       break
     default:
       // Generic Ox-Body: +1 -1, +2 -2
@@ -148,7 +165,7 @@ export const calculateHealthLevels = (
     zero: baseline.zero + oxBodyZero,
     minusOne: baseline.minusOne + oxBodyMinusOne,
     minusTwo: baseline.minusTwo + oxBodyMinusTwo,
-    incap: baseline.incap + oxBodyIncap
+    incap: baseline.incap + oxBodyIncap,
   }
 }
 
@@ -159,34 +176,34 @@ export const calculateHealthPenalty = (
   aggravatedDamage: number
 ): number => {
   const totalDamage = bashingDamage + lethalDamage + aggravatedDamage
-  
+
   // Determine penalty based on filled health levels
   let penalty = 0
   let damageCounter = totalDamage
-  
+
   // -0 levels don't cause penalty
   damageCounter -= healthLevels.zero
   if (damageCounter <= 0) return 0
-  
+
   // -1 levels cause -1 penalty
   if (damageCounter > 0) {
     penalty = -1
     damageCounter -= healthLevels.minusOne
     if (damageCounter <= 0) return penalty
   }
-  
+
   // -2 levels cause -2 penalty
   if (damageCounter > 0) {
     penalty = -2
     damageCounter -= healthLevels.minusTwo
     if (damageCounter <= 0) return penalty
   }
-  
+
   // Incapacitated
   if (damageCounter > 0) {
     penalty = -4
   }
-  
+
   return penalty
 }
 
@@ -207,24 +224,29 @@ export const calculateDicePool = (
   extraDiceBonus: number,
   extraDiceNonBonus: number,
   extraSuccessBonus: number,
-  extraSuccessNonBonus: number
+  extraSuccessNonBonus: number,
+  isStunted: boolean = false
 ): DicePoolResult => {
   const basePool = attributeValue + abilityValue
   const bonusDice = extraDiceBonus + extraDiceNonBonus
   const cappedBonusDice = Math.min(bonusDice, basePool)
-  const totalPool = basePool + cappedBonusDice
-  const extraDice = cappedBonusDice
-  
+
+  // Add stunt dice (+2 non-capped dice)
+  const stuntDice = isStunted ? 2 : 0
+  const totalPool = basePool + cappedBonusDice + stuntDice
+  const extraDice = cappedBonusDice + stuntDice
+
   const bonusSuccesses = extraSuccessBonus + extraSuccessNonBonus
   const bonusText = bonusSuccesses > 0 ? ` +${bonusSuccesses} successes` : ""
-  const actionPhrase = `Roll ${totalPool}, TN ${targetNumber} Double ${doublesThreshold}s${bonusText}`
-  
+  const stuntText = isStunted ? " (Stunted)" : ""
+  const actionPhrase = `Roll ${totalPool}, TN ${targetNumber} Double ${doublesThreshold}s${bonusText}${stuntText}`
+
   return {
     basePool,
     extraDice,
     totalPool,
     cappedBonusDice,
-    actionPhrase
+    actionPhrase,
   }
 }
 

@@ -53,12 +53,19 @@ export interface HealthLevels {
   incap: number
 }
 
-export type ExaltType = "lunar" | "solar" | "dragon-blood" | "sidereal" | "abyssal" | "liminal" | "exigent"
+export type ExaltType =
+  | "lunar"
+  | "solar"
+  | "dragon-blood"
+  | "sidereal"
+  | "abyssal"
+  | "liminal"
+  | "exigent"
 
 export interface DramaticInjury {
   id: string
   description: string
-  severity: "minor" | "major" | "defining"
+  isHealed: boolean
 }
 
 export interface Health {
@@ -104,12 +111,12 @@ export interface Milestones {
   major: number
 }
 
-export type AdvancementStatus = 
-  | "Planned" 
-  | "Paid with Personal" 
-  | "Paid with Exalt" 
-  | "Paid with Minor" 
-  | "Paid with Major" 
+export type AdvancementStatus =
+  | "Planned"
+  | "Paid with Personal"
+  | "Paid with Exalt"
+  | "Paid with Minor"
+  | "Paid with Major"
   | "Initial"
 
 export interface AdvancementEntry {
@@ -132,22 +139,20 @@ export interface DicePool {
   extraDiceNonBonus: number
   extraSuccessBonus: number
   extraSuccessNonBonus: number
+  isStunted: boolean
 }
 
-export type CharmType = "reflexive" | "simple" | "supplemental" | "permanent"
 export type SpellCircle = "terrestrial" | "celestial" | "solar"
 
 export interface Charm {
   id: string
   name: string
-  type: CharmType
   cost: string
   keywords: string[]
   description: string
-  step: number | null  // Combat step when used
+  step: number | null // Combat step when used
   pageReference: string
   prerequisites: string[]
-  duration: string
   dateAdded: string
 }
 
@@ -156,13 +161,11 @@ export interface Spell {
   name: string
   circle: SpellCircle
   cost: string
-  target: string
-  duration: string
   description: string
-  step: number | null  // Combat step when cast
+  step: number | null // Combat step when cast
   pageReference: string
   dateAdded: string
-  components: string[]  // Material components if any
+  components: string[] // Material components if any
 }
 
 export interface Combat {
@@ -174,7 +177,8 @@ export interface Combat {
   decisiveExtraSuccess: number
 }
 
-export type VirtueType = "valor" | "compassion" | "temperance" | "conviction" | null
+// TODO: Research correct Exalted Essence virtues (these are 3rd Edition placeholders)
+export type VirtueType = "courage" | "compassion" | "temperance" | "conviction" | null
 
 export interface Virtues {
   major: VirtueType
@@ -184,13 +188,23 @@ export interface Virtues {
 export interface Intimacy {
   id: string
   description: string
-  intensity: "minor" | "major" | "defining"
-  type: "tie" | "principle"
+  intensity: "minor" | "major"
+}
+
+export type BackgroundType = "artifact" | "resources" | "followers"
+export type BackgroundLevel = "tertiary" | "secondary" | "primary"
+
+export interface Background {
+  id: string
+  type: BackgroundType
+  level: BackgroundLevel
+  description: string
 }
 
 export interface Social {
   virtues: Virtues
   intimacies: Intimacy[]
+  backgrounds: Background[]
 }
 
 export interface Ruling {

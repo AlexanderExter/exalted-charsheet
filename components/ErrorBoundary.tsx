@@ -29,12 +29,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     this.setState({
       error,
-      errorInfo
+      errorInfo,
     })
-    
+
     // Log error to console in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Error Boundary caught an error:', error, errorInfo)
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error Boundary caught an error:", error, errorInfo)
     }
   }
 
@@ -65,8 +65,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               <p className="text-gray-600 text-center">
                 An unexpected error occurred while rendering this component.
               </p>
-              
-              {process.env.NODE_ENV === 'development' && this.state.error && (
+
+              {process.env.NODE_ENV === "development" && this.state.error && (
                 <details className="bg-gray-100 p-3 rounded text-sm">
                   <summary className="cursor-pointer font-medium text-gray-700 mb-2">
                     Error Details (Development)
@@ -81,9 +81,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                   )}
                 </details>
               )}
-              
+
               <div className="flex gap-2 justify-center">
-                <Button 
+                <Button
                   onClick={this.handleRetry}
                   variant="outline"
                   size="sm"
@@ -92,10 +92,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                   <RefreshCw className="h-4 w-4" />
                   Try Again
                 </Button>
-                <Button 
-                  onClick={this.handleReload}
-                  size="sm"
-                >
+                <Button onClick={this.handleReload} size="sm">
                   Reload Page
                 </Button>
               </div>
@@ -110,13 +107,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 }
 
 // Functional component wrapper for easier use
-export const ErrorBoundaryWrapper: React.FC<{ children: ReactNode; fallback?: ReactNode }> = ({ 
-  children, 
-  fallback 
+export const ErrorBoundaryWrapper: React.FC<{ children: ReactNode; fallback?: ReactNode }> = ({
+  children,
+  fallback,
 }) => {
-  return (
-    <ErrorBoundary fallback={fallback}>
-      {children}
-    </ErrorBoundary>
-  )
+  return <ErrorBoundary fallback={fallback}>{children}</ErrorBoundary>
 }
