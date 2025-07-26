@@ -1,5 +1,6 @@
 // WIP Tab Component - Work in Progress and experimental features
 
+import React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface CombatStep {
@@ -21,7 +22,7 @@ const COMBAT_STEPS: CombatStep[] = [
   { step: 8, defaultActions: [] },
 ]
 
-export const WIPTab: React.FC = () => {
+export const WIPTab: React.FC = React.memo(() => {
   return (
     <div className="space-y-6">
       <div className="bg-yellow-50 rounded-lg p-4 text-sm text-yellow-800">
@@ -63,4 +64,6 @@ export const WIPTab: React.FC = () => {
       </Card>
     </div>
   )
-}
+})
+
+WIPTab.displayName = "WIPTab"

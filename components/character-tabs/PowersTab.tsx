@@ -1,6 +1,6 @@
 // Powers Tab Component - Charms and Spells management
 
-import { useCallback } from "react"
+import React, { useCallback } from "react"
 import { Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,7 +15,7 @@ interface PowersTabProps {
   updateCharacter: (updates: Partial<Character>) => void
 }
 
-export const PowersTab: React.FC<PowersTabProps> = ({ character, updateCharacter }) => {
+export const PowersTab: React.FC<PowersTabProps> = React.memo(({ character, updateCharacter }) => {
   // Charm management functions
   const addCharm = useCallback(() => {
     if (!character) return
@@ -399,4 +399,6 @@ export const PowersTab: React.FC<PowersTabProps> = ({ character, updateCharacter
       </Card>
     </div>
   )
-}
+})
+
+PowersTab.displayName = "PowersTab"

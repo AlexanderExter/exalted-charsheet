@@ -1,6 +1,6 @@
 // Rulings Tab Component - Character-specific rulings and house rules
 
-import { useCallback } from "react"
+import React, { useCallback } from "react"
 import { Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,7 +15,7 @@ interface RulingsTabProps {
   updateCharacter: (updates: Partial<Character>) => void
 }
 
-export const RulingsTab: React.FC<RulingsTabProps> = ({ character, updateCharacter }) => {
+export const RulingsTab: React.FC<RulingsTabProps> = React.memo(({ character, updateCharacter }) => {
   // Ruling management functions
   const addRuling = useCallback(() => {
     if (!character) return
@@ -148,4 +148,6 @@ export const RulingsTab: React.FC<RulingsTabProps> = ({ character, updateCharact
       </Card>
     </div>
   )
-}
+})
+
+RulingsTab.displayName = "RulingsTab"

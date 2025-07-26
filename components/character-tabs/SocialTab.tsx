@@ -1,6 +1,6 @@
 // Social Tab Component - Virtues, intimacies, and resolve management
 
-import { useCallback } from "react"
+import React, { useCallback } from "react"
 import { Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -17,7 +17,7 @@ interface SocialTabProps {
 
 const virtueOptions: Array<NonNullable<VirtueType>> = ["valor", "compassion", "temperance", "conviction"]
 
-export const SocialTab: React.FC<SocialTabProps> = ({ character, updateCharacter, calculateResolve }) => {
+export const SocialTab: React.FC<SocialTabProps> = React.memo(({ character, updateCharacter, calculateResolve }) => {
   // Virtue management functions
   const setVirtue = useCallback(
     (type: "major" | "minor", virtue: VirtueType) => {
@@ -328,4 +328,6 @@ export const SocialTab: React.FC<SocialTabProps> = ({ character, updateCharacter
       </Card>
     </div>
   )
-}
+})
+
+SocialTab.displayName = "SocialTab"

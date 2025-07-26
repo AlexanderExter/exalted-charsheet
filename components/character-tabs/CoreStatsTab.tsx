@@ -1,6 +1,6 @@
 // Core Stats Tab Component - Essence, attributes, abilities, and dice pool calculator
 
-import { useCallback, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -26,7 +26,7 @@ interface CoreStatsTabProps {
   setGlobalAbilityAttribute: (attribute: string) => void
 }
 
-export const CoreStatsTab: React.FC<CoreStatsTabProps> = ({ 
+export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(({ 
   character, 
   updateCharacter,
   calculateAbilityTotal,
@@ -724,4 +724,6 @@ export const CoreStatsTab: React.FC<CoreStatsTabProps> = ({
       </Card>
     </div>
   )
-}
+})
+
+CoreStatsTab.displayName = "CoreStatsTab"

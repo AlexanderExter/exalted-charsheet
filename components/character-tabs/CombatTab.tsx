@@ -1,6 +1,6 @@
 // Combat Tab Component - Essence, health, static values, and combat mechanics
 
-import { useCallback } from "react"
+import React, { useCallback } from "react"
 import { Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -21,7 +21,7 @@ interface CombatTabProps {
   calculateHardness: () => number
 }
 
-export const CombatTab: React.FC<CombatTabProps> = ({ 
+export const CombatTab: React.FC<CombatTabProps> = React.memo(({ 
   character, 
   updateCharacter, 
   calculations,
@@ -32,7 +32,7 @@ export const CombatTab: React.FC<CombatTabProps> = ({
   const getHighestAttribute = useCallback(() => {
     if (!character?.attributes) return 0
     return calculations.highestAttribute
-  }, [calculations.highestAttribute])
+  }, [character?.attributes, calculations.highestAttribute])
 
   // Dramatic injury management
   const addDramaticInjury = useCallback(() => {
@@ -864,4 +864,6 @@ export const CombatTab: React.FC<CombatTabProps> = ({
       </Card>
     </div>
   )
-}
+})
+
+CombatTab.displayName = "CombatTab"

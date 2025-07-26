@@ -32,6 +32,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { useLocalStorage } from "@/hooks/useLocalStorage"
 import { useCharacterCalculations } from "@/hooks/useCharacterCalculations"
+import { useAutoSave } from "@/hooks/useAutoSave"
+import { useCharacterContext } from "@/hooks/useCharacterContext"
 import type { Character, AttributeType, AbilityType } from "@/lib/character-types"
 import { createNewCharacter } from "@/lib/character-defaults"
 import { 
@@ -49,41 +51,14 @@ import { AdvancementTab } from "@/components/character-tabs/AdvancementTab"
 import { CombatTab } from "@/components/character-tabs/CombatTab"
 import { CoreStatsTab } from "@/components/character-tabs/CoreStatsTab"
 
-// Auto-save hook - 10 minute intervals
-const useAutoSave = (data: any, key: string, delay = 600000) => {
-  // 10 minutes = 600000ms
-  const [isSaving, setIsSaving] = useState(false)
-  const [lastSaved, setLastSaved] = useState<Date | null>(null)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-  useEffect(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-    }
-
-    timeoutRef.current = setTimeout(() => {
-      setIsSaving(true)
-      localStorage.setItem(key, JSON.stringify(data))
-      setIsSaving(false)
-      setLastSaved(new Date())
-    }, delay)
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
-      }
-    }
-  }, [data, key, delay])
-
-  return { isSaving, lastSaved }
-}
 
 // Anima system functions - now imported from utils
 
 // Main component
 const ExaltedCharacterManager = () => {
   const [characters, setCharacters] = useLocalStorage<Character[]>("exalted-characters", [])
-  const [currentCharacter, setCurrentCharacter] = useState<Character | null>(null)
+  const { state, updateCurrentCharacter, addNewCharacter, deleteCharacter, setCurrentCharacter: setContextCurrentCharacter, loadCharacters } = useCharacterContext()
+  const { currentCharacter } = state
   const [showCharacterSelect, setShowCharacterSelect] = useState(true)
   const [newCharacterName, setNewCharacterName] = useState("")
   const [activeTab, setActiveTab] = useState("core")
@@ -102,26 +77,34 @@ const ExaltedCharacterManager = () => {
 
   // Character creation - now using imported defaults
 
+  // Load localStorage data into context on mount only
+  useEffect(() => {
+    if (characters.length > 0 && state.characters.length === 0) {
+      loadCharacters(characters)
+    }
+  }, [characters, loadCharacters, state.characters.length])
+
+  // Sync context changes back to localStorage
+  useEffect(() => {
+    if (state.characters.length > 0) {
+      setCharacters(state.characters)
+    }
+  }, [state.characters, setCharacters])
+
   // Character management
   const handleCreateCharacter = useCallback(() => {
     if (!newCharacterName.trim()) return
 
-    const newChar = createNewCharacter(newCharacterName.trim())
-    setCharacters((prev) => [...prev, newChar])
-    setCurrentCharacter(newChar)
+    addNewCharacter(newCharacterName.trim())
     setNewCharacterName("")
     setShowCharacterSelect(false)
-  }, [newCharacterName, setCharacters])
+  }, [newCharacterName, addNewCharacter])
 
   const updateCharacter = useCallback(
     (updates: any) => {
-      if (!currentCharacter) return
-
-      const updatedCharacter = { ...currentCharacter, ...updates }
-      setCurrentCharacter(updatedCharacter)
-      setCharacters((prev) => prev.map((char) => (char.id === currentCharacter.id ? updatedCharacter : char)))
+      updateCurrentCharacter(updates)
     },
-    [currentCharacter, setCharacters],
+    [updateCurrentCharacter],
   )
 
   // Calculation functions
@@ -130,7 +113,7 @@ const ExaltedCharacterManager = () => {
   const getHighestAttribute = useCallback(() => {
     if (!currentCharacter?.attributes) return 0
     return calculations.highestAttribute
-  }, [calculations.highestAttribute])
+  }, [currentCharacter?.attributes, calculations.highestAttribute])
 
   const calculateEvasion = useCallback(() => {
     return calculations.evasion
@@ -159,7 +142,7 @@ const ExaltedCharacterManager = () => {
     )
     const modifier = currentCharacter?.staticValues?.soakModifier || 0
     return Math.max(0, base + armorSoak + Math.max(-5, Math.min(5, modifier)))
-  }, [currentCharacter, calculateStatTotal])
+  }, [currentCharacter])
 
   const calculateHardness = useCallback(() => {
     const essence = currentCharacter?.essence?.rating || 1
@@ -187,7 +170,7 @@ const ExaltedCharacterManager = () => {
 
       return abilityTotal + calculateStatTotal(attribute)
     },
-    [currentCharacter, calculateStatTotal, globalAbilityAttribute],
+    [currentCharacter, globalAbilityAttribute],
   )
 
   const calculateDicePool = useCallback(() => {
@@ -227,7 +210,7 @@ const ExaltedCharacterManager = () => {
       cappedBonusDice,
       actionPhrase,
     }
-  }, [currentCharacter, calculateStatTotal])
+  }, [currentCharacter])
 
   // Equipment management - moved to EquipmentTab component
 
@@ -291,10 +274,13 @@ const ExaltedCharacterManager = () => {
           }
         })
 
-        setCharacters((prev) => [...prev, ...validatedCharacters])
+        // Add characters to context
+        validatedCharacters.forEach(char => {
+          loadCharacters([...state.characters, char])
+        })
 
         if (validatedCharacters.length === 1) {
-          setCurrentCharacter(validatedCharacters[0])
+          setContextCurrentCharacter(validatedCharacters[0].id)
           setShowCharacterSelect(false)
         }
 
@@ -313,8 +299,8 @@ const ExaltedCharacterManager = () => {
 
   // Filtered characters for search
   const filteredCharacters = useMemo(() => {
-    return characters.filter((char) => char.name.toLowerCase().includes(searchTerm.toLowerCase()))
-  }, [characters, searchTerm])
+    return state.characters.filter((char) => char.name.toLowerCase().includes(searchTerm.toLowerCase()))
+  }, [state.characters, searchTerm])
 
   if (showCharacterSelect || !currentCharacter) {
     return (
@@ -406,7 +392,7 @@ const ExaltedCharacterManager = () => {
                       key={character.id}
                       className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md hover:border-gray-300 transition-all cursor-pointer group"
                       onClick={() => {
-                        setCurrentCharacter(character)
+                        setContextCurrentCharacter(character.id)
                         setShowCharacterSelect(false)
                       }}
                     >

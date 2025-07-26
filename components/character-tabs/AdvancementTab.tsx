@@ -1,6 +1,6 @@
 // Advancement Tab Component - Milestones and character progression management
 
-import { useCallback, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { Plus, Trash2, ChevronDown, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,7 +15,7 @@ interface AdvancementTabProps {
   updateCharacter: (updates: Partial<Character>) => void
 }
 
-export const AdvancementTab: React.FC<AdvancementTabProps> = ({ character, updateCharacter }) => {
+export const AdvancementTab: React.FC<AdvancementTabProps> = React.memo(({ character, updateCharacter }) => {
   const [showAdvancementLog, setShowAdvancementLog] = useState(false)
 
   // Advancement entry management functions
@@ -300,4 +300,6 @@ export const AdvancementTab: React.FC<AdvancementTabProps> = ({ character, updat
       </Card>
     </div>
   )
-}
+})
+
+AdvancementTab.displayName = "AdvancementTab"

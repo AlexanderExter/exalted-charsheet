@@ -1,6 +1,6 @@
 // Equipment Tab Component - Armor, weapons, and equipment management
 
-import { useCallback } from "react"
+import React, { useCallback } from "react"
 import { Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,7 +15,7 @@ interface EquipmentTabProps {
   updateCharacter: (updates: Partial<Character>) => void
 }
 
-export const EquipmentTab: React.FC<EquipmentTabProps> = ({ character, updateCharacter }) => {
+export const EquipmentTab: React.FC<EquipmentTabProps> = React.memo(({ character, updateCharacter }) => {
   // Armor management functions
   const addArmor = useCallback(() => {
     if (!character) return
@@ -416,4 +416,6 @@ export const EquipmentTab: React.FC<EquipmentTabProps> = ({ character, updateCha
       </Card>
     </div>
   )
-}
+})
+
+EquipmentTab.displayName = "EquipmentTab"
