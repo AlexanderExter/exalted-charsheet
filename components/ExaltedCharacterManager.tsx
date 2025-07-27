@@ -79,6 +79,20 @@ const ExaltedCharacterManager = () => {
   const [globalAbilityAttribute, setGlobalAbilityAttribute] = useState("none")
   const [showAboutModal, setShowAboutModal] = useState(false)
   const [showLegalModal, setShowLegalModal] = useState(false)
+  const [aboutContent, setAboutContent] = useState("")
+  const [legalContent, setLegalContent] = useState("")
+
+  // Simple markdown parser for basic formatting
+  const parseMarkdown = (content: string): string => {
+    return content
+      .replace(/\n/g, '<br/>')
+      .replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold mb-4 mt-6">$1</h1>')
+      .replace(/^## (.+)$/gm, '<h2 class="text-xl font-semibold mb-3 mt-6">$1</h2>')
+      .replace(/^### (.+)$/gm, '<h3 class="text-lg font-medium mb-2 mt-4">$1</h3>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/^- (.+)$/gm, '<li class="ml-4">• $1</li>')
+  }
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -96,6 +110,26 @@ const ExaltedCharacterManager = () => {
       loadCharacters(characters)
     }
   }, [characters, loadCharacters, state.characters.length])
+
+  // Load markdown content
+  useEffect(() => {
+    const loadMarkdownContent = async () => {
+      try {
+        const aboutResponse = await fetch('/content/about.md')
+        const aboutText = await aboutResponse.text()
+        setAboutContent(aboutText)
+        
+        const legalResponse = await fetch('/content/legal.md')
+        const legalText = await legalResponse.text()
+        setLegalContent(legalText)
+      } catch (error) {
+        setAboutContent('# About\n\nInformation about this application.')
+        setLegalContent('# Legal\n\nLegal information and disclaimers.')
+      }
+    }
+    
+    loadMarkdownContent()
+  }, [])
 
   // Sync context changes back to localStorage
   useEffect(() => {
@@ -274,7 +308,6 @@ const ExaltedCharacterManager = () => {
         window.URL.revokeObjectURL(url)
       }, 100)
     } catch (error) {
-      console.error("Export error:", error)
       alert("Failed to export character. Please try again.")
     }
   }
@@ -319,7 +352,6 @@ const ExaltedCharacterManager = () => {
 
         alert(`Successfully imported ${validatedCharacters.length} character(s)`)
       } catch (error) {
-        console.error("Import error:", error)
         alert("Failed to import character(s). Please ensure the file is a valid character export.")
         event.target.value = ""
       }
@@ -677,30 +709,52 @@ const ExaltedCharacterManager = () => {
 
       {/* About Modal */}
       {showAboutModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl max-h-96 overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">About</h2>
-            <div className="prose text-sm text-gray-600">
-              <p>Placeholder for markdown content about the application.</p>
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-4xl max-h-[80vh] overflow-y-auto m-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">About</h2>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowAboutModal(false)}
+              >
+                ×
+              </Button>
             </div>
-            <Button onClick={() => setShowAboutModal(false)} className="mt-4">
-              Close
-            </Button>
+            <div className="prose prose-sm max-w-none text-gray-700">
+              <div dangerouslySetInnerHTML={{ __html: parseMarkdown(aboutContent) }} />
+            </div>
+            <div className="mt-6 pt-4 border-t">
+              <Button onClick={() => setShowAboutModal(false)} className="w-full">
+                Close
+              </Button>
+            </div>
           </div>
         </div>
       )}
 
       {/* Legal Modal */}
       {showLegalModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl max-h-96 overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Legal</h2>
-            <div className="prose text-sm text-gray-600">
-              <p>Placeholder for legal information and disclaimers.</p>
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-4xl max-h-[80vh] overflow-y-auto m-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Legal Information</h2>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowLegalModal(false)}
+              >
+                ×
+              </Button>
             </div>
-            <Button onClick={() => setShowLegalModal(false)} className="mt-4">
-              Close
-            </Button>
+            <div className="prose prose-sm max-w-none text-gray-700">
+              <div dangerouslySetInnerHTML={{ __html: parseMarkdown(legalContent) }} />
+            </div>
+            <div className="mt-6 pt-4 border-t">
+              <Button onClick={() => setShowLegalModal(false)} className="w-full">
+                Close
+              </Button>
+            </div>
           </div>
         </div>
       )}

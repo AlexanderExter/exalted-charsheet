@@ -7,17 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0-alpha] - 2024-01-XX
+## [0.0.5-alpha] - 2025-01-26
 
 ### Added
 
-- ✨ **Initial Release** - Complete character sheet manager for Exalted: Essence
+- ✨ **Initial Public Release** - Complete character sheet manager for Exalted: Essence
 - 🎯 **Multi-Character Management** - Create, switch, and manage multiple characters
 - 📊 **Complete Character Tracking** - All Exalted: Essence mechanics implemented
 - 💾 **Data Persistence** - Automatic localStorage saving with migration support
 - 📤 **Import/Export System** - JSON-based character data portability
 - ⚔️ **Combat Support** - Integrated dice pools, weapon stats, and power tracking
 - 👥 **Social System** - Virtues and intimacies with resolve calculation
+- 📚 **About & Legal Content** - Comprehensive markdown-based information modals
+- 🛡️ **Production Security** - Clean error handling, no exposed secrets or debug code
+- 🚀 **Static Export Deployment** - Optimized 162KB bundle ready for any hosting platform
 
 ### Game Mechanics
 
@@ -40,11 +43,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Technical Features
 
-- ⚛️ **React 18** - Modern functional components with hooks
-- 🔷 **TypeScript** - Type safety and better development experience
-- 🎨 **Tailwind CSS** - Utility-first styling for consistent design
-- ⚡ **Vite** - Fast development server and optimized builds
-- 📱 **Responsive Design** - Mobile-first approach with desktop enhancements
+- ⚛️ **React 19** - Modern functional components with hooks and concurrent features
+- ⚡ **Next.js 15** - App Router with Turbopack for development and static export
+- 🔷 **TypeScript** - Strict type safety and enhanced development experience
+- 🎨 **Tailwind CSS 4** - Latest utility-first styling with CSS variables
+- 📱 **Responsive Design** - Mobile-first approach with shadcn/ui components
+- 🔧 **Performance Optimized** - 63 React.memo/useCallback/useMemo optimizations
+- 🛠️ **Developer Tools** - Process monitoring scripts and comprehensive dev commands
 
 ### Documentation
 

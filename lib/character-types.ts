@@ -177,8 +177,7 @@ export interface Combat {
   decisiveExtraSuccess: number
 }
 
-// TODO: Research correct Exalted Essence virtues (these are 3rd Edition placeholders)
-export type VirtueType = "courage" | "compassion" | "temperance" | "conviction" | null
+export type VirtueType = "ambition" | "compassion" | "courage" | "discipline" | "justice" | "loyalty" | "wonder" | null
 
 export interface Virtues {
   major: VirtueType

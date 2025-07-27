@@ -29,10 +29,13 @@ interface SocialTabProps {
 }
 
 const virtueOptions: Array<NonNullable<VirtueType>> = [
+  "ambition",
+  "compassion", 
   "courage",
-  "compassion",
-  "temperance",
-  "conviction",
+  "discipline",
+  "justice",
+  "loyalty", 
+  "wonder",
 ]
 
 export const SocialTab: React.FC<SocialTabProps> = React.memo(
