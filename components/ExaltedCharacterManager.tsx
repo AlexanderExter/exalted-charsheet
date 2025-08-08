@@ -261,7 +261,8 @@ const ExaltedCharacterManager = () => {
     // Generate action phrase
     let actionPhrase = `Roll ${totalPool}`
     if (totalExtraSuccess > 0) {
-      actionPhrase += `, ${totalExtraSuccess} success in`
+      const successText = totalExtraSuccess === 1 ? "success" : "successes"
+      actionPhrase += `, ${totalExtraSuccess} ${successText}`
     }
     actionPhrase += `, TN ${targetNumber}`
     if (doublesThreshold < 10) {
