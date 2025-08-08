@@ -1,9 +1,9 @@
-import ExaltedCharacterManager from "@/components/ExaltedCharacterManager"
+import CharacterManager from "@/components/manager/CharacterManager"
 
 export default function Home() {
   return (
     <main>
-      <ExaltedCharacterManager />
+      <CharacterManager />
     </main>
   )
 }
