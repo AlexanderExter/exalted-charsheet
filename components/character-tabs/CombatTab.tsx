@@ -2,13 +2,14 @@
 
 import React from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { EssencePanel } from "@/components/combat/EssencePanel"
 import { CombatRolls } from "@/components/combat/CombatRolls"
 import { StaticValuesPanel } from "@/components/combat/StaticValuesPanel"
 import { HealthTracker } from "@/components/combat/HealthTracker"
 import type { Character } from "@/lib/character-types"
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations"
 import { useCombat } from "@/hooks/useCombat"
+import { EssencePanel } from "@/components/character-tabs/common/EssencePanel"
+import { createDefaultEssence } from "@/lib/character-defaults"
 
 interface CombatTabProps {
   character: Character | null
@@ -40,7 +41,10 @@ export const CombatTab: React.FC<CombatTabProps> = React.memo(
 
     return (
       <div className="space-y-6">
-        <EssencePanel character={character} updateCharacter={updateCharacter} />
+        <EssencePanel
+          essence={character.essence || createDefaultEssence()}
+          onChange={essence => updateCharacter({ essence })}
+        />
 
         <CombatRolls
           character={character}

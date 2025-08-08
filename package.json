@@ -52,8 +52,8 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css,mdx}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md,css,mdx}\"",
     "// Testing": "Scripts for testing (placeholder for future)",
-    "test": "echo \"No tests specified yet\" && exit 0",
-    "test:watch": "echo \"No tests specified yet\" && exit 0",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "// Process Management": "Scripts for managing development processes",
     "monitor-dev": "node scripts/monitor-dev.js",
     "kill-dev": "node scripts/kill-dev.js",
@@ -107,7 +107,12 @@
     "rimraf": "^6.0.1",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.5",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^1.5.0",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "jsdom": "^24.0.0",
+    "vite-tsconfig-paths": "^5.1.2"
   },
   "browserslist": [
     "defaults",

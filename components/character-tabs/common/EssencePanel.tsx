@@ -4,17 +4,14 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { EssenceEditor } from "@/components/EssenceEditor"
 import { getAnimaLevel, getActiveAnimaRulings } from "@/lib/exalted-utils/anima"
-import type { Character } from "@/lib/character-types"
+import type { Essence } from "@/lib/character-types"
 
 interface EssencePanelProps {
-  character: Character
-  updateCharacter: (updates: Partial<Character>) => void
+  essence: Essence
+  onChange: (essence: Essence) => void
 }
 
-export const EssencePanel: React.FC<EssencePanelProps> = ({
-  character,
-  updateCharacter,
-}) => {
+export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange }) => {
   return (
     <Card>
       <CardHeader>
@@ -22,18 +19,7 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({
       </CardHeader>
       <CardContent>
         <div className="grid md:grid-cols-2 gap-6">
-          <EssenceEditor
-            essence={
-              character.essence || {
-                rating: 1,
-                motes: 5,
-                commitments: 0,
-                spent: 0,
-                anima: 0,
-              }
-            }
-            onChange={essence => updateCharacter({ essence })}
-          />
+          <EssenceEditor essence={essence} onChange={onChange} />
 
           <div className="space-y-4">
             {/* Anima Slider */}
@@ -51,13 +37,10 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({
                   min="0"
                   max="10"
                   step="1"
-                  value={character.essence?.anima || 0}
-                  onChange={e => {
-                    const value = Number.parseInt(e.target.value)
-                    updateCharacter({
-                      essence: { ...character.essence, anima: value },
-                    })
-                  }}
+                  value={essence.anima || 0}
+                  onChange={e =>
+                    onChange({ ...essence, anima: Number.parseInt(e.target.value) })
+                  }
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                 />
                 <div className="flex justify-between text-xs text-gray-600">
@@ -71,36 +54,20 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Current Level:</span>
-                <Badge variant="secondary">
-                  {getAnimaLevel(character.essence?.anima || 0)}
-                </Badge>
+                <Badge variant="secondary">{getAnimaLevel(essence.anima || 0)}</Badge>
               </div>
-              {getActiveAnimaRulings(character?.essence?.anima || 0).length > 0 && (
+              {getActiveAnimaRulings(essence.anima || 0).length > 0 && (
                 <div className="bg-purple-50 p-3 rounded-lg">
                   <div className="text-sm font-medium text-purple-700 mb-2">
                     Active Effects:
                   </div>
-                  {getActiveAnimaRulings(character?.essence?.anima || 0).map(
-                    (ruling, index) => (
-                      <div key={index} className="text-sm text-purple-600">
-                        • {ruling}
-                      </div>
-                    ),
-                  )}
+                  {getActiveAnimaRulings(essence.anima || 0).map((ruling, index) => (
+                    <div key={index} className="text-sm text-purple-600">
+                      • {ruling}
+                    </div>
+                  ))}
                 </div>
               )}
-            </div>
-
-            {/* Exalt Type Rules Placeholder */}
-            <div className="space-y-2">
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <div className="text-sm font-medium text-gray-700 mb-2">
-                  Exalt Type Rules:
-                </div>
-                <div className="text-sm text-gray-600">
-                  [Placeholder: Exalt-specific rules and abilities will be displayed here based on character type]
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -110,4 +77,6 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({
 }
 
 EssencePanel.displayName = "EssencePanel"
+
+export default EssencePanel
 
