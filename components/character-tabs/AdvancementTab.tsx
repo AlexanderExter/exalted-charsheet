@@ -16,6 +16,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import type { Character, AdvancementEntry, AdvancementStatus } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
+import { CharacterTabWrapper } from "./CharacterTabWrapper"
 
 interface AdvancementTabProps {
   character: Character | null
@@ -85,27 +86,18 @@ export const AdvancementTab: React.FC<AdvancementTabProps> = React.memo(
       return accrued - spent
     }
 
-    if (!character) {
-      return (
-        <div className="space-y-6">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-500 italic">No character selected.</p>
-            </CardContent>
-          </Card>
-        </div>
-      )
-    }
 
-    return (
-      <div className="space-y-6">
-        {/* Milestone Budget */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Milestone Budget</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      return (
+        <CharacterTabWrapper character={character}>
+          {character => (
+            <>
+              {/* Milestone Budget */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Milestone Budget</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Personal Milestones */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium text-blue-700">Personal Milestones</Label>
@@ -369,11 +361,13 @@ export const AdvancementTab: React.FC<AdvancementTabProps> = React.memo(
                 </div>
               )}
             </CardContent>
-          )}
-        </Card>
-      </div>
-    )
-  }
+            )}
+          </Card>
+        </>
+      )}
+    </CharacterTabWrapper>
+  )
+}
 )
 
 AdvancementTab.displayName = "AdvancementTab"

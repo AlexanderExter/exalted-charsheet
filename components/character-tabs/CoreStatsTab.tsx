@@ -21,6 +21,7 @@ import type {
   AbilityType,
 } from "@/lib/character-types"
 import { getAnimaLevel, getActiveAnimaRulings, calculateStatTotal } from "@/lib/exalted-utils"
+import { CharacterTabWrapper } from "./CharacterTabWrapper"
 
 interface CoreStatsTabProps {
   character: Character | null
@@ -46,23 +47,14 @@ export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(
     globalAbilityAttribute,
     setGlobalAbilityAttribute,
   }) => {
-    if (!character) {
-      return (
-        <div className="space-y-6">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-500 italic">No character selected.</p>
-            </CardContent>
-          </Card>
-        </div>
-      )
-    }
 
     return (
-      <div className="space-y-6">
-        {/* Essence */}
-        <Card>
-          <CardHeader>
+      <CharacterTabWrapper character={character}>
+        {character => (
+          <>
+            {/* Essence */}
+            <Card>
+              <CardHeader>
             <CardTitle>Essence</CardTitle>
           </CardHeader>
           <CardContent>
@@ -853,10 +845,12 @@ export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(
               </div>
             </div>
           </CardContent>
-        </Card>
-      </div>
-    )
-  }
+          </Card>
+        </>
+      )}
+    </CharacterTabWrapper>
+  )
+}
 )
 
 CoreStatsTab.displayName = "CoreStatsTab"

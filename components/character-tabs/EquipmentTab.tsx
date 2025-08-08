@@ -22,6 +22,7 @@ import type {
   WeaponRange,
 } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
+import { CharacterTabWrapper } from "./CharacterTabWrapper"
 
 interface EquipmentTabProps {
   character: Character | null
@@ -139,41 +140,32 @@ export const EquipmentTab: React.FC<EquipmentTabProps> = React.memo(
       return tags.join(", ")
     }
 
-    if (!character) {
-      return (
-        <div className="space-y-6">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-500 italic">No character selected.</p>
-            </CardContent>
-          </Card>
-        </div>
-      )
-    }
 
-    return (
-      <div className="space-y-6">
-        {/* Armor */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              Armor
-              <Button onClick={addArmor} size="sm" className="bg-gray-600 hover:bg-gray-700">
-                <Plus className="w-4 h-4 mr-1" />
-                Add Armor
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {(character.armor || []).length === 0 ? (
-              <p className="text-gray-500 italic">No armor equipped.</p>
-            ) : (
-              <div className="space-y-4">
-                {(character.armor || []).map(armor => (
-                  <div
-                    key={armor.id}
-                    className="p-4 bg-white rounded border border-gray-200 space-y-3"
-                  >
+      return (
+        <CharacterTabWrapper character={character}>
+          {character => (
+            <>
+              {/* Armor */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    Armor
+                    <Button onClick={addArmor} size="sm" className="bg-gray-600 hover:bg-gray-700">
+                      <Plus className="w-4 h-4 mr-1" />
+                      Add Armor
+                    </Button>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {(character.armor || []).length === 0 ? (
+                    <p className="text-gray-500 italic">No armor equipped.</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {(character.armor || []).map(armor => (
+                        <div
+                          key={armor.id}
+                          className="p-4 bg-white rounded border border-gray-200 space-y-3"
+                        >
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div>
                         <Label htmlFor={`armor-name-${armor.id}`}>Name</Label>
@@ -463,10 +455,12 @@ export const EquipmentTab: React.FC<EquipmentTabProps> = React.memo(
               })()}
             </div>
           </CardContent>
-        </Card>
-      </div>
-    )
-  }
+          </Card>
+        </>
+      )}
+    </CharacterTabWrapper>
+  )
+}
 )
 
 EquipmentTab.displayName = "EquipmentTab"

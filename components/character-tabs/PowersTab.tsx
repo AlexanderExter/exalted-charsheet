@@ -16,6 +16,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import type { Character, Charm, Spell, SpellCircle } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
+import { CharacterTabWrapper } from "./CharacterTabWrapper"
 
 interface PowersTabProps {
   character: Character | null
@@ -121,41 +122,32 @@ export const PowersTab: React.FC<PowersTabProps> = React.memo(({ character, upda
     [character, updateCharacter]
   )
 
-  if (!character) {
-    return (
-      <div className="space-y-6">
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-gray-500 italic">No character selected.</p>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
 
-  return (
-    <div className="space-y-6">
-      {/* Charms */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            Charms
-            <Button onClick={addCharm} size="sm" className="bg-amber-600 hover:bg-amber-700">
-              <Plus className="w-4 h-4 mr-1" />
-              Add Charm
-            </Button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {(character.charms || []).length === 0 ? (
-            <p className="text-gray-500 italic">No charms yet.</p>
-          ) : (
-            <div className="space-y-4">
-              {(character.charms || []).map(charm => (
-                <div
-                  key={charm.id}
-                  className="p-4 bg-white rounded border border-gray-200 space-y-3"
-                >
+    return (
+      <CharacterTabWrapper character={character}>
+        {character => (
+          <>
+            {/* Charms */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  Charms
+                  <Button onClick={addCharm} size="sm" className="bg-amber-600 hover:bg-amber-700">
+                    <Plus className="w-4 h-4 mr-1" />
+                    Add Charm
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {(character.charms || []).length === 0 ? (
+                  <p className="text-gray-500 italic">No charms yet.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {(character.charms || []).map(charm => (
+                      <div
+                        key={charm.id}
+                        className="p-4 bg-white rounded border border-gray-200 space-y-3"
+                      >
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
                       <Label htmlFor={`charm-name-${charm.id}`}>Name</Label>
@@ -352,9 +344,11 @@ export const PowersTab: React.FC<PowersTabProps> = React.memo(({ character, upda
               ))}
             </div>
           )}
-        </CardContent>
-      </Card>
-    </div>
+          </CardContent>
+        </Card>
+      </>
+    )}
+  </CharacterTabWrapper>
   )
 })
 

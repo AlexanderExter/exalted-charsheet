@@ -16,6 +16,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import type { Character, Ruling } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
+import { CharacterTabWrapper } from "./CharacterTabWrapper"
 
 interface RulingsTabProps {
   character: Character | null
@@ -65,40 +66,31 @@ export const RulingsTab: React.FC<RulingsTabProps> = React.memo(
       [character, updateCharacter]
     )
 
-    if (!character) {
-      return (
-        <div className="space-y-6">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-500 italic">No character selected.</p>
-            </CardContent>
-          </Card>
-        </div>
-      )
-    }
 
-    return (
-      <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              Character-Specific Rulings
-              <Button onClick={addRuling} size="sm">
-                <Plus className="w-4 h-4 mr-1" />
-                Add Ruling
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {(character.rulings || []).length === 0 ? (
-              <p className="text-gray-500 italic">No rulings recorded yet.</p>
-            ) : (
-              <div className="space-y-4">
-                {(character.rulings || []).map(ruling => (
-                  <div
-                    key={ruling.id}
-                    className="p-4 bg-white rounded border border-gray-200 space-y-3"
-                  >
+      return (
+        <CharacterTabWrapper character={character}>
+          {character => (
+            <>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    Character-Specific Rulings
+                    <Button onClick={addRuling} size="sm">
+                      <Plus className="w-4 h-4 mr-1" />
+                      Add Ruling
+                    </Button>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {(character.rulings || []).length === 0 ? (
+                    <p className="text-gray-500 italic">No rulings recorded yet.</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {(character.rulings || []).map(ruling => (
+                        <div
+                          key={ruling.id}
+                          className="p-4 bg-white rounded border border-gray-200 space-y-3"
+                        >
                     <div className="flex items-center gap-2">
                       <div className="flex-1">
                         <Label htmlFor={`title-${ruling.id}`}>Title</Label>
@@ -151,10 +143,12 @@ export const RulingsTab: React.FC<RulingsTabProps> = React.memo(
               </div>
             )}
           </CardContent>
-        </Card>
-      </div>
-    )
-  }
+          </Card>
+        </>
+      )}
+    </CharacterTabWrapper>
+  )
+}
 )
 
 RulingsTab.displayName = "RulingsTab"

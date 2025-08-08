@@ -22,6 +22,7 @@ import type {
   BackgroundLevel,
 } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
+import { CharacterTabWrapper } from "./CharacterTabWrapper"
 
 interface SocialTabProps {
   character: Character | null
@@ -166,22 +167,13 @@ export const SocialTab: React.FC<SocialTabProps> = React.memo(
       [character, updateCharacter]
     )
 
-    if (!character) {
-      return (
-        <div className="space-y-6">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-500 italic">No character selected.</p>
-            </CardContent>
-          </Card>
-        </div>
-      )
-    }
 
-    return (
-      <div className="space-y-6">
-        {/* Social Influence Reference */}
-        <div className="bg-blue-50 rounded-lg p-4 text-xs text-blue-700">
+      return (
+        <CharacterTabWrapper character={character}>
+          {character => (
+            <>
+              {/* Social Influence Reference */}
+              <div className="bg-blue-50 rounded-lg p-4 text-xs text-blue-700">
           <div className="font-semibold mb-1">Social Influence Steps:</div>
           <div>Step 1: The player declares her intention for the influence.</div>
           <div>
@@ -417,10 +409,12 @@ export const SocialTab: React.FC<SocialTabProps> = React.memo(
               </div>
             )}
           </CardContent>
-        </Card>
-      </div>
-    )
-  }
+          </Card>
+        </>
+      )}
+    </CharacterTabWrapper>
+  )
+}
 )
 
 SocialTab.displayName = "SocialTab"

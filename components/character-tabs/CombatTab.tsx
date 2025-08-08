@@ -20,6 +20,7 @@ import type { Character, ExaltType, DramaticInjury } from "@/lib/character-types
 import { getAnimaLevel, getActiveAnimaRulings, calculateStatTotal } from "@/lib/exalted-utils"
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations"
 import { v4 as uuidv4 } from "uuid"
+import { CharacterTabWrapper } from "./CharacterTabWrapper"
 
 interface CombatTabProps {
   character: Character | null
@@ -101,27 +102,18 @@ export const CombatTab: React.FC<CombatTabProps> = React.memo(
       [character, updateCharacter]
     )
 
-    if (!character) {
-      return (
-        <div className="space-y-6">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-500 italic">No character selected.</p>
-            </CardContent>
-          </Card>
-        </div>
-      )
-    }
 
-    return (
-      <div className="space-y-6">
-        {/* Essence (duplicated for combat convenience) */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Essence</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-6">
+      return (
+        <CharacterTabWrapper character={character}>
+          {character => (
+            <>
+              {/* Essence (duplicated for combat convenience) */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Essence</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label>Rating</Label>
@@ -1120,10 +1112,12 @@ export const CombatTab: React.FC<CombatTabProps> = React.memo(
               </div>
             </div>
           </CardContent>
-        </Card>
-      </div>
-    )
-  }
+          </Card>
+        </>
+      )}
+    </CharacterTabWrapper>
+  )
+}
 )
 
 CombatTab.displayName = "CombatTab"
