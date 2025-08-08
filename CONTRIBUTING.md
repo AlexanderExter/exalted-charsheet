@@ -60,7 +60,6 @@ This app implements core **Exalted: Essence** mechanics, including:
 
 - LocalStorage size constraints
 - Basic markdown rendering
-- Static combat step guidance
 - Limited mobile optimization
 
 ---

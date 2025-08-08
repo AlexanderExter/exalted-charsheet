@@ -62,34 +62,36 @@
 ## 🚀 Quick Start
 
 **Prerequisites:**
-- Node.js 16+
+
+- Node.js 18+
 - npm or yarn
 
 ---
 
 ## 📋 Tab Overview
 
-| Tab             | Description                   | Key Features                      |
-| --------------- | ----------------------------- | --------------------------------- |
-| **Core Stats**  | Primary character info        | Attributes, Abilities, Essence    |
-| **Combat**      | Battle mechanics              | Health, Dice pools, Static values |
-| **Equipment**   | Gear management               | Weapons, Armor, Tag references    |
-| **Powers**      | Magical abilities             | Charms, Spells, Descriptions      |
-| **Socials**     | Social mechanics              | Virtues, Intimacies, Resolve      |
-| **Advancement** | Character progression         | Milestones, XP tracking           |
-| **Rulings**     | GM decisions                  | House rules, edge cases           |
-| **WIP**         | Experimental features         | Combat step guidance              |
+| Tab             | Description            | Key Features                      |
+| --------------- | ---------------------- | --------------------------------- |
+| **Core Stats**  | Primary character info | Attributes, Abilities, Essence    |
+| **Combat**      | Battle mechanics       | Health, Dice pools, Static values |
+| **Equipment**   | Gear management        | Weapons, Armor, Tag references    |
+| **Powers**      | Magical abilities      | Charms, Spells, Descriptions      |
+| **Socials**     | Social mechanics       | Virtues, Intimacies, Resolve      |
+| **Advancement** | Character progression  | Milestones, XP tracking           |
+| **Rulings**     | GM decisions           | House rules, edge cases           |
 
 ---
 
 ## 💾 Data Management
 
 **Import/Export**
+
 - Export single characters or full roster (JSON)
 - Automatic migration for older formats
 - Easy backup and sharing
 
 **Local Storage**
+
 - Auto-save after each change
 - Persistent across sessions
 - Handles migrations on update
@@ -98,11 +100,9 @@
 
 ## 📖 Documentation
 
-- [Complete Documentation](docs/exalted-complete-documentation.md): Feature guide & user manual
-- [Technical Requirements](docs/TECHNICAL_REQUIREMENTS.md): Setup & architecture
-- [Functional Requirements](docs/FUNCTIONAL_REQUIREMENTS.md): Feature specs & criteria
-- [Game Rules](https://www.drivethrurpg.com/product/162759/Exalted-Essence): Official rulebook
 - [Contributing Guide](CONTRIBUTING.md): How to contribute
+- [Changelog](CHANGELOG.md): Project history
+- [Game Rules](https://www.drivethrurpg.com/product/162759/Exalted-Essence): Official rulebook
 
 ---
 
@@ -124,6 +124,7 @@
 We welcome contributions! See [Contributing Guide](CONTRIBUTING.md).
 
 **Development Setup:**
+
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
@@ -137,6 +138,7 @@ We welcome contributions! See [Contributing Guide](CONTRIBUTING.md).
 See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 **v0.0.5-alpha (Current):**
+
 - V0-accelerated character manager
 - Modern shadcn/ui component architecture
 - Complete character sheet functionality

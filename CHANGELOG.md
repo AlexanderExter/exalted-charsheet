@@ -35,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### User Interface
 
-- 📱 **8-Tab Organization** - Core Stats, Combat, Equipment, Powers, Socials, Advancement, Rulings, WIP
+- 📱 **7-Tab Organization** - Core Stats, Combat, Equipment, Powers, Socials, Advancement, Rulings
 - 📱 **Mobile-Responsive Design** - Works across devices and screen sizes
 - 🎨 **Intuitive Interface** - Follows game terminology and logical organization
 - ⚡ **Real-Time Calculations** - All derived values update automatically
@@ -53,10 +53,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Documentation
 
-- 📚 **Comprehensive Documentation** - Complete feature guide and technical details
 - 🤝 **Contributing Guide** - Clear guidelines for community contributions
 - 📝 **Detailed README** - Installation, usage, and development instructions
-- 🎯 **Testing Checklist** - Manual testing procedures for quality assurance
 
 ### Quality Assurance
 
@@ -69,7 +67,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 🏪 **Storage Constraints** - Limited by browser localStorage capacity
 - 📝 **Basic Markdown** - Simple header and paragraph support only
-- ⚔️ **Static Combat Steps** - Combat guidance not dynamic
 - 🎯 **Edge Case Handling** - Some scenarios handled via text fields
 
 ---
