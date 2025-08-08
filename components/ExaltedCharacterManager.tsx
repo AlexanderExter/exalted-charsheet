@@ -15,7 +15,6 @@ import {
   TrendingUp,
   Users,
   Scroll,
-  Construction,
   Save,
   RefreshCw,
   ChevronDown,
@@ -52,7 +51,6 @@ import {
   clampModifier,
 } from "@/lib/exalted-utils"
 import { RulingsTab } from "@/components/character-tabs/RulingsTab"
-import { WIPTab } from "@/components/character-tabs/WIPTab"
 import { PowersTab } from "@/components/character-tabs/PowersTab"
 import { SocialTab } from "@/components/character-tabs/SocialTab"
 import { EquipmentTab } from "@/components/character-tabs/EquipmentTab"
@@ -77,9 +75,9 @@ const ExaltedCharacterManager = () => {
   const [newCharacterName, setNewCharacterName] = useState("")
   const [activeTab, setActiveTab] = useState("core")
   const [searchTerm, setSearchTerm] = useState("")
-  const [globalAbilityAttribute, setGlobalAbilityAttribute] = useState<
-    AttributeType | "none"
-  >("none")
+  const [globalAbilityAttribute, setGlobalAbilityAttribute] = useState<AttributeType | "none">(
+    "none"
+  )
   const [showAboutModal, setShowAboutModal] = useState(false)
   const [showLegalModal, setShowLegalModal] = useState(false)
   const [aboutContent, setAboutContent] = useState("")
@@ -97,22 +95,21 @@ const ExaltedCharacterManager = () => {
   useEffect(() => {
     const loadMarkdownContent = async () => {
       try {
-        const aboutResponse = await fetch('/content/about.md')
+        const aboutResponse = await fetch("/content/about.md")
         const aboutText = await aboutResponse.text()
         setAboutContent(aboutText)
-        
-        const legalResponse = await fetch('/content/legal.md')
+
+        const legalResponse = await fetch("/content/legal.md")
         const legalText = await legalResponse.text()
         setLegalContent(legalText)
       } catch (error) {
-        setAboutContent('# About\n\nInformation about this application.')
-        setLegalContent('# Legal\n\nLegal information and disclaimers.')
+        setAboutContent("# About\n\nInformation about this application.")
+        setLegalContent("# Legal\n\nLegal information and disclaimers.")
       }
     }
-    
+
     loadMarkdownContent()
   }, [])
-
 
   // Character management
   const handleCreateCharacter = useCallback(() => {
@@ -171,8 +168,7 @@ const ExaltedCharacterManager = () => {
     const essence = currentCharacter?.essence?.rating || 1
     const base = essence + 2
     const armorHardness = (currentCharacter?.armor || []).reduce(
-      (total: number, armor: ArmorPiece) =>
-        total + (Number.parseInt(String(armor.hardness)) || 0),
+      (total: number, armor: ArmorPiece) => total + (Number.parseInt(String(armor.hardness)) || 0),
       0
     )
     const modifier = currentCharacter?.staticValues?.hardnessModifier || 0
@@ -338,9 +334,7 @@ const ExaltedCharacterManager = () => {
 
   // Filtered characters for search
   const filteredCharacters = useMemo(() => {
-    return characters.filter(char =>
-      char.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    return characters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase()))
   }, [characters, searchTerm])
 
   if (showCharacterSelect || !currentCharacter) {
@@ -482,7 +476,11 @@ const ExaltedCharacterManager = () => {
                           size="sm"
                           onClick={e => {
                             e.stopPropagation()
-                            if (window.confirm(`Are you sure you want to delete "${character.name}"? This action cannot be undone.`)) {
+                            if (
+                              window.confirm(
+                                `Are you sure you want to delete "${character.name}"? This action cannot be undone.`
+                              )
+                            ) {
                               deleteCharacter(character.id)
                             }
                           }}
@@ -509,7 +507,6 @@ const ExaltedCharacterManager = () => {
     { id: "socials", label: "Socials", icon: Users },
     { id: "advancement", label: "Advancement", icon: TrendingUp },
     { id: "rulings", label: "Rulings", icon: Scroll },
-    { id: "wip", label: "WIP", icon: Construction },
   ]
 
   return (
@@ -654,10 +651,6 @@ const ExaltedCharacterManager = () => {
             <TabsContent value="rulings" className="space-y-6">
               <RulingsTab character={currentCharacter} updateCharacter={updateCharacter} />
             </TabsContent>
-
-            <TabsContent value="wip" className="space-y-6">
-              <WIPTab />
-            </TabsContent>
           </Tabs>
         </div>
       </main>
@@ -689,11 +682,7 @@ const ExaltedCharacterManager = () => {
           <div className="bg-white rounded-lg p-6 max-w-4xl max-h-[80vh] overflow-y-auto m-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">About</h2>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowAboutModal(false)}
-              >
+              <Button variant="outline" size="sm" onClick={() => setShowAboutModal(false)}>
                 ×
               </Button>
             </div>
@@ -715,11 +704,7 @@ const ExaltedCharacterManager = () => {
           <div className="bg-white rounded-lg p-6 max-w-4xl max-h-[80vh] overflow-y-auto m-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Legal Information</h2>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowLegalModal(false)}
-              >
+              <Button variant="outline" size="sm" onClick={() => setShowLegalModal(false)}>
                 ×
               </Button>
             </div>
