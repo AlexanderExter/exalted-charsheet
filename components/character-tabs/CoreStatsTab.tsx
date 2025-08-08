@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { EssenceEditor } from "@/components/EssenceEditor"
 import {
   Select,
   SelectContent,
@@ -13,7 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import type {
   Character,
   StatBlock,
@@ -67,87 +67,18 @@ export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label>Rating</Label>
-                  <Input
-                    type="number"
-                    value={character.essence?.rating || 1}
-                    onChange={e => {
-                      const value = Math.max(0, Math.min(10, Number.parseInt(e.target.value) || 0))
-                      updateCharacter({
-                        essence: { ...character.essence, rating: value },
-                      })
-                    }}
-                    className="w-20 text-center"
-                    min={0}
-                    max={10}
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <Label>Motes</Label>
-                  <Input
-                    type="number"
-                    value={character.essence?.motes || 5}
-                    onChange={e => {
-                      const value = Math.max(0, Math.min(50, Number.parseInt(e.target.value) || 0))
-                      updateCharacter({
-                        essence: { ...character.essence, motes: value },
-                      })
-                    }}
-                    className="w-20 text-center"
-                    min={0}
-                    max={50}
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <Label>Commitments</Label>
-                  <Input
-                    type="number"
-                    value={character.essence?.commitments || 0}
-                    onChange={e => {
-                      const value = Math.max(0, Number.parseInt(e.target.value) || 0)
-                      updateCharacter({
-                        essence: { ...character.essence, commitments: value },
-                      })
-                    }}
-                    className="w-20 text-center"
-                    min={0}
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <Label>Spent</Label>
-                  <Input
-                    type="number"
-                    value={character.essence?.spent || 0}
-                    onChange={e => {
-                      const value = Math.max(0, Number.parseInt(e.target.value) || 0)
-                      updateCharacter({
-                        essence: { ...character.essence, spent: value },
-                      })
-                    }}
-                    className="w-20 text-center"
-                    min={0}
-                  />
-                </div>
-                <Separator />
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label className="font-medium text-blue-600">Remain</Label>
-                    <span className="font-bold text-blue-600">
-                      {(character.essence?.motes || 5) -
-                        (character.essence?.commitments || 0) -
-                        (character.essence?.spent || 0)}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <Label className="font-medium text-green-600">Open</Label>
-                    <span className="font-bold text-green-600">
-                      {(character.essence?.motes || 5) - (character.essence?.commitments || 0)}
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <EssenceEditor
+                essence={
+                  character.essence || {
+                    rating: 1,
+                    motes: 5,
+                    commitments: 0,
+                    spent: 0,
+                    anima: 0,
+                  }
+                }
+                onChange={essence => updateCharacter({ essence })}
+              />
 
               <div className="space-y-4">
                 {/* Anima Slider */}
