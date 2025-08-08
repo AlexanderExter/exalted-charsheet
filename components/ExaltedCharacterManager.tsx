@@ -43,8 +43,12 @@ import type { Character, AttributeType, AbilityType, ArmorPiece } from "@/lib/ch
 import { createNewCharacter } from "@/lib/character-defaults"
 import { toast } from "sonner"
 import { v4 as uuidv4 } from "uuid"
-import { getAnimaLevel, getActiveAnimaRulings } from "@/lib/anima";
-import { calculateStatTotal } from "@/lib/staticValues"
+import {
+  getAnimaLevel,
+  getActiveAnimaRulings,
+  calculateStatTotal,
+  clampModifier,
+} from "@/lib/exalted-utils"
 import { RulingsTab } from "@/components/character-tabs/RulingsTab"
 import { PowersTab } from "@/components/character-tabs/PowersTab"
 import { SocialTab } from "@/components/character-tabs/SocialTab"
