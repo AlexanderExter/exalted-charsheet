@@ -1,16 +1,9 @@
 "use client";
 
-import { User, Swords, Shield, BookOpen, TrendingUp, Users, Scroll } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Character, AttributeType, AbilityType } from "@/lib/character-types";
-import { CoreStatsTab } from "@/components/character-tabs/CoreStatsTab";
-import { CombatTab } from "@/components/character-tabs/CombatTab";
-import { EquipmentTab } from "@/components/character-tabs/EquipmentTab";
-import { PowersTab } from "@/components/character-tabs/PowersTab";
-import { SocialTab } from "@/components/character-tabs/SocialTab";
-import { AdvancementTab } from "@/components/character-tabs/AdvancementTab";
-import { RulingsTab } from "@/components/character-tabs/RulingsTab";
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations";
+import tabs from "@/components/character-tabs/tabs-config";
 import type React from "react";
 
 interface CharacterTabsProps {
@@ -44,15 +37,14 @@ export function CharacterTabs({
   setGlobalAbilityAttribute,
   resolve,
 }: CharacterTabsProps) {
-  const tabs = [
-    { id: "core", label: "Core Stats", icon: User },
-    { id: "combat", label: "Combat", icon: Swords },
-    { id: "equipment", label: "Equipment", icon: Shield },
-    { id: "powers", label: "Powers", icon: BookOpen },
-    { id: "socials", label: "Socials", icon: Users },
-    { id: "advancement", label: "Advancement", icon: TrendingUp },
-    { id: "rulings", label: "Rulings", icon: Scroll },
-  ];
+  const extraProps = {
+    calculateAbilityTotal,
+    calculateDicePool,
+    globalAbilityAttribute,
+    setGlobalAbilityAttribute,
+    calculations,
+    resolve,
+  };
 
   return (
     <Tabs value={activeTab} onValueChange={onTabChange}>
@@ -68,44 +60,22 @@ export function CharacterTabs({
         })}
       </TabsList>
 
-      <TabsContent value="core" className="space-y-6">
-        <CoreStatsTab
-          character={character}
-          updateCharacter={updateCharacter}
-          calculateAbilityTotal={calculateAbilityTotal}
-          calculateDicePool={calculateDicePool}
-          globalAbilityAttribute={globalAbilityAttribute}
-          setGlobalAbilityAttribute={setGlobalAbilityAttribute}
-        />
-      </TabsContent>
+      {tabs.map(tab => {
+        const TabComponent = tab.component;
+        const tabProps = tab.componentProps?.reduce(
+          (acc, key) => {
+            (acc as any)[key] = (extraProps as any)[key];
+            return acc;
+          },
+          {} as Record<string, unknown>,
+        );
 
-      <TabsContent value="combat" className="space-y-6">
-        <CombatTab
-          character={character}
-          updateCharacter={updateCharacter}
-          calculations={calculations}
-        />
-      </TabsContent>
-
-      <TabsContent value="equipment" className="space-y-6">
-        <EquipmentTab character={character} updateCharacter={updateCharacter} />
-      </TabsContent>
-
-      <TabsContent value="powers" className="space-y-6">
-        <PowersTab character={character} updateCharacter={updateCharacter} />
-      </TabsContent>
-
-      <TabsContent value="socials" className="space-y-6">
-        <SocialTab character={character} updateCharacter={updateCharacter} resolve={resolve} />
-      </TabsContent>
-
-      <TabsContent value="advancement" className="space-y-6">
-        <AdvancementTab character={character} updateCharacter={updateCharacter} />
-      </TabsContent>
-
-      <TabsContent value="rulings" className="space-y-6">
-        <RulingsTab character={character} updateCharacter={updateCharacter} />
-      </TabsContent>
+        return (
+          <TabsContent key={tab.id} value={tab.id} className="space-y-6">
+            <TabComponent character={character} updateCharacter={updateCharacter} {...tabProps} />
+          </TabsContent>
+        );
+      })}
     </Tabs>
   );
 }
