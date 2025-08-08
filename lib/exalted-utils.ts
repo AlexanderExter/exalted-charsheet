@@ -231,12 +231,13 @@ export const calculateDicePool = (
 
   // Bonus dice from Charms and other effects are capped at the base pool
   const cappedBonusDice = Math.min(extraDiceBonus, basePool)
-  const totalBonusDice = cappedBonusDice + extraDiceNonBonus
 
   // Add stunt dice (+2 non-capped dice)
   const stuntDice = isStunted ? 2 : 0
-  const totalPool = basePool + totalBonusDice + stuntDice
-  const extraDice = totalBonusDice + stuntDice
+
+  // Non-bonus dice are added after capping
+  const extraDice = cappedBonusDice + extraDiceNonBonus + stuntDice
+  const totalPool = basePool + cappedBonusDice + extraDiceNonBonus + stuntDice
 
   const bonusSuccesses = extraSuccessBonus + extraSuccessNonBonus
   const bonusText = bonusSuccesses > 0 ? ` +${bonusSuccesses} successes` : ""
