@@ -12,6 +12,7 @@ import type {
   DicePool,
   Combat,
   Social,
+  ExaltType,
 } from "./character-types"
 import { v4 as uuidv4 } from "uuid"
 
@@ -144,76 +145,53 @@ export const createNewCharacter = (name: string): Character => ({
   rulings: [],
 })
 
+// Mapping of Exalt types to default mote values
+const defaultMotesByExaltType: Record<ExaltType, number> = {
+  solar: 7,
+  "dragon-blood": 4,
+  lunar: 5,
+  sidereal: 6,
+  abyssal: 7,
+  liminal: 5,
+  exigent: 5,
+}
+
+// Generic character template factory
+export const createCharacterTemplate = (name: string, type: ExaltType): Character => {
+  const character = createNewCharacter(name)
+  character.health.exaltType = type
+  character.essence.motes = defaultMotesByExaltType[type]
+  return character
+}
+
 // Preset character templates for different Exalt types
-export const createSolarCharacter = (name: string): Character => {
-  const character = createNewCharacter(name)
-  character.health.exaltType = "solar"
-  character.essence.motes = 7 // Solars start with more motes
-  return character
-}
+export const createSolarCharacter = (name: string): Character =>
+  createCharacterTemplate(name, "solar")
 
-export const createDragonBloodCharacter = (name: string): Character => {
-  const character = createNewCharacter(name)
-  character.health.exaltType = "dragon-blood"
-  character.essence.motes = 4 // Dragon-Bloods start with fewer motes
-  return character
-}
+export const createDragonBloodCharacter = (name: string): Character =>
+  createCharacterTemplate(name, "dragon-blood")
 
-export const createLunarCharacter = (name: string): Character => {
-  const character = createNewCharacter(name)
-  character.health.exaltType = "lunar"
-  character.essence.motes = 5 // Default for Lunars
-  return character
-}
+export const createLunarCharacter = (name: string): Character =>
+  createCharacterTemplate(name, "lunar")
 
-export const createSiderealCharacter = (name: string): Character => {
-  const character = createNewCharacter(name)
-  character.health.exaltType = "sidereal"
-  character.essence.motes = 6
-  return character
-}
+export const createSiderealCharacter = (name: string): Character =>
+  createCharacterTemplate(name, "sidereal")
 
-export const createAbyssalCharacter = (name: string): Character => {
-  const character = createNewCharacter(name)
-  character.health.exaltType = "abyssal"
-  character.essence.motes = 7
-  return character
-}
+export const createAbyssalCharacter = (name: string): Character =>
+  createCharacterTemplate(name, "abyssal")
 
-export const createLiminalCharacter = (name: string): Character => {
-  const character = createNewCharacter(name)
-  character.health.exaltType = "liminal"
-  character.essence.motes = 5
-  return character
-}
+export const createLiminalCharacter = (name: string): Character =>
+  createCharacterTemplate(name, "liminal")
 
-export const createExigentCharacter = (name: string): Character => {
-  const character = createNewCharacter(name)
-  character.health.exaltType = "exigent"
-  character.essence.motes = 5
-  return character
-}
+export const createExigentCharacter = (name: string): Character =>
+  createCharacterTemplate(name, "exigent")
 
 // Character template selector
 export const createCharacterByType = (name: string, exaltType: string): Character => {
-  switch (exaltType) {
-    case "solar":
-      return createSolarCharacter(name)
-    case "dragon-blood":
-      return createDragonBloodCharacter(name)
-    case "lunar":
-      return createLunarCharacter(name)
-    case "sidereal":
-      return createSiderealCharacter(name)
-    case "abyssal":
-      return createAbyssalCharacter(name)
-    case "liminal":
-      return createLiminalCharacter(name)
-    case "exigent":
-      return createExigentCharacter(name)
-    default:
-      return createLunarCharacter(name) // Default to Lunar
+  if (exaltType in defaultMotesByExaltType) {
+    return createCharacterTemplate(name, exaltType as ExaltType)
   }
+  return createCharacterTemplate(name, "lunar") // Default to Lunar
 }
 
 // Validation defaults
