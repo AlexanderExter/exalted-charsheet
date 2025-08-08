@@ -13,6 +13,7 @@ import type {
   Combat,
   Social,
 } from "./character-types"
+import { v4 as uuidv4 } from "uuid"
 
 // Default stat block
 const createDefaultStatBlock = (baseValue: number = 0): StatBlock => ({
@@ -124,7 +125,7 @@ export const createDefaultSocial = (): Social => ({
 
 // Complete character template
 export const createNewCharacter = (name: string): Character => ({
-  id: `char_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+  id: uuidv4(),
   name,
   attributes: createDefaultAttributes(),
   abilities: createDefaultAbilities(),

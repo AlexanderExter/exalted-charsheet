@@ -37,12 +37,14 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { useLocalStorage } from "@/hooks/useLocalStorage"
 import { useCharacterCalculations } from "@/hooks/useCharacterCalculations"
 import { useAutoSave } from "@/hooks/useAutoSave"
-import { useCharacterContext } from "@/hooks/useCharacterContext"
-import type { Character, AttributeType, AbilityType } from "@/lib/character-types"
+import { useCharacterStore } from "@/hooks/useCharacterStore"
+import type { Character, AttributeType, AbilityType, ArmorPiece } from "@/lib/character-types"
 import { createNewCharacter } from "@/lib/character-defaults"
+import ReactMarkdown from "react-markdown"
+import { toast } from "sonner"
+import { v4 as uuidv4 } from "uuid"
 import {
   getAnimaLevel,
   getActiveAnimaRulings,
@@ -62,37 +64,26 @@ import { CoreStatsTab } from "@/components/character-tabs/CoreStatsTab"
 
 // Main component
 const ExaltedCharacterManager = () => {
-  const [characters, setCharacters] = useLocalStorage<Character[]>("exalted-characters", [])
   const {
-    state,
+    characters,
+    currentCharacter,
+    addCharacter,
     updateCurrentCharacter,
-    addNewCharacter,
     deleteCharacter,
-    setCurrentCharacter: setContextCurrentCharacter,
+    setCurrentCharacter,
     loadCharacters,
-  } = useCharacterContext()
-  const { currentCharacter } = state
+  } = useCharacterStore()
   const [showCharacterSelect, setShowCharacterSelect] = useState(true)
   const [newCharacterName, setNewCharacterName] = useState("")
   const [activeTab, setActiveTab] = useState("core")
   const [searchTerm, setSearchTerm] = useState("")
-  const [globalAbilityAttribute, setGlobalAbilityAttribute] = useState("none")
+  const [globalAbilityAttribute, setGlobalAbilityAttribute] = useState<
+    AttributeType | "none"
+  >("none")
   const [showAboutModal, setShowAboutModal] = useState(false)
   const [showLegalModal, setShowLegalModal] = useState(false)
   const [aboutContent, setAboutContent] = useState("")
   const [legalContent, setLegalContent] = useState("")
-
-  // Simple markdown parser for basic formatting
-  const parseMarkdown = (content: string): string => {
-    return content
-      .replace(/\n/g, '<br/>')
-      .replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold mb-4 mt-6">$1</h1>')
-      .replace(/^## (.+)$/gm, '<h2 class="text-xl font-semibold mb-3 mt-6">$1</h2>')
-      .replace(/^### (.+)$/gm, '<h3 class="text-lg font-medium mb-2 mt-4">$1</h3>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/^- (.+)$/gm, '<li class="ml-4">• $1</li>')
-  }
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -101,15 +92,6 @@ const ExaltedCharacterManager = () => {
 
   // Character calculations hook
   const calculations = useCharacterCalculations(currentCharacter)
-
-  // Character creation - now using imported defaults
-
-  // Load localStorage data into context on mount only
-  useEffect(() => {
-    if (characters.length > 0 && state.characters.length === 0) {
-      loadCharacters(characters)
-    }
-  }, [characters, loadCharacters, state.characters.length])
 
   // Load markdown content
   useEffect(() => {
@@ -131,24 +113,18 @@ const ExaltedCharacterManager = () => {
     loadMarkdownContent()
   }, [])
 
-  // Sync context changes back to localStorage
-  useEffect(() => {
-    if (state.characters.length > 0) {
-      setCharacters(state.characters)
-    }
-  }, [state.characters, setCharacters])
 
   // Character management
   const handleCreateCharacter = useCallback(() => {
     if (!newCharacterName.trim()) return
 
-    addNewCharacter(newCharacterName.trim())
+    addCharacter(newCharacterName.trim())
     setNewCharacterName("")
     setShowCharacterSelect(false)
-  }, [newCharacterName, addNewCharacter])
+  }, [newCharacterName, addCharacter])
 
   const updateCharacter = useCallback(
-    (updates: any) => {
+    (updates: Partial<Character>) => {
       updateCurrentCharacter(updates)
     },
     [updateCurrentCharacter]
@@ -184,7 +160,7 @@ const ExaltedCharacterManager = () => {
     let base = 1
     if (physique >= 3) base += 1
     const armorSoak = (currentCharacter?.armor || []).reduce(
-      (total: number, armor: any) => total + (Number.parseInt(armor.soak) || 0),
+      (total: number, armor: ArmorPiece) => total + (Number.parseInt(String(armor.soak)) || 0),
       0
     )
     const modifier = currentCharacter?.staticValues?.soakModifier || 0
@@ -195,7 +171,8 @@ const ExaltedCharacterManager = () => {
     const essence = currentCharacter?.essence?.rating || 1
     const base = essence + 2
     const armorHardness = (currentCharacter?.armor || []).reduce(
-      (total: number, armor: any) => total + (Number.parseInt(armor.hardness) || 0),
+      (total: number, armor: ArmorPiece) =>
+        total + (Number.parseInt(String(armor.hardness)) || 0),
       0
     )
     const modifier = currentCharacter?.staticValues?.hardnessModifier || 0
@@ -203,7 +180,7 @@ const ExaltedCharacterManager = () => {
   }, [currentCharacter])
 
   const calculateAbilityTotal = useCallback(
-    (abilityKey: string) => {
+    (abilityKey: AbilityType) => {
       const ability = currentCharacter?.abilities?.[abilityKey]
       if (!ability) return 0
 
@@ -291,7 +268,7 @@ const ExaltedCharacterManager = () => {
   // Rulings management - moved to RulingsTab component
 
   // Import/Export functions
-  const exportCharacter = (character: any) => {
+  const exportCharacter = (character: Character) => {
     try {
       const dataStr = JSON.stringify(character, null, 2)
       const dataBlob = new Blob([dataStr], { type: "application/json" })
@@ -309,7 +286,7 @@ const ExaltedCharacterManager = () => {
         window.URL.revokeObjectURL(url)
       }, 100)
     } catch (error) {
-      alert("Failed to export character. Please try again.")
+      toast.error("Failed to export character. Please try again.")
     }
   }
 
@@ -325,35 +302,33 @@ const ExaltedCharacterManager = () => {
         const isArray = Array.isArray(importedData)
         const charactersToImport = isArray ? importedData : [importedData]
 
-        const validatedCharacters = charactersToImport.map((char: any) => {
+        const validatedCharacters = charactersToImport.map((char: Partial<Character>) => {
           if (!char.name) {
             throw new Error("Invalid character data: missing name")
           }
 
-          const newId = Date.now() + Math.random()
-
           return {
             ...createNewCharacter(char.name),
             ...char,
-            id: newId,
+            id: uuidv4(),
           }
         })
 
-        // Add characters to context
-        validatedCharacters.forEach(char => {
-          loadCharacters([...state.characters, char])
-        })
+        // Add characters to store
+        loadCharacters([...characters, ...validatedCharacters])
 
         if (validatedCharacters.length === 1) {
-          setContextCurrentCharacter(validatedCharacters[0].id)
+          setCurrentCharacter(validatedCharacters[0].id)
           setShowCharacterSelect(false)
         }
 
         event.target.value = ""
 
-        alert(`Successfully imported ${validatedCharacters.length} character(s)`)
+        toast.success(`Successfully imported ${validatedCharacters.length} character(s)`)
       } catch (error) {
-        alert("Failed to import character(s). Please ensure the file is a valid character export.")
+        toast.error(
+          "Failed to import character(s). Please ensure the file is a valid character export."
+        )
         event.target.value = ""
       }
     }
@@ -363,10 +338,10 @@ const ExaltedCharacterManager = () => {
 
   // Filtered characters for search
   const filteredCharacters = useMemo(() => {
-    return state.characters.filter(char =>
+    return characters.filter(char =>
       char.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
-  }, [state.characters, searchTerm])
+  }, [characters, searchTerm])
 
   if (showCharacterSelect || !currentCharacter) {
     return (
@@ -478,7 +453,7 @@ const ExaltedCharacterManager = () => {
                       key={character.id}
                       className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md hover:border-gray-300 transition-all cursor-pointer group"
                       onClick={() => {
-                        setContextCurrentCharacter(character.id)
+                        setCurrentCharacter(character.id)
                         setShowCharacterSelect(false)
                       }}
                     >
@@ -723,7 +698,7 @@ const ExaltedCharacterManager = () => {
               </Button>
             </div>
             <div className="prose prose-sm max-w-none text-gray-700">
-              <div dangerouslySetInnerHTML={{ __html: parseMarkdown(aboutContent) }} />
+              <ReactMarkdown>{aboutContent}</ReactMarkdown>
             </div>
             <div className="mt-6 pt-4 border-t">
               <Button onClick={() => setShowAboutModal(false)} className="w-full">
@@ -749,7 +724,7 @@ const ExaltedCharacterManager = () => {
               </Button>
             </div>
             <div className="prose prose-sm max-w-none text-gray-700">
-              <div dangerouslySetInnerHTML={{ __html: parseMarkdown(legalContent) }} />
+              <ReactMarkdown>{legalContent}</ReactMarkdown>
             </div>
             <div className="mt-6 pt-4 border-t">
               <Button onClick={() => setShowLegalModal(false)} className="w-full">

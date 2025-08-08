@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import type { Character, Charm, Spell, SpellCircle } from "@/lib/character-types"
+import { v4 as uuidv4 } from "uuid"
 
 interface PowersTabProps {
   character: Character | null
@@ -27,7 +28,7 @@ export const PowersTab: React.FC<PowersTabProps> = React.memo(({ character, upda
     if (!character) return
 
     const newCharm: Charm = {
-      id: `charm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: uuidv4(),
       name: "",
       cost: "",
       keywords: [],
@@ -44,7 +45,11 @@ export const PowersTab: React.FC<PowersTabProps> = React.memo(({ character, upda
   }, [character, updateCharacter])
 
   const updateCharm = useCallback(
-    (id: string, field: keyof Charm, value: any) => {
+    (
+      id: string,
+      field: keyof Charm,
+      value: Charm[keyof Charm]
+    ) => {
       if (!character) return
 
       updateCharacter({
@@ -72,7 +77,7 @@ export const PowersTab: React.FC<PowersTabProps> = React.memo(({ character, upda
     if (!character) return
 
     const newSpell: Spell = {
-      id: `spell_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: uuidv4(),
       name: "",
       circle: "terrestrial",
       cost: "",
@@ -89,7 +94,11 @@ export const PowersTab: React.FC<PowersTabProps> = React.memo(({ character, upda
   }, [character, updateCharacter])
 
   const updateSpell = useCallback(
-    (id: string, field: keyof Spell, value: any) => {
+    (
+      id: string,
+      field: keyof Spell,
+      value: Spell[keyof Spell]
+    ) => {
       if (!character) return
 
       updateCharacter({

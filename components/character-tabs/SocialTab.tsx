@@ -21,6 +21,7 @@ import type {
   BackgroundType,
   BackgroundLevel,
 } from "@/lib/character-types"
+import { v4 as uuidv4 } from "uuid"
 
 interface SocialTabProps {
   character: Character | null
@@ -63,7 +64,7 @@ export const SocialTab: React.FC<SocialTabProps> = React.memo(
       if (!character) return
 
       const newIntimacy: Intimacy = {
-        id: `intimacy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: uuidv4(),
         description: "",
         intensity: "minor",
       }
@@ -77,7 +78,11 @@ export const SocialTab: React.FC<SocialTabProps> = React.memo(
     }, [character, updateCharacter])
 
     const updateIntimacy = useCallback(
-      (id: string, field: keyof Intimacy, value: any) => {
+      (
+        id: string,
+        field: keyof Intimacy,
+        value: Intimacy[keyof Intimacy]
+      ) => {
         if (!character) return
 
         updateCharacter({
@@ -111,7 +116,7 @@ export const SocialTab: React.FC<SocialTabProps> = React.memo(
       if (!character) return
 
       const newBackground: Background = {
-        id: `background_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: uuidv4(),
         type: "artifact",
         level: "tertiary",
         description: "",
@@ -126,7 +131,11 @@ export const SocialTab: React.FC<SocialTabProps> = React.memo(
     }, [character, updateCharacter])
 
     const updateBackground = useCallback(
-      (id: string, field: keyof Background, value: any) => {
+      (
+        id: string,
+        field: keyof Background,
+        value: Background[keyof Background]
+      ) => {
         if (!character) return
 
         updateCharacter({

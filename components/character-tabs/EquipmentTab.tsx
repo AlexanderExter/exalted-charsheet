@@ -14,7 +14,14 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import type { Character, ArmorPiece, Weapon, ArmorType, WeaponRange } from "@/lib/character-types"
+import type {
+  Character,
+  ArmorPiece,
+  Weapon,
+  ArmorType,
+  WeaponRange,
+} from "@/lib/character-types"
+import { v4 as uuidv4 } from "uuid"
 
 interface EquipmentTabProps {
   character: Character | null
@@ -28,7 +35,7 @@ export const EquipmentTab: React.FC<EquipmentTabProps> = React.memo(
       if (!character) return
 
       const newArmor: ArmorPiece = {
-        id: `armor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: uuidv4(),
         name: "",
         type: "light",
         soak: 0,
@@ -44,7 +51,11 @@ export const EquipmentTab: React.FC<EquipmentTabProps> = React.memo(
     }, [character, updateCharacter])
 
     const updateArmor = useCallback(
-      (id: string, field: keyof ArmorPiece, value: any) => {
+      (
+        id: string,
+        field: keyof ArmorPiece,
+        value: ArmorPiece[keyof ArmorPiece]
+      ) => {
         if (!character) return
 
         updateCharacter({
@@ -72,7 +83,7 @@ export const EquipmentTab: React.FC<EquipmentTabProps> = React.memo(
       if (!character) return
 
       const newWeapon: Weapon = {
-        id: `weapon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: uuidv4(),
         name: "",
         accuracy: 0,
         damage: 0,
@@ -89,7 +100,11 @@ export const EquipmentTab: React.FC<EquipmentTabProps> = React.memo(
     }, [character, updateCharacter])
 
     const updateWeapon = useCallback(
-      (id: string, field: keyof Weapon, value: any) => {
+      (
+        id: string,
+        field: keyof Weapon,
+        value: Weapon[keyof Weapon]
+      ) => {
         if (!character) return
 
         updateCharacter({

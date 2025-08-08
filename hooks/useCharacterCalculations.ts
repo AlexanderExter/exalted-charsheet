@@ -1,7 +1,12 @@
 // Character calculation hook for derived values
 
 import { useMemo } from "react"
-import type { Character } from "@/lib/character-types"
+import type {
+  Character,
+  AttributeType,
+  AbilityType,
+  StatBlock,
+} from "@/lib/character-types"
 import {
   calculateStatTotal,
   getHighestAttributeValue,
@@ -71,13 +76,13 @@ export const useCharacterCalculations = (character: Character | null): Character
     }
 
     // Helper functions
-    const getAttributeTotal = (attributeKey: string): number => {
-      const attribute = (character.attributes as any)[attributeKey]
+    const getAttributeTotal = (attributeKey: AttributeType): number => {
+      const attribute: StatBlock | undefined = character.attributes[attributeKey]
       return attribute ? calculateStatTotal(attribute) : 0
     }
 
-    const getAbilityTotal = (abilityKey: string): number => {
-      const ability = (character.abilities as any)[abilityKey]
+    const getAbilityTotal = (abilityKey: AbilityType): number => {
+      const ability: StatBlock | undefined = character.abilities[abilityKey]
       return ability ? calculateStatTotal(ability) : 0
     }
 
@@ -255,10 +260,10 @@ export const useDicePoolCalculation = (character: Character | null) => {
     }
 
     const attributeValue = calculateStatTotal(
-      (character.attributes as any)[character.dicePool.attribute]
+      character.attributes[character.dicePool.attribute]
     )
     const abilityValue = calculateStatTotal(
-      (character.abilities as any)[character.dicePool.ability]
+      character.abilities[character.dicePool.ability]
     )
 
     return calculateDicePool(
