@@ -1,14 +1,11 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef, useCallback, useMemo } from "react"
+import { useState, useRef, useCallback } from "react"
 import {
-  Plus,
-  Trash2,
   User,
   Download,
   Upload,
-  Search,
   Shield,
   Swords,
   BookOpen,
@@ -17,25 +14,12 @@ import {
   Scroll,
   Save,
   RefreshCw,
-  ChevronDown,
-  ChevronRight,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Separator } from "@/components/ui/separator"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import CharacterSelect from "@/components/CharacterSelect"
 import { useCharacterCalculations } from "@/hooks/useCharacterCalculations"
 import { useAutoSave } from "@/hooks/useAutoSave"
 import { useCharacterStore } from "@/hooks/useCharacterStore"
@@ -71,9 +55,7 @@ const ExaltedCharacterManager = () => {
     loadCharacters,
   } = useCharacterStore()
   const [showCharacterSelect, setShowCharacterSelect] = useState(true)
-  const [newCharacterName, setNewCharacterName] = useState("")
   const [activeTab, setActiveTab] = useState("core")
-  const [searchTerm, setSearchTerm] = useState("")
   const [globalAbilityAttribute, setGlobalAbilityAttribute] = useState<AttributeType | "none">(
     "none"
   )
@@ -89,13 +71,22 @@ const ExaltedCharacterManager = () => {
   // Load markdown content
 
   // Character management
-  const handleCreateCharacter = useCallback(() => {
-    if (!newCharacterName.trim()) return
+    const createCharacter = useCallback(
+    (name: string) => {
+      if (!name.trim()) return
+      addCharacter(name.trim())
+      setShowCharacterSelect(false)
+    },
+    [addCharacter]
+  )
 
-    addCharacter(newCharacterName.trim())
-    setNewCharacterName("")
-    setShowCharacterSelect(false)
-  }, [newCharacterName, addCharacter])
+  const selectCharacter = useCallback(
+    (id: string) => {
+      setCurrentCharacter(id)
+      setShowCharacterSelect(false)
+    },
+    [setCurrentCharacter]
+  )
 
   const updateCharacter = useCallback(
     (updates: Partial<Character>) => {
@@ -309,170 +300,19 @@ const ExaltedCharacterManager = () => {
     reader.readAsText(file)
   }
 
-  // Filtered characters for search
-  const filteredCharacters = useMemo(() => {
-    return characters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase()))
-  }, [characters, searchTerm])
-
   if (showCharacterSelect || !currentCharacter) {
     return (
-      <div className="max-w-4xl mx-auto p-6 space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-center">Exalted: Essence Character Manager</CardTitle>
-            <CardDescription className="text-center">
-              Create and manage your Exalted characters
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Auto-save indicator */}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex items-center justify-center gap-2 text-sm text-gray-600 cursor-help">
-                    {isSaving ? (
-                      <>
-                        <RefreshCw className="w-4 h-4 animate-spin" />
-                        Saving...
-                      </>
-                    ) : lastSaved ? (
-                      <>
-                        <Save className="w-4 h-4" />
-                        Last saved: {lastSaved.toLocaleTimeString()}
-                      </>
-                    ) : null}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>
-                    Characters are automatically saved to your browser&apos;s local storage every 10
-                    minutes
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-
-            {/* Import/Export Controls */}
-            <div className="flex justify-center gap-3">
-              <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
-                <Upload className="w-4 h-4 mr-2" />
-                Import Character(s)
-              </Button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".json"
-                onChange={importCharacter}
-                className="hidden"
-              />
-              {characters.length > 0 && (
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    const dataStr = JSON.stringify(characters, null, 2)
-                    const dataBlob = new Blob([dataStr], { type: "application/json" })
-                    const link = document.createElement("a")
-                    const url = window.URL.createObjectURL(dataBlob)
-                    link.href = url
-                    link.download = "all_exalted_characters.json"
-                    link.click()
-                    window.URL.revokeObjectURL(url)
-                  }}
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Export All
-                </Button>
-              )}
-            </div>
-
-            {/* Create new character */}
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold">Create New Character</h3>
-              <div className="flex gap-3">
-                <Input
-                  value={newCharacterName}
-                  onChange={e => setNewCharacterName(e.target.value)}
-                  placeholder="Character name..."
-                  onKeyPress={e => e.key === "Enter" && handleCreateCharacter()}
-                />
-                <Button onClick={handleCreateCharacter} disabled={!newCharacterName.trim()}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create
-                </Button>
-              </div>
-            </div>
-
-            {/* Character list */}
-            {characters.length > 0 && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">Select Character</h3>
-                  <div className="flex items-center gap-2">
-                    <Search className="w-4 h-4" />
-                    <Input
-                      placeholder="Search characters..."
-                      value={searchTerm}
-                      onChange={e => setSearchTerm(e.target.value)}
-                      className="w-48"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid gap-2">
-                  {filteredCharacters.map(character => (
-                    <div
-                      key={character.id}
-                      className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md hover:border-gray-300 transition-all cursor-pointer group"
-                      onClick={() => {
-                        setCurrentCharacter(character.id)
-                        setShowCharacterSelect(false)
-                      }}
-                    >
-                      <div className="flex items-center gap-3">
-                        <User className="w-5 h-5 text-gray-600" />
-                        <div>
-                          <div className="font-medium">{character.name}</div>
-                          <div className="text-sm text-gray-600">
-                            Essence {character.essence?.rating || 1}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={e => {
-                            e.stopPropagation()
-                            exportCharacter(character)
-                          }}
-                        >
-                          <Download className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={e => {
-                            e.stopPropagation()
-                            if (
-                              window.confirm(
-                                `Are you sure you want to delete "${character.name}"? This action cannot be undone.`
-                              )
-                            ) {
-                              deleteCharacter(character.id)
-                            }
-                          }}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+      <CharacterSelect
+        characters={characters}
+        onCreateCharacter={createCharacter}
+        onSelectCharacter={selectCharacter}
+        onDeleteCharacter={deleteCharacter}
+        onExportCharacter={exportCharacter}
+        importCharacter={importCharacter}
+        isSaving={isSaving}
+        lastSaved={lastSaved}
+        fileInputRef={fileInputRef}
+      />
     )
   }
 
