@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { exportCharacters } from "@/lib/character-storage";
 import {
   Card,
   CardContent,
@@ -127,18 +128,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
             {characters.length > 0 && (
               <Button
                 variant="outline"
-                onClick={() => {
-                  const dataStr = JSON.stringify(characters, null, 2);
-                  const dataBlob = new Blob([dataStr], {
-                    type: "application/json",
-                  });
-                  const link = document.createElement("a");
-                  const url = window.URL.createObjectURL(dataBlob);
-                  link.href = url;
-                  link.download = "all_exalted_characters.json";
-                  link.click();
-                  window.URL.revokeObjectURL(url);
-                }}
+                onClick={() => exportCharacters(characters)}
               >
                 <Download className="w-4 h-4 mr-2" />
                 Export All
