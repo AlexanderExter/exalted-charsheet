@@ -19,12 +19,10 @@ interface CombatTabProps {
   character: Character | null
   updateCharacter: (updates: Partial<Character>) => void
   calculations: CharacterCalculations
-  calculateSoak: () => number
-  calculateHardness: () => number
 }
 
 export const CombatTab: React.FC<CombatTabProps> = React.memo(
-  ({ character, updateCharacter, calculations, calculateSoak, calculateHardness }) => {
+  ({ character, updateCharacter, calculations }) => {
     const {
       getHighestAttribute,
       getTotalHealthLevels,
@@ -265,8 +263,6 @@ export const CombatTab: React.FC<CombatTabProps> = React.memo(
           character={character}
           updateCharacter={updateCharacter}
           calculations={calculations}
-          calculateSoak={calculateSoak}
-          calculateHardness={calculateHardness}
         />
 
         {/* Health Tracker */}

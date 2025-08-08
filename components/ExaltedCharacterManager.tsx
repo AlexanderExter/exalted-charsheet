@@ -11,7 +11,6 @@ import type {
   Character,
   AttributeType,
   AbilityType,
-  ArmorPiece,
 } from "@/lib/character-types";
 import { calculateStatTotal } from "@/lib/exalted-utils";
 import { importCharacters, exportCharacter } from "@/lib/character-storage";
@@ -104,32 +103,6 @@ const ExaltedCharacterManager = () => {
     };
   };
 
-  const calculateSoak = () => {
-    if (!currentCharacter?.abilities?.physique) return 1;
-    const physique = calculateStatTotal(currentCharacter.abilities.physique);
-    let base = 1;
-    if (physique >= 3) base += 1;
-    const armorSoak = (currentCharacter?.armor || []).reduce(
-      (total: number, armor: ArmorPiece) =>
-        total + (Number.parseInt(String(armor.soak)) || 0),
-      0,
-    );
-    const modifier = currentCharacter?.staticValues?.soakModifier || 0;
-    return Math.max(0, base + armorSoak + Math.max(-5, Math.min(5, modifier)));
-  };
-
-  const calculateHardness = () => {
-    const essence = currentCharacter?.essence?.rating || 1;
-    const base = essence + 2;
-    const armorHardness = (currentCharacter?.armor || []).reduce(
-      (total: number, armor: ArmorPiece) =>
-        total + (Number.parseInt(String(armor.hardness)) || 0),
-      0,
-    );
-    const modifier = currentCharacter?.staticValues?.hardnessModifier || 0;
-    return Math.max(0, base + armorHardness + Math.max(-5, Math.min(5, modifier)));
-  };
-
   const handleExport = async (character: Character) => {
     try {
       await exportCharacter(character);
@@ -201,8 +174,6 @@ const ExaltedCharacterManager = () => {
             character={currentCharacter}
             updateCharacter={updateCharacter}
             calculations={calculations}
-            calculateSoak={calculateSoak}
-            calculateHardness={calculateHardness}
             calculateAbilityTotal={calculateAbilityTotal}
             calculateDicePool={calculateDicePool}
             globalAbilityAttribute={globalAbilityAttribute}
