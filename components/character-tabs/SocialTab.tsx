@@ -26,7 +26,7 @@ import { v4 as uuidv4 } from "uuid"
 interface SocialTabProps {
   character: Character | null
   updateCharacter: (updates: Partial<Character>) => void
-  calculateResolve: () => number
+  resolve: number
 }
 
 const virtueOptions: Array<NonNullable<VirtueType>> = [
@@ -40,7 +40,7 @@ const virtueOptions: Array<NonNullable<VirtueType>> = [
 ]
 
 export const SocialTab: React.FC<SocialTabProps> = React.memo(
-  ({ character, updateCharacter, calculateResolve }) => {
+  ({ character, updateCharacter, resolve }) => {
     // Virtue management functions
     const setVirtue = useCallback(
       (type: "major" | "minor", virtue: VirtueType) => {
@@ -206,7 +206,7 @@ export const SocialTab: React.FC<SocialTabProps> = React.memo(
           <CardContent>
             <div className="space-y-2">
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">{calculateResolve()}</div>
+                <div className="text-2xl font-bold text-blue-600">{resolve}</div>
                 <div className="text-sm font-medium text-gray-700">Resolve</div>
               </div>
               <div className="text-xs text-gray-500 text-center">
