@@ -9,16 +9,12 @@ interface StaticValuesPanelProps {
   character: Character
   updateCharacter: (updates: Partial<Character>) => void
   calculations: CharacterCalculations
-  calculateSoak: () => number
-  calculateHardness: () => number
 }
 
 export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
   character,
   updateCharacter,
   calculations,
-  calculateSoak,
-  calculateHardness,
 }) => {
   return (
     <Card>
@@ -156,7 +152,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
             {/* Soak */}
             <div className="space-y-2">
               <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-600">{calculateSoak()}</div>
+                <div className="text-2xl font-bold text-yellow-600">{calculations.soak}</div>
                 <div className="text-sm font-medium text-gray-700">Soak</div>
               </div>
               <div className="text-xs text-gray-500 text-center">
@@ -193,7 +189,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
             {/* Hardness */}
             <div className="space-y-2">
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">{calculateHardness()}</div>
+                <div className="text-2xl font-bold text-purple-600">{calculations.hardness}</div>
                 <div className="text-sm font-medium text-gray-700">Hardness</div>
               </div>
               <div className="text-xs text-gray-500 text-center">

@@ -19,8 +19,6 @@ interface CharacterTabsProps {
   character: Character;
   updateCharacter: (updates: Partial<Character>) => void;
   calculations: CharacterCalculations;
-  calculateSoak: () => number;
-  calculateHardness: () => number;
   calculateAbilityTotal: (abilityKey: AbilityType) => number;
   calculateDicePool: () => {
     basePool: number;
@@ -40,8 +38,6 @@ export function CharacterTabs({
   character,
   updateCharacter,
   calculations,
-  calculateSoak,
-  calculateHardness,
   calculateAbilityTotal,
   calculateDicePool,
   globalAbilityAttribute,
@@ -88,8 +84,6 @@ export function CharacterTabs({
           character={character}
           updateCharacter={updateCharacter}
           calculations={calculations}
-          calculateSoak={calculateSoak}
-          calculateHardness={calculateHardness}
         />
       </TabsContent>
 
