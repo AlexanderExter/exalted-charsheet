@@ -78,7 +78,7 @@ This app implements core **Exalted: Essence** mechanics, including:
 - [React Documentation](https://react.dev/)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [Tailwind CSS Docs](https://tailwindcss.com/docs)
-- [Vite Guide](https://vitejs.dev/guide/)
+- [Next.js Documentation](https://nextjs.org/docs)
 
 ---
 
