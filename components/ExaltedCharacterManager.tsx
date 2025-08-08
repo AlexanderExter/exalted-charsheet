@@ -49,13 +49,13 @@ import {
   calculateStatTotal,
   clampModifier,
 } from "@/lib/exalted-utils"
-import { RulingsTab } from "@/components/character-tabs/RulingsTab"
-import { PowersTab } from "@/components/character-tabs/PowersTab"
-import { SocialTab } from "@/components/character-tabs/SocialTab"
-import { EquipmentTab } from "@/components/character-tabs/EquipmentTab"
-import { AdvancementTab } from "@/components/character-tabs/AdvancementTab"
-import { CombatTab } from "@/components/character-tabs/CombatTab"
-import { CoreStatsTab } from "@/components/character-tabs/CoreStatsTab"
+import { RulingsTab } from "@/components/character-tabs/rulings/RulingsTab"
+import { PowersTab } from "@/components/character-tabs/powers/PowersTab"
+import { SocialTab } from "@/components/character-tabs/social/SocialTab"
+import { EquipmentTab } from "@/components/character-tabs/equipment/EquipmentTab"
+import { AdvancementTab } from "@/components/character-tabs/advancement/AdvancementTab"
+import { CombatTab } from "@/components/character-tabs/combat/CombatTab"
+import { CoreStatsTab } from "@/components/character-tabs/core-stats/CoreStatsTab"
 
 // Anima system functions - now imported from utils
 
