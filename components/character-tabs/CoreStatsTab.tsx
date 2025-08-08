@@ -4,14 +4,13 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { EssenceEditor } from "@/components/EssenceEditor";
-import { Badge } from "@/components/ui/badge";
 import type { Character, AttributeType, AbilityType } from "@/lib/character-types";
 import { calculateStatTotal } from "@/lib/exalted-utils";
-import { getAnimaLevel, getActiveAnimaRulings } from "@/lib/exalted-utils/anima";
 import { StatTable } from "@/components/forms/StatTable";
 import { attributeConfig, abilityConfig } from "@/lib/stat-config";
 import { DicePoolEditor } from "@/components/forms/DicePoolEditor";
+import { EssencePanel } from "@/components/character-tabs/common/EssencePanel";
+import { createDefaultEssence } from "@/lib/character-defaults";
 
 interface CoreStatsTabProps {
   character: Character | null;
@@ -60,136 +59,10 @@ export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(
 
     return (
       <div className="space-y-6">
-        {/* Essence */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Essence</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-6">
-              <EssenceEditor
-                essence={
-                  character.essence || {
-                    rating: 1,
-                    motes: 5,
-                    commitments: 0,
-                    spent: 0,
-                    anima: 0,
-                  }
-                }
-                onChange={essence => updateCharacter({ essence })}
-              />
-
-              <div className="space-y-4">
-                {/* Anima Slider */}
-                <div className="space-y-3">
-                  <Label className="text-sm font-medium">Anima Level</Label>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-xs text-gray-600">
-                      <span>Dim</span>
-                      <span>Burning</span>
-                      <span>Bonfire</span>
-                      <span>Iconic</span>
-                    </div>
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      step="1"
-                      value={character.essence?.anima || 0}
-                      onChange={e => {
-                        const value = Number.parseInt(e.target.value);
-                        updateCharacter({
-                          essence: { ...character.essence, anima: value },
-                        });
-                      }}
-                      className={`w-full h-3 rounded-lg appearance-none cursor-pointer slider ${
-                        (character?.essence?.anima || 0) <= 4
-                          ? "slider-dim"
-                          : (character?.essence?.anima || 0) <= 6
-                            ? "slider-burning"
-                            : (character?.essence?.anima || 0) <= 9
-                              ? "slider-bonfire"
-                              : "slider-iconic"
-                      }`}
-                      style={{
-                        background: `linear-gradient(to right,
-                        ${
-                          (character?.essence?.anima || 0) <= 4
-                            ? "#9ca3af"
-                            : (character?.essence?.anima || 0) <= 6
-                              ? "#f97316"
-                              : (character?.essence?.anima || 0) <= 9
-                                ? "#ef4444"
-                                : "#9333ea"
-                        } 0%,
-                        ${
-                          (character?.essence?.anima || 0) <= 4
-                            ? "#9ca3af"
-                            : (character?.essence?.anima || 0) <= 6
-                              ? "#f97316"
-                              : (character?.essence?.anima || 0) <= 9
-                                ? "#ef4444"
-                                : "#9333ea"
-                        } ${((character?.essence?.anima || 0) / 10) * 100}%,
-                        #e5e7eb ${((character?.essence?.anima || 0) / 10) * 100}%,
-                        #e5e7eb 100%)`,
-                      }}
-                    />
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>0</span>
-                      <span>4</span>
-                      <span>6</span>
-                      <span>9</span>
-                      <span>10</span>
-                    </div>
-                    <div className="text-center">
-                      <span className="text-lg font-bold text-purple-600">
-                        {character?.essence?.anima || 0}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Anima Level and Rulings */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium text-purple-600">Anima Level</span>
-                    <Badge variant="outline" className="text-purple-600">
-                      {getAnimaLevel(character?.essence?.anima || 0)}
-                    </Badge>
-                  </div>
-                  {getActiveAnimaRulings(character?.essence?.anima || 0).length > 0 && (
-                    <div className="bg-purple-50 p-3 rounded-lg">
-                      <div className="text-sm font-medium text-purple-700 mb-2">
-                        Active Effects:
-                      </div>
-                      {getActiveAnimaRulings(character?.essence?.anima || 0).map(
-                        (ruling, index) => (
-                          <div key={index} className="text-sm text-purple-600">
-                            • {ruling}
-                          </div>
-                        ),
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Exalt Type Rules Placeholder */}
-                <div className="space-y-2">
-                  <div className="bg-gray-50 p-3 rounded-lg">
-                    <div className="text-sm font-medium text-gray-700 mb-2">
-                      Exalt Type Rules:
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      [Placeholder: Exalt-specific rules and abilities will be displayed here based on character type]
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <EssencePanel
+          essence={character.essence || createDefaultEssence()}
+          onChange={essence => updateCharacter({ essence })}
+        />
 
         {/* Attributes and Abilities */}
         <div className="grid lg:grid-cols-2 gap-6">
