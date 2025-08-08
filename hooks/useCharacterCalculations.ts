@@ -7,8 +7,7 @@ import type {
   AbilityType,
   StatBlock,
 } from "@/lib/character-types"
-import {
-  calculateStatTotal,
+import { calculateStatTotal,
   getHighestAttributeValue,
   calculateEvasion,
   calculateParry,
@@ -16,11 +15,9 @@ import {
   calculateResolve,
   calculateSoak,
   calculateHardness,
-  calculateHealthLevels,
-  calculateHealthPenalty,
-  calculateDicePool,
-  type DicePoolResult,
-} from "@/lib/exalted-utils"
+} from "@/lib/staticValues";
+import { calculateHealthLevels, calculateHealthPenalty } from "@/lib/health";
+import { calculateDicePool, type DicePoolResult } from "@/lib/dice";
 
 export interface CharacterCalculations {
   // Static values

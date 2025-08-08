@@ -20,7 +20,8 @@ import type {
   AttributeType,
   AbilityType,
 } from "@/lib/character-types"
-import { getAnimaLevel, getActiveAnimaRulings, calculateStatTotal } from "@/lib/exalted-utils"
+import { getAnimaLevel, getActiveAnimaRulings } from "@/lib/anima"
+import { calculateStatTotal } from "@/lib/staticValues"
 
 interface CoreStatsTabProps {
   character: Character | null
