@@ -228,13 +228,15 @@ export const calculateDicePool = (
   isStunted: boolean = false
 ): DicePoolResult => {
   const basePool = attributeValue + abilityValue
-  const bonusDice = extraDiceBonus + extraDiceNonBonus
-  const cappedBonusDice = Math.min(bonusDice, basePool)
+
+  // Bonus dice from Charms and other effects are capped at the base pool
+  const cappedBonusDice = Math.min(extraDiceBonus, basePool)
+  const totalBonusDice = cappedBonusDice + extraDiceNonBonus
 
   // Add stunt dice (+2 non-capped dice)
   const stuntDice = isStunted ? 2 : 0
-  const totalPool = basePool + cappedBonusDice + stuntDice
-  const extraDice = cappedBonusDice + stuntDice
+  const totalPool = basePool + totalBonusDice + stuntDice
+  const extraDice = totalBonusDice + stuntDice
 
   const bonusSuccesses = extraSuccessBonus + extraSuccessNonBonus
   const bonusText = bonusSuccesses > 0 ? ` +${bonusSuccesses} successes` : ""
