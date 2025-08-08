@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom"
 import { render, screen, fireEvent } from "@testing-library/react"
 import { describe, it, expect, vi } from "vitest"
-import { EssencePanel } from "./EssencePanel"
+import { EssencePanel } from "../EssencePanel"
 import { createDefaultEssence } from "@/lib/character-defaults"
 
 describe("EssencePanel", () => {
