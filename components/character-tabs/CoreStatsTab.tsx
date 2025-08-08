@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import StatBlockEditor from "@/components/common/StatBlockEditor"
 import {
   Select,
   SelectContent,
@@ -290,74 +291,24 @@ export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(
                                 ? "text-red-600"
                                 : "text-gray-700"
                         return (
-                          <tr key={key} className="border-b border-gray-200">
-                            <td className={`py-2 px-3 font-medium capitalize ${colorClass}`}>
-                              {key}
-                            </td>
-                            <td className="py-2 px-3">
-                              <Input
-                                type="number"
-                                value={attr.base}
-                                onChange={e => {
-                                  const value = Math.max(
-                                    1,
-                                    Math.min(5, Number.parseInt(e.target.value) || 1)
-                                  )
-                                  updateCharacter({
-                                    attributes: {
-                                      ...character.attributes,
-                                      [key]: { ...attr, base: value },
-                                    },
-                                  })
-                                }}
-                                className="w-16 text-center"
-                                min={1}
-                                max={5}
-                              />
-                            </td>
-                            <td className="py-2 px-3">
-                              <Input
-                                type="number"
-                                value={attr.added}
-                                onChange={e => {
-                                  const maxAdded = Math.max(0, 5 - attr.base)
-                                  const value = Math.min(
-                                    maxAdded,
-                                    Math.max(0, Number.parseInt(e.target.value) || 0)
-                                  )
-                                  updateCharacter({
-                                    attributes: {
-                                      ...character.attributes,
-                                      [key]: { ...attr, added: value },
-                                    },
-                                  })
-                                }}
-                                className="w-16 text-center"
-                                min={0}
-                                max={Math.max(0, 5 - attr.base)}
-                              />
-                            </td>
-                            <td className="py-2 px-3">
-                              <Input
-                                type="number"
-                                value={attr.bonus}
-                                onChange={e => {
-                                  const value = Math.max(0, Number.parseInt(e.target.value) || 0)
-                                  updateCharacter({
-                                    attributes: {
-                                      ...character.attributes,
-                                      [key]: { ...attr, bonus: value },
-                                    },
-                                  })
-                                }}
-                                className="w-16 text-center"
-                                min={0}
-                              />
-                            </td>
-                            <td className={`py-2 px-3 font-bold text-center ${colorClass}`}>
-                              {calculateStatTotal(attr)}
-                            </td>
-                          </tr>
+                          <StatBlockEditor
+                            key={key}
+                            label={key}
+                            value={attr}
+                            onChange={updated =>
+                              updateCharacter({
+                                attributes: {
+                                  ...character.attributes,
+                                  [key]: updated,
+                                },
+                              })
+                            }
+                            minBase={1}
+                            maxBase={5}
+                            maxTotal={5}
+                            labelClassName={colorClass}
+                            totalClassName={colorClass}
+                          />
                         )
                       }
                     )}
@@ -436,86 +387,37 @@ export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(
                   </thead>
                   <tbody>
                     {Object.entries(character.abilities || {}).map(
-                      ([key, ability]: [AbilityType, StatBlock]) => (
-                        <tr key={key} className="border-b border-gray-200">
-                          <td className="py-2 px-3 font-medium text-gray-700 text-sm capitalize">
-                            {key.replace(/([A-Z])/g, " $1").trim()}
-                          </td>
-                          <td className="py-2 px-3">
-                            <Input
-                              type="number"
-                              value={ability.base}
-                              onChange={e => {
-                                const value = Math.max(
-                                  0,
-                                  Math.min(5, Number.parseInt(e.target.value) || 0)
-                                )
-                                updateCharacter({
-                                  abilities: {
-                                    ...character.abilities,
-                                    [key]: { ...ability, base: value },
-                                  },
-                                })
-                              }}
-                              className="w-16 text-center text-sm"
-                              min={0}
-                              max={5}
-                            />
-                          </td>
-                          <td className="py-2 px-3">
-                            <Input
-                              type="number"
-                              value={ability.added}
-                              onChange={e => {
-                                const maxAdded = Math.max(0, 5 - ability.base)
-                                const value = Math.min(
-                                  maxAdded,
-                                  Math.max(0, Number.parseInt(e.target.value) || 0)
-                                )
-                                updateCharacter({
-                                  abilities: {
-                                    ...character.abilities,
-                                    [key]: { ...ability, added: value },
-                                  },
-                                })
-                              }}
-                              className="w-16 text-center text-sm"
-                              min={0}
-                              max={Math.max(0, 5 - ability.base)}
-                            />
-                          </td>
-                          <td className="py-2 px-3">
-                            <Input
-                              type="number"
-                              value={ability.bonus}
-                              onChange={e => {
-                                const value = Math.max(0, Number.parseInt(e.target.value) || 0)
-                                updateCharacter({
-                                  abilities: {
-                                    ...character.abilities,
-                                    [key]: { ...ability, bonus: value },
-                                  },
-                                })
-                              }}
-                              className="w-16 text-center text-sm"
-                              min={0}
-                            />
-                          </td>
-                          <td
-                            className={`py-2 px-3 font-bold text-center text-sm ${
-                              globalAbilityAttribute === "fortitude"
-                                ? "text-green-600"
-                                : globalAbilityAttribute === "finesse"
-                                  ? "text-blue-600"
-                                  : globalAbilityAttribute === "force"
-                                    ? "text-red-600"
-                                    : "text-gray-700"
-                            }`}
-                          >
-                            {calculateAbilityTotal(key)}
-                          </td>
-                        </tr>
-                      )
+                      ([key, ability]: [AbilityType, StatBlock]) => {
+                        const totalColorClass =
+                          globalAbilityAttribute === "fortitude"
+                            ? "text-green-600"
+                            : globalAbilityAttribute === "finesse"
+                              ? "text-blue-600"
+                              : globalAbilityAttribute === "force"
+                                ? "text-red-600"
+                                : "text-gray-700"
+                        return (
+                          <StatBlockEditor
+                            key={key}
+                            label={key.replace(/([A-Z])/g, " $1").trim()}
+                            value={ability}
+                            onChange={updated =>
+                              updateCharacter({
+                                abilities: {
+                                  ...character.abilities,
+                                  [key]: updated,
+                                },
+                              })
+                            }
+                            minBase={0}
+                            maxBase={5}
+                            maxTotal={5}
+                            labelClassName="text-gray-700 text-sm capitalize"
+                            totalClassName={`text-sm ${totalColorClass}`}
+                            total={calculateAbilityTotal(key)}
+                          />
+                        )
+                      }
                     )}
                   </tbody>
                 </table>
