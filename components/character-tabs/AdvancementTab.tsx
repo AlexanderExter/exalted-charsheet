@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import type { Character, AdvancementEntry, AdvancementStatus } from "@/lib/character-types"
+import { v4 as uuidv4 } from "uuid"
 
 interface AdvancementTabProps {
   character: Character | null
@@ -30,7 +31,7 @@ export const AdvancementTab: React.FC<AdvancementTabProps> = React.memo(
       if (!character) return
 
       const newEntry: AdvancementEntry = {
-        id: `advancement_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: uuidv4(),
         item: "",
         status: "Planned",
         timestamp: new Date().toLocaleDateString(),
@@ -43,7 +44,11 @@ export const AdvancementTab: React.FC<AdvancementTabProps> = React.memo(
     }, [character, updateCharacter])
 
     const updateAdvancementEntry = useCallback(
-      (id: string, field: keyof AdvancementEntry, value: any) => {
+      (
+        id: string,
+        field: keyof AdvancementEntry,
+        value: AdvancementEntry[keyof AdvancementEntry]
+      ) => {
         if (!character) return
 
         updateCharacter({

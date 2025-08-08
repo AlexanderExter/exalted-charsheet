@@ -5,8 +5,8 @@ interface UseAutoSaveReturn {
   lastSaved: Date | null
 }
 
-export const useAutoSave = (
-  data: any,
+export const useAutoSave = <T,>(
+  data: T,
   key: string,
   delay = 600000 // 10 minutes default
 ): UseAutoSaveReturn => {

@@ -14,13 +14,18 @@ import {
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import type { Character } from "@/lib/character-types"
+import type {
+  Character,
+  StatBlock,
+  AttributeType,
+  AbilityType,
+} from "@/lib/character-types"
 import { getAnimaLevel, getActiveAnimaRulings, calculateStatTotal } from "@/lib/exalted-utils"
 
 interface CoreStatsTabProps {
   character: Character | null
   updateCharacter: (updates: Partial<Character>) => void
-  calculateAbilityTotal: (abilityKey: string) => number
+  calculateAbilityTotal: (abilityKey: AbilityType) => number
   calculateDicePool: () => {
     basePool: number
     extraDice: number
@@ -28,8 +33,8 @@ interface CoreStatsTabProps {
     cappedBonusDice: number
     actionPhrase: string
   }
-  globalAbilityAttribute: string
-  setGlobalAbilityAttribute: (attribute: string) => void
+  globalAbilityAttribute: AttributeType | "none"
+  setGlobalAbilityAttribute: (attribute: AttributeType | "none") => void
 }
 
 export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(
@@ -275,7 +280,7 @@ export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(
                   </thead>
                   <tbody>
                     {Object.entries(character.attributes || {}).map(
-                      ([key, attr]: [string, any]) => {
+                      ([key, attr]: [AttributeType, StatBlock]) => {
                         const colorClass =
                           key === "fortitude"
                             ? "text-green-600"
@@ -431,7 +436,7 @@ export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(
                   </thead>
                   <tbody>
                     {Object.entries(character.abilities || {}).map(
-                      ([key, ability]: [string, any]) => (
+                      ([key, ability]: [AbilityType, StatBlock]) => (
                         <tr key={key} className="border-b border-gray-200">
                           <td className="py-2 px-3 font-medium text-gray-700 text-sm capitalize">
                             {key.replace(/([A-Z])/g, " $1").trim()}

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import type { Character, Ruling } from "@/lib/character-types"
+import { v4 as uuidv4 } from "uuid"
 
 interface RulingsTabProps {
   character: Character | null
@@ -28,7 +29,7 @@ export const RulingsTab: React.FC<RulingsTabProps> = React.memo(
       if (!character) return
 
       const newRuling: Ruling = {
-        id: `ruling_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: uuidv4(),
         title: "New Ruling",
         description: "",
         category: "house-rule",

@@ -18,11 +18,13 @@ import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import type { Character, ExaltType, DramaticInjury } from "@/lib/character-types"
 import { getAnimaLevel, getActiveAnimaRulings, calculateStatTotal } from "@/lib/exalted-utils"
+import type { CharacterCalculations } from "@/hooks/useCharacterCalculations"
+import { v4 as uuidv4 } from "uuid"
 
 interface CombatTabProps {
   character: Character | null
   updateCharacter: (updates: Partial<Character>) => void
-  calculations: any
+  calculations: CharacterCalculations
   calculateSoak: () => number
   calculateHardness: () => number
 }
@@ -50,7 +52,7 @@ export const CombatTab: React.FC<CombatTabProps> = React.memo(
       if (!character) return
 
       const newInjury: DramaticInjury = {
-        id: `injury_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: uuidv4(),
         description: "",
         isHealed: false,
       }
@@ -64,7 +66,11 @@ export const CombatTab: React.FC<CombatTabProps> = React.memo(
     }, [character, updateCharacter])
 
     const updateDramaticInjury = useCallback(
-      (id: string, field: keyof DramaticInjury, value: any) => {
+      (
+        id: string,
+        field: keyof DramaticInjury,
+        value: DramaticInjury[keyof DramaticInjury]
+      ) => {
         if (!character) return
 
         updateCharacter({
