@@ -10,17 +10,23 @@ import type {
 import {
   calculateStatTotal,
   getHighestAttributeValue,
+} from "@/lib/exalted-utils"
+import {
   calculateEvasion,
   calculateParry,
   calculateDefense,
   calculateResolve,
   calculateSoak,
   calculateHardness,
+} from "@/lib/exalted-utils/static-values"
+import {
   calculateHealthLevels,
   calculateHealthPenalty,
+} from "@/lib/exalted-utils/health"
+import {
   calculateDicePool,
   type DicePoolResult,
-} from "@/lib/exalted-utils"
+} from "@/lib/exalted-utils/dice"
 
 export interface CharacterCalculations {
   // Static values
