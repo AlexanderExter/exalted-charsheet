@@ -50,7 +50,6 @@ export const createDefaultAbilities = (): Abilities => ({
 
 // Default essence pool
 export const createDefaultEssence = (): Essence => ({
-  motes: 5,
   commitments: 0,
   spent: 0,
   anima: 0,
@@ -144,22 +143,10 @@ export const createNewCharacter = (name: string): Character => ({
   rulings: [],
 });
 
-// Mapping of Exalt types to default mote values
-const defaultMotesByExaltType: Record<ExaltType, number> = {
-  solar: 7,
-  "dragon-blood": 4,
-  lunar: 5,
-  sidereal: 6,
-  abyssal: 7,
-  liminal: 5,
-  exigent: 5,
-};
-
 // Generic character template factory
 export const createCharacterTemplate = (name: string, type: ExaltType): Character => {
   const character = createNewCharacter(name);
   character.health.exaltType = type;
-  character.essence.motes = defaultMotesByExaltType[type];
   return character;
 };
 
@@ -186,8 +173,18 @@ export const createExigentCharacter = (name: string): Character =>
   createCharacterTemplate(name, "exigent");
 
 // Character template selector
+const EXALT_TYPES: ExaltType[] = [
+  "solar",
+  "dragon-blood",
+  "lunar",
+  "sidereal",
+  "abyssal",
+  "liminal",
+  "exigent",
+];
+
 export const createCharacterByType = (name: string, exaltType: string): Character => {
-  if (exaltType in defaultMotesByExaltType) {
+  if (EXALT_TYPES.includes(exaltType as ExaltType)) {
     return createCharacterTemplate(name, exaltType as ExaltType);
   }
   return createCharacterTemplate(name, "lunar"); // Default to Lunar

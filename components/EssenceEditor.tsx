@@ -11,11 +11,14 @@ interface EssenceEditorProps {
 
 export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence, onChange }) => {
   const update = (field: keyof Essence, value: number) => {
-    onChange({ ...essence, [field]: value });
+    const updated = { ...essence, [field]: value };
+    const rating = updated.rating ?? 0;
+    updated.motes = 5 + rating * 2;
+    onChange(updated);
   };
 
   const rating = essence.rating ?? 1;
-  const motes = essence.motes ?? 5;
+  const motes = 5 + rating * 2;
   const commitments = essence.commitments ?? 0;
   const spent = essence.spent ?? 0;
 
@@ -43,10 +46,7 @@ export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence
         <Input
           type="number"
           value={motes}
-          onChange={e => {
-            const value = Math.max(0, Math.min(50, Number.parseInt(e.target.value) || 0));
-            update("motes", value);
-          }}
+          readOnly
           className="w-20 text-center"
           min={0}
           max={50}

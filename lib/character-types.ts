@@ -30,7 +30,7 @@ export interface Abilities {
 }
 
 export interface Essence {
-  motes: number;
+  motes?: number;
   commitments: number;
   spent: number;
   anima: number;
