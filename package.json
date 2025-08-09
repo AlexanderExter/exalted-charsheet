@@ -1,6 +1,6 @@
 {
   "name": "exalted-charsheet",
-  "version": "0.0.5-alpha",
+  "version": "0.0.6",
   "private": true,
   "description": "A comprehensive digital character sheet manager for the Exalted: Essence tabletop RPG system",
   "homepage": "https://github.com/AlexanderExter/exalted-charsheet",
