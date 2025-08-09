@@ -11,6 +11,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import type { ArmorPiece, ArmorType } from "@/lib/character-types"
+import { parseTagsFromString, stringifyTags } from "@/components/equipment/tag-utils"
 
 interface ArmorEditorProps {
   armor: ArmorPiece
@@ -27,14 +28,6 @@ export const ArmorEditor: React.FC<ArmorEditorProps> = ({
   updateArmor,
   deleteArmor,
 }) => {
-  const parseTagsFromString = (tagString: string): string[] =>
-    tagString
-      .split(",")
-      .map(tag => tag.trim())
-      .filter(tag => tag.length > 0)
-
-  const stringifyTags = (tags: string[]): string => tags.join(", ")
-
   return (
     <div className="p-4 bg-white rounded border border-gray-200 space-y-3">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
