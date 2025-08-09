@@ -55,7 +55,7 @@ export const calculateSoak = (
   if (physiqueTotal >= 3) base += 1;
 
   const armorSoak = armor.reduce(
-    (total, armorPiece) => total + (Number.parseInt(armorPiece.soak.toString()) || 0),
+    (total, armorPiece) => total + armorPiece.soak,
     0,
   );
 
@@ -69,7 +69,7 @@ export const calculateHardness = (
 ): number => {
   const base = essenceRating + 2;
   const armorHardness = armor.reduce(
-    (total, armorPiece) => total + (Number.parseInt(armorPiece.hardness.toString()) || 0),
+    (total, armorPiece) => total + armorPiece.hardness,
     0,
   );
   return Math.max(0, base + armorHardness + clampModifier(hardnessModifier));
