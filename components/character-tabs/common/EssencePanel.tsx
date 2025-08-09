@@ -41,9 +41,13 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange })
                   onChange={e => onChange({ ...essence, anima: Number.parseInt(e.target.value) })}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                 />
-                <div className="flex justify-between text-xs text-gray-600">
-                  <span>0</span>
-                  <span>10</span>
+                <div className="mt-2 h-6 flex justify-between text-xs text-gray-600">
+                  {Array.from({ length: 11 }, (_, i) => (
+                    <div key={i} className="relative w-0">
+                      <div className="w-px h-2 bg-gray-400" />
+                      <span className="absolute top-2 left-1/2 -translate-x-1/2">{i}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
