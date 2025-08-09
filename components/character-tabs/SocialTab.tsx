@@ -14,7 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import type {
-  Character,
   VirtueType,
   Intimacy,
   Background,
@@ -23,12 +22,7 @@ import type {
 } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
 import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
-
-interface SocialTabProps {
-  character: Character | null
-  updateCharacter: (updates: Partial<Character>) => void
-  resolve: number
-}
+import { useCharacterContext } from "@/hooks/CharacterContext"
 
 const virtueOptions: Array<NonNullable<VirtueType>> = [
   "ambition",
@@ -40,8 +34,9 @@ const virtueOptions: Array<NonNullable<VirtueType>> = [
   "wonder",
 ]
 
-export const SocialTab: React.FC<SocialTabProps> = React.memo(
-  ({ character, updateCharacter, resolve }) => {
+export const SocialTab: React.FC = React.memo(() => {
+  const { character, updateCharacter, calculations } = useCharacterContext()
+  const resolve = calculations.resolve
     // Virtue management functions
     const setVirtue = useCallback(
       (type: "major" | "minor", virtue: VirtueType) => {

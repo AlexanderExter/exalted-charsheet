@@ -14,17 +14,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import type { Character, Ruling } from "@/lib/character-types"
+import type { Ruling } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
 import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
+import { useCharacterContext } from "@/hooks/CharacterContext"
 
-interface RulingsTabProps {
-  character: Character | null
-  updateCharacter: (updates: Partial<Character>) => void
-}
-
-export const RulingsTab: React.FC<RulingsTabProps> = React.memo(
-  ({ character, updateCharacter }) => {
+export const RulingsTab: React.FC = React.memo(() => {
+  const { character, updateCharacter } = useCharacterContext()
     // Ruling management functions
     const addRuling = useCallback(() => {
       if (!character) return

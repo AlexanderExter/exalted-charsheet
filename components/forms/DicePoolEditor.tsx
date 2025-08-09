@@ -10,24 +10,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Character } from "@/lib/character-types";
 import { calculateStatTotal } from "@/lib/exalted-utils";
+import { useCharacterContext } from "@/hooks/CharacterContext";
 
-interface DicePoolEditorProps {
-  character: Character;
-  updateCharacter: (updates: Partial<Character>) => void;
-  calculateDicePool: () => {
-    basePool: number;
-    extraDice: number;
-    totalPool: number;
-    cappedBonusDice: number;
-    actionPhrase: string;
-  };
-}
+export const DicePoolEditor: React.FC = React.memo(() => {
+  const { character, updateCharacter, calculateDicePool } = useCharacterContext();
 
-export const DicePoolEditor: React.FC<DicePoolEditorProps> = React.memo(
-  ({ character, updateCharacter, calculateDicePool }) => {
-    return (
+  if (!character) return null;
+
+  return (
       <Card>
         <CardHeader>
           <CardTitle>Roll Assembler</CardTitle>
@@ -361,8 +352,7 @@ export const DicePoolEditor: React.FC<DicePoolEditorProps> = React.memo(
         </CardContent>
       </Card>
     );
-  },
-);
+});
 
 DicePoolEditor.displayName = "DicePoolEditor";
 

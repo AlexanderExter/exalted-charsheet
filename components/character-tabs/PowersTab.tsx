@@ -14,16 +14,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import type { Character, Charm, Spell, SpellCircle } from "@/lib/character-types"
+import type { Charm, Spell, SpellCircle } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
 import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
+import { useCharacterContext } from "@/hooks/CharacterContext"
 
-interface PowersTabProps {
-  character: Character | null
-  updateCharacter: (updates: Partial<Character>) => void
-}
-
-export const PowersTab: React.FC<PowersTabProps> = React.memo(({ character, updateCharacter }) => {
+export const PowersTab: React.FC = React.memo(() => {
+  const { character, updateCharacter } = useCharacterContext()
   // Charm management functions
   const addCharm = useCallback(() => {
     if (!character) return

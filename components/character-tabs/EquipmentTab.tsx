@@ -14,42 +14,33 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import type {
-  Character,
-  ArmorPiece,
-  Weapon,
-  ArmorType,
-  WeaponRange,
-} from "@/lib/character-types"
+import type { ArmorPiece, Weapon, ArmorType, WeaponRange } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
 import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
+import { useCharacterContext } from "@/hooks/CharacterContext"
 
-interface EquipmentTabProps {
-  character: Character | null
-  updateCharacter: (updates: Partial<Character>) => void
-}
+export const EquipmentTab: React.FC = React.memo(() => {
+  const { character, updateCharacter } = useCharacterContext()
 
-export const EquipmentTab: React.FC<EquipmentTabProps> = React.memo(
-  ({ character, updateCharacter }) => {
-    // Armor management functions
-    const addArmor = useCallback(() => {
-      if (!character) return
+  // Armor management functions
+  const addArmor = useCallback(() => {
+    if (!character) return
 
-      const newArmor: ArmorPiece = {
-        id: uuidv4(),
-        name: "",
-        type: "light",
-        soak: 0,
-        hardness: 0,
-        mobility: 0,
-        tags: [],
-        description: "",
-      }
+    const newArmor: ArmorPiece = {
+      id: uuidv4(),
+      name: "",
+      type: "light",
+      soak: 0,
+      hardness: 0,
+      mobility: 0,
+      tags: [],
+      description: "",
+    }
 
-      updateCharacter({
-        armor: [...(character.armor || []), newArmor],
-      })
-    }, [character, updateCharacter])
+    updateCharacter({
+      armor: [...(character.armor || []), newArmor],
+    })
+  }, [character, updateCharacter])
 
     const updateArmor = useCallback(
       (
@@ -126,26 +117,26 @@ export const EquipmentTab: React.FC<EquipmentTabProps> = React.memo(
         })
       },
       [character, updateCharacter]
-    )
+  )
 
-    // Utility functions
-    const parseTagsFromString = (tagString: string): string[] => {
-      return tagString
-        .split(",")
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0)
-    }
+  // Utility functions
+  const parseTagsFromString = (tagString: string): string[] => {
+    return tagString
+      .split(",")
+      .map(tag => tag.trim())
+      .filter(tag => tag.length > 0)
+  }
 
-    const stringifyTags = (tags: string[]): string => {
-      return tags.join(", ")
-    }
+  const stringifyTags = (tags: string[]): string => {
+    return tags.join(", ")
+  }
 
-    if (!character) {
-      return <NoCharacterCard />
-    }
+  if (!character) {
+    return <NoCharacterCard />
+  }
 
-    return (
-      <div className="space-y-6">
+  return (
+    <div className="space-y-6">
         {/* Armor */}
         <Card>
           <CardHeader>

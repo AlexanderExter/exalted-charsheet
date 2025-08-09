@@ -14,18 +14,14 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import type { Character, AdvancementEntry, AdvancementStatus } from "@/lib/character-types"
+import type { AdvancementEntry, AdvancementStatus } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
 import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
+import { useCharacterContext } from "@/hooks/CharacterContext"
 
-interface AdvancementTabProps {
-  character: Character | null
-  updateCharacter: (updates: Partial<Character>) => void
-}
-
-export const AdvancementTab: React.FC<AdvancementTabProps> = React.memo(
-  ({ character, updateCharacter }) => {
-    const [showAdvancementLog, setShowAdvancementLog] = useState(false)
+export const AdvancementTab: React.FC = React.memo(() => {
+  const { character, updateCharacter } = useCharacterContext()
+  const [showAdvancementLog, setShowAdvancementLog] = useState(false)
 
     // Advancement entry management functions
     const addAdvancementEntry = useCallback(() => {

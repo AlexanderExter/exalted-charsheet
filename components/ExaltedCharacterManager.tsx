@@ -4,15 +4,10 @@ import { useRef, useState } from "react";
 import CharacterSelect from "@/components/CharacterSelect";
 import CharacterToolbar from "@/components/CharacterToolbar";
 import CharacterTabs from "@/components/CharacterTabs";
+import { CharacterProvider } from "@/hooks/CharacterContext";
 import { useAutoSave } from "@/hooks/useAutoSave";
-import { useCharacterCalculations } from "@/hooks/useCharacterCalculations";
 import { useCharacterManagement } from "@/hooks/useCharacterManagement";
-import type {
-  Character,
-  AttributeType,
-  AbilityType,
-} from "@/lib/character-types";
-import { calculateStatTotal } from "@/lib/exalted-utils";
+import type { Character } from "@/lib/character-types";
 import { importCharacters, exportCharacter } from "@/lib/character-storage";
 import { toast } from "sonner";
 
@@ -30,78 +25,10 @@ const ExaltedCharacterManager = () => {
   } = useCharacterManagement();
 
   const [activeTab, setActiveTab] = useState("core");
-  const [globalAbilityAttribute, setGlobalAbilityAttribute] =
-    useState<AttributeType | "none">("none");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { isSaving, lastSaved } = useAutoSave(characters, "exalted-characters");
-  const calculations = useCharacterCalculations(currentCharacter);
-
-  const calculateAbilityTotal = (abilityKey: AbilityType) => {
-    const ability = currentCharacter?.abilities?.[abilityKey];
-    if (!ability) return 0;
-    const abilityTotal = calculateStatTotal(ability);
-    if (!globalAbilityAttribute || globalAbilityAttribute === "none") return abilityTotal;
-    const attribute = currentCharacter?.attributes?.[globalAbilityAttribute];
-    if (!attribute) return abilityTotal;
-    return abilityTotal + calculateStatTotal(attribute);
-  };
-
-  const calculateDicePool = () => {
-    if (
-      !currentCharacter?.dicePool ||
-      !currentCharacter?.attributes ||
-      !currentCharacter?.abilities
-    ) {
-      return {
-        basePool: 0,
-        extraDice: 0,
-        totalPool: 0,
-        cappedBonusDice: 0,
-        actionPhrase: "Roll 0, TN 7 Double 10s",
-      };
-    }
-    const {
-      attribute,
-      ability,
-      targetNumber,
-      doublesThreshold,
-      extraSuccessBonus,
-      extraSuccessNonBonus,
-    } = currentCharacter.dicePool;
-    const attributeTotal = calculateStatTotal(
-      currentCharacter.attributes[attribute] || { base: 0, added: 0, bonus: 0 },
-    );
-    const abilityTotal = calculateStatTotal(
-      currentCharacter.abilities[ability] || { base: 0, added: 0, bonus: 0 },
-    );
-    const basePool = attributeTotal + abilityTotal;
-    const { extraDiceBonus, extraDiceNonBonus, isStunted } = currentCharacter.dicePool;
-    const cappedBonusDice = Math.min(extraDiceBonus || 0, 10);
-    const stuntDice = isStunted ? 2 : 0;
-    const totalExtraDice = cappedBonusDice + (extraDiceNonBonus || 0) + stuntDice;
-    const totalPool = basePool + totalExtraDice;
-    const totalExtraSuccess = (extraSuccessBonus || 0) + (extraSuccessNonBonus || 0);
-    let actionPhrase = `Roll ${totalPool}`;
-    if (totalExtraSuccess > 0) {
-      const successText = totalExtraSuccess === 1 ? "success" : "successes";
-      actionPhrase += `, ${totalExtraSuccess} ${successText}`;
-    }
-    actionPhrase += `, TN ${targetNumber}`;
-    if (doublesThreshold < 10) {
-      actionPhrase += ` Double ${doublesThreshold}s`;
-    } else {
-      actionPhrase += ` Double 10s`;
-    }
-    return {
-      basePool,
-      extraDice: totalExtraDice,
-      totalPool,
-      cappedBonusDice,
-      actionPhrase,
-    };
-  };
 
   const handleExport = async (character: Character) => {
     try {
@@ -168,18 +95,12 @@ const ExaltedCharacterManager = () => {
             onImport={handleImport}
             onSwitch={() => setShowCharacterSelect(true)}
           />
-          <CharacterTabs
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
+          <CharacterProvider
             character={currentCharacter}
             updateCharacter={updateCharacter}
-            calculations={calculations}
-            calculateAbilityTotal={calculateAbilityTotal}
-            calculateDicePool={calculateDicePool}
-            globalAbilityAttribute={globalAbilityAttribute}
-            setGlobalAbilityAttribute={setGlobalAbilityAttribute}
-            resolve={calculations.resolve}
-          />
+          >
+            <CharacterTabs activeTab={activeTab} onTabChange={setActiveTab} />
+          </CharacterProvider>
         </div>
       </main>
     </div>
