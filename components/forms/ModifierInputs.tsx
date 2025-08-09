@@ -2,6 +2,7 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCharacterContext } from "@/hooks/CharacterContext";
+import { DEFAULT_MODIFIER_MAX } from "@/lib/character-defaults";
 
 export const ModifierInputs: React.FC = () => {
   const { character, updateCharacter } = useCharacterContext();
@@ -112,7 +113,7 @@ export const ModifierInputs: React.FC = () => {
                   dicePool: {
                     ...character.dicePool,
                     extraSuccessBonus: Math.min(
-                      5,
+                      DEFAULT_MODIFIER_MAX,
                       Math.max(0, Number.parseInt(e.target.value) || 0),
                     ),
                   },
@@ -120,9 +121,11 @@ export const ModifierInputs: React.FC = () => {
               }
               className="text-center"
               min={0}
-              max={5}
+              max={DEFAULT_MODIFIER_MAX}
             />
-            <div className="text-xs text-gray-500 mt-1">Max: 5</div>
+            <div className="text-xs text-gray-500 mt-1">
+              Max: {DEFAULT_MODIFIER_MAX}
+            </div>
           </div>
           <div>
             <Label className="block text-sm font-medium text-gray-600 mb-1">

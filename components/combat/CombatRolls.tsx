@@ -5,6 +5,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import type { Character } from "@/lib/character-types"
 import { calculateStatTotal } from "@/lib/exalted-utils"
+import {
+  DEFAULT_MODIFIER_MAX,
+  DEFAULT_MODIFIER_MIN,
+} from "@/lib/character-defaults"
 
 interface CombatRollsProps {
   character: Character
@@ -59,16 +63,19 @@ export const CombatRolls: React.FC<CombatRollsProps> = ({
                     value={character?.combat?.joinBattleSuccessBonus || 0}
                     onChange={e => {
                       const value = Math.max(
-                        -5,
-                        Math.min(5, Number.parseInt(e.target.value) || 0),
+                        DEFAULT_MODIFIER_MIN,
+                        Math.min(
+                          DEFAULT_MODIFIER_MAX,
+                          Number.parseInt(e.target.value) || 0,
+                        ),
                       )
                       updateCharacter({
                         combat: { ...character.combat, joinBattleSuccessBonus: value },
                       })
                     }}
                     className="w-full text-center"
-                    min={-5}
-                    max={5}
+                    min={DEFAULT_MODIFIER_MIN}
+                    max={DEFAULT_MODIFIER_MAX}
                   />
                   <div className="text-xs text-gray-400">±5 cap</div>
                 </div>

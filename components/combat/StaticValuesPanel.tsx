@@ -4,6 +4,10 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import type { Character } from "@/lib/character-types"
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations"
+import {
+  DEFAULT_MODIFIER_MAX,
+  DEFAULT_MODIFIER_MIN,
+} from "@/lib/character-defaults"
 
 interface StaticValuesPanelProps {
   character: Character
@@ -41,16 +45,19 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   value={character?.staticValues?.defenseModifier || 0}
                   onChange={e => {
                     const value = Math.max(
-                      -5,
-                      Math.min(5, Number.parseInt(e.target.value) || 0),
+                      DEFAULT_MODIFIER_MIN,
+                      Math.min(
+                        DEFAULT_MODIFIER_MAX,
+                        Number.parseInt(e.target.value) || 0,
+                      ),
                     )
                     updateCharacter({
                       staticValues: { ...character.staticValues, defenseModifier: value },
                     })
                   }}
                   className="w-12 text-center text-xs"
-                  min={-5}
-                  max={5}
+                  min={DEFAULT_MODIFIER_MIN}
+                  max={DEFAULT_MODIFIER_MAX}
                 />
               </div>
             </div>
@@ -71,16 +78,19 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   value={character?.staticValues?.evasionModifier || 0}
                   onChange={e => {
                     const value = Math.max(
-                      -5,
-                      Math.min(5, Number.parseInt(e.target.value) || 0),
+                      DEFAULT_MODIFIER_MIN,
+                      Math.min(
+                        DEFAULT_MODIFIER_MAX,
+                        Number.parseInt(e.target.value) || 0,
+                      ),
                     )
                     updateCharacter({
                       staticValues: { ...character.staticValues, evasionModifier: value },
                     })
                   }}
                   className="w-12 text-center text-xs"
-                  min={-5}
-                  max={5}
+                  min={DEFAULT_MODIFIER_MIN}
+                  max={DEFAULT_MODIFIER_MAX}
                 />
               </div>
             </div>
@@ -101,16 +111,19 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   value={character?.staticValues?.parryModifier || 0}
                   onChange={e => {
                     const value = Math.max(
-                      -5,
-                      Math.min(5, Number.parseInt(e.target.value) || 0),
+                      DEFAULT_MODIFIER_MIN,
+                      Math.min(
+                        DEFAULT_MODIFIER_MAX,
+                        Number.parseInt(e.target.value) || 0,
+                      ),
                     )
                     updateCharacter({
                       staticValues: { ...character.staticValues, parryModifier: value },
                     })
                   }}
                   className="w-12 text-center text-xs"
-                  min={-5}
-                  max={5}
+                  min={DEFAULT_MODIFIER_MIN}
+                  max={DEFAULT_MODIFIER_MAX}
                 />
               </div>
             </div>
@@ -135,16 +148,19 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   value={character?.staticValues?.resolveModifier || 0}
                   onChange={e => {
                     const value = Math.max(
-                      -5,
-                      Math.min(5, Number.parseInt(e.target.value) || 0),
+                      DEFAULT_MODIFIER_MIN,
+                      Math.min(
+                        DEFAULT_MODIFIER_MAX,
+                        Number.parseInt(e.target.value) || 0,
+                      ),
                     )
                     updateCharacter({
                       staticValues: { ...character.staticValues, resolveModifier: value },
                     })
                   }}
                   className="w-12 text-center text-xs"
-                  min={-5}
-                  max={5}
+                  min={DEFAULT_MODIFIER_MIN}
+                  max={DEFAULT_MODIFIER_MAX}
                 />
               </div>
             </div>
@@ -172,16 +188,19 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   value={character?.staticValues?.soakModifier || 0}
                   onChange={e => {
                     const value = Math.max(
-                      -5,
-                      Math.min(5, Number.parseInt(e.target.value) || 0),
+                      DEFAULT_MODIFIER_MIN,
+                      Math.min(
+                        DEFAULT_MODIFIER_MAX,
+                        Number.parseInt(e.target.value) || 0,
+                      ),
                     )
                     updateCharacter({
                       staticValues: { ...character.staticValues, soakModifier: value },
                     })
                   }}
                   className="w-12 text-center text-xs"
-                  min={-5}
-                  max={5}
+                  min={DEFAULT_MODIFIER_MIN}
+                  max={DEFAULT_MODIFIER_MAX}
                 />
               </div>
             </div>
@@ -209,16 +228,19 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   value={character?.staticValues?.hardnessModifier || 0}
                   onChange={e => {
                     const value = Math.max(
-                      -5,
-                      Math.min(5, Number.parseInt(e.target.value) || 0),
+                      DEFAULT_MODIFIER_MIN,
+                      Math.min(
+                        DEFAULT_MODIFIER_MAX,
+                        Number.parseInt(e.target.value) || 0,
+                      ),
                     )
                     updateCharacter({
                       staticValues: { ...character.staticValues, hardnessModifier: value },
                     })
                   }}
                   className="w-12 text-center text-xs"
-                  min={-5}
-                  max={5}
+                  min={DEFAULT_MODIFIER_MIN}
+                  max={DEFAULT_MODIFIER_MAX}
                 />
               </div>
             </div>
