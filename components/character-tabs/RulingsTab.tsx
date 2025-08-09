@@ -16,6 +16,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import type { Character, Ruling } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
+import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
 
 interface RulingsTabProps {
   character: Character | null
@@ -66,15 +67,7 @@ export const RulingsTab: React.FC<RulingsTabProps> = React.memo(
     )
 
     if (!character) {
-      return (
-        <div className="space-y-6">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-500 italic">No character selected.</p>
-            </CardContent>
-          </Card>
-        </div>
-      )
+      return <NoCharacterCard />
     }
 
     return (
