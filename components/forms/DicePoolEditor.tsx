@@ -16,8 +16,6 @@ import { useCharacterContext } from "@/hooks/CharacterContext";
 export const DicePoolEditor: React.FC = React.memo(() => {
   const { character, updateCharacter, calculateDicePool } = useCharacterContext();
 
-  if (!character) return null;
-
   return (
       <Card>
         <CardHeader>

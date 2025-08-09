@@ -6,7 +6,6 @@ import { StaticValuesPanel } from "@/components/combat/StaticValuesPanel"
 import { HealthTracker } from "@/components/combat/HealthTracker"
 import { useCombat } from "@/hooks/useCombat"
 import { EssencePanel } from "@/components/character-tabs/common/EssencePanel"
-import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
 import { createDefaultEssence } from "@/lib/character-defaults"
 import { useCharacterContext } from "@/hooks/CharacterContext"
 
@@ -20,10 +19,6 @@ export const CombatTab: React.FC = React.memo(() => {
     updateDramaticInjury,
     deleteDramaticInjury,
   } = useCombat({ character, updateCharacter, calculations })
-
-  if (!character) {
-    return <NoCharacterCard />
-  }
 
   return (
     <div className="space-y-6">

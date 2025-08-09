@@ -16,14 +16,12 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import type { Charm, Spell, SpellCircle } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
-import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
 import { useCharacterContext } from "@/hooks/CharacterContext"
 
 export const PowersTab: React.FC = React.memo(() => {
   const { character, updateCharacter } = useCharacterContext()
   // Charm management functions
-  const addCharm = useCallback(() => {
-    if (!character) return
+    const addCharm = useCallback(() => {
 
     const newCharm: Charm = {
       id: uuidv4(),
@@ -42,37 +40,32 @@ export const PowersTab: React.FC = React.memo(() => {
     })
   }, [character, updateCharacter])
 
-  const updateCharm = useCallback(
-    (
-      id: string,
-      field: keyof Charm,
-      value: Charm[keyof Charm]
-    ) => {
-      if (!character) return
+    const updateCharm = useCallback(
+      (
+        id: string,
+        field: keyof Charm,
+        value: Charm[keyof Charm]
+      ) => {
+        updateCharacter({
+          charms: (character.charms || []).map(charm =>
+            charm.id === id ? { ...charm, [field]: value } : charm
+          ),
+        })
+      },
+      [character, updateCharacter]
+    )
 
-      updateCharacter({
-        charms: (character.charms || []).map(charm =>
-          charm.id === id ? { ...charm, [field]: value } : charm
-        ),
-      })
-    },
-    [character, updateCharacter]
-  )
-
-  const deleteCharm = useCallback(
-    (id: string) => {
-      if (!character) return
-
-      updateCharacter({
-        charms: (character.charms || []).filter(charm => charm.id !== id),
-      })
-    },
-    [character, updateCharacter]
-  )
+    const deleteCharm = useCallback(
+      (id: string) => {
+        updateCharacter({
+          charms: (character.charms || []).filter(charm => charm.id !== id),
+        })
+      },
+      [character, updateCharacter]
+    )
 
   // Spell management functions
-  const addSpell = useCallback(() => {
-    if (!character) return
+    const addSpell = useCallback(() => {
 
     const newSpell: Spell = {
       id: uuidv4(),
@@ -91,39 +84,31 @@ export const PowersTab: React.FC = React.memo(() => {
     })
   }, [character, updateCharacter])
 
-  const updateSpell = useCallback(
-    (
-      id: string,
-      field: keyof Spell,
-      value: Spell[keyof Spell]
-    ) => {
-      if (!character) return
+    const updateSpell = useCallback(
+      (
+        id: string,
+        field: keyof Spell,
+        value: Spell[keyof Spell]
+      ) => {
+        updateCharacter({
+          spells: (character.spells || []).map(spell =>
+            spell.id === id ? { ...spell, [field]: value } : spell
+          ),
+        })
+      },
+      [character, updateCharacter]
+    )
 
-      updateCharacter({
-        spells: (character.spells || []).map(spell =>
-          spell.id === id ? { ...spell, [field]: value } : spell
-        ),
-      })
-    },
-    [character, updateCharacter]
-  )
+    const deleteSpell = useCallback(
+      (id: string) => {
+        updateCharacter({
+          spells: (character.spells || []).filter(spell => spell.id !== id),
+        })
+      },
+      [character, updateCharacter]
+    )
 
-  const deleteSpell = useCallback(
-    (id: string) => {
-      if (!character) return
-
-      updateCharacter({
-        spells: (character.spells || []).filter(spell => spell.id !== id),
-      })
-    },
-    [character, updateCharacter]
-  )
-
-  if (!character) {
-    return <NoCharacterCard />
-  }
-
-  return (
+    return (
     <div className="space-y-6">
       {/* Charms */}
       <Card>

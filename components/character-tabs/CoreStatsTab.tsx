@@ -9,7 +9,6 @@ import { StatTable } from "@/components/forms/StatTable";
 import { attributeConfig, abilityConfig } from "@/lib/stat-config";
 import { DicePoolEditor } from "@/components/forms/DicePoolEditor";
 import { EssencePanel } from "@/components/character-tabs/common/EssencePanel";
-import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard";
 import { createDefaultEssence } from "@/lib/character-defaults";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 export const CoreStatsTab: React.FC = React.memo(() => {
@@ -21,10 +20,6 @@ export const CoreStatsTab: React.FC = React.memo(() => {
     globalAbilityAttribute,
     setGlobalAbilityAttribute,
   } = useCharacterContext();
-
-  if (!character) {
-    return <NoCharacterCard />;
-  }
 
   const abilityTotalColor =
     globalAbilityAttribute === "fortitude"

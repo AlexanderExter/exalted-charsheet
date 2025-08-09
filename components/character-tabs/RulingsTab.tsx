@@ -16,14 +16,12 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import type { Ruling } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
-import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
 import { useCharacterContext } from "@/hooks/CharacterContext"
 
 export const RulingsTab: React.FC = React.memo(() => {
   const { character, updateCharacter } = useCharacterContext()
     // Ruling management functions
     const addRuling = useCallback(() => {
-      if (!character) return
 
       const newRuling: Ruling = {
         id: uuidv4(),
@@ -40,8 +38,6 @@ export const RulingsTab: React.FC = React.memo(() => {
 
     const updateRuling = useCallback(
       (id: string, field: keyof Ruling, value: string) => {
-        if (!character) return
-
         updateCharacter({
           rulings: (character.rulings || []).map(ruling =>
             ruling.id === id ? { ...ruling, [field]: value } : ruling
@@ -53,18 +49,12 @@ export const RulingsTab: React.FC = React.memo(() => {
 
     const deleteRuling = useCallback(
       (id: string) => {
-        if (!character) return
-
         updateCharacter({
           rulings: (character.rulings || []).filter(ruling => ruling.id !== id),
         })
       },
       [character, updateCharacter]
     )
-
-    if (!character) {
-      return <NoCharacterCard />
-    }
 
     return (
       <div className="space-y-6">

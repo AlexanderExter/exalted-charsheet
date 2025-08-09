@@ -7,7 +7,7 @@ import { useCharacterCalculations, type CharacterCalculations } from "@/hooks/us
 type DicePoolResult = ReturnType<typeof calculateDicePoolUtil>;
 
 interface CharacterContextValue {
-  character: Character | null;
+  character: Character;
   updateCharacter: (updates: Partial<Character>) => void;
   calculations: CharacterCalculations;
   calculateAbilityTotal: (abilityKey: AbilityType) => number;
@@ -19,7 +19,7 @@ interface CharacterContextValue {
 const CharacterContext = createContext<CharacterContextValue | undefined>(undefined);
 
 interface CharacterProviderProps {
-  character: Character | null;
+  character: Character;
   updateCharacter: (updates: Partial<Character>) => void;
   children: React.ReactNode;
 }
@@ -31,31 +31,16 @@ export function CharacterProvider({ character, updateCharacter, children }: Char
 
   const calculateAbilityTotal = useCallback(
     (abilityKey: AbilityType) => {
-      const ability = character?.abilities?.[abilityKey];
-      if (!ability) return 0;
+      const ability = character.abilities[abilityKey];
       const abilityTotal = calculateStatTotal(ability);
-      if (!globalAbilityAttribute || globalAbilityAttribute === "none") return abilityTotal;
-      const attribute = character?.attributes?.[globalAbilityAttribute];
-      if (!attribute) return abilityTotal;
+      if (globalAbilityAttribute === "none") return abilityTotal;
+      const attribute = character.attributes[globalAbilityAttribute];
       return abilityTotal + calculateStatTotal(attribute);
     },
     [character, globalAbilityAttribute],
   );
 
   const calculateDicePool = useCallback((): DicePoolResult => {
-    if (
-      !character?.dicePool ||
-      !character?.attributes ||
-      !character?.abilities
-    ) {
-      return {
-        basePool: 0,
-        extraDice: 0,
-        totalPool: 0,
-        cappedBonusDice: 0,
-        actionPhrase: "Roll 0, TN 7 Double 10s",
-      };
-    }
     const {
       attribute,
       ability,
@@ -68,12 +53,8 @@ export function CharacterProvider({ character, updateCharacter, children }: Char
       isStunted,
     } = character.dicePool;
 
-    const attributeTotal = calculateStatTotal(
-      character.attributes[attribute] || { base: 0, added: 0, bonus: 0 },
-    );
-    const abilityTotal = calculateStatTotal(
-      character.abilities[ability] || { base: 0, added: 0, bonus: 0 },
-    );
+    const attributeTotal = calculateStatTotal(character.attributes[attribute]);
+    const abilityTotal = calculateStatTotal(character.abilities[ability]);
 
     return calculateDicePoolUtil(
       attributeTotal,
