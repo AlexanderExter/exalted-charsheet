@@ -144,7 +144,11 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
                 value={newCharacterName}
                 onChange={e => setNewCharacterName(e.target.value)}
                 placeholder="Character name..."
-                onKeyPress={e => e.key === "Enter" && handleCreate()}
+                onKeyDown={e => {
+                  if (e.key === "Enter") {
+                    handleCreate();
+                  }
+                }}
               />
               <Button onClick={handleCreate} disabled={!newCharacterName.trim()}>
                 <Plus className="w-4 h-4 mr-2" />
