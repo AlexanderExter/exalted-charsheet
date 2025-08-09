@@ -12,17 +12,32 @@ export const useAutoSave = <T,>(
   const [isSaving, setIsSaving] = useState(false)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const innerTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isMountedRef = useRef(true)
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false
+    }
+  }, [])
 
   useEffect(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
     }
+    if (innerTimeoutRef.current) {
+      clearTimeout(innerTimeoutRef.current)
+    }
 
     timeoutRef.current = setTimeout(() => {
+      if (!isMountedRef.current) return
+
       // Persist middleware handles saving; we only update UI indicators
       setIsSaving(true)
       // briefly show the saving state then update the timestamp
-      setTimeout(() => {
+      innerTimeoutRef.current = setTimeout(() => {
+        if (!isMountedRef.current) return
+
         setIsSaving(false)
         setLastSaved(new Date())
       }, 500)
@@ -31,6 +46,9 @@ export const useAutoSave = <T,>(
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
+      }
+      if (innerTimeoutRef.current) {
+        clearTimeout(innerTimeoutRef.current)
       }
     }
   }, [data, delay])
