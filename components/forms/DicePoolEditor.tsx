@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import { useCharacterContext } from "@/hooks/CharacterContext";
 
 export const DicePoolEditor: React.FC = React.memo(() => {
   const { character, updateCharacter, calculateDicePool } = useCharacterContext();
+  const dicePool = useMemo(() => calculateDicePool(), [calculateDicePool]);
 
   return (
       <Card>
@@ -319,19 +320,19 @@ export const DicePoolEditor: React.FC = React.memo(() => {
               <div>
                 <div className="text-blue-600 font-medium">Base Pool</div>
                 <div className="text-lg font-bold text-blue-800">
-                  {calculateDicePool().basePool}
+                  {dicePool.basePool}
                 </div>
               </div>
               <div>
                 <div className="text-blue-600 font-medium">Extra Dice</div>
                 <div className="text-lg font-bold text-blue-800">
-                  +{calculateDicePool().extraDice}
+                  +{dicePool.extraDice}
                 </div>
               </div>
               <div>
                 <div className="text-blue-600 font-medium">Total Dice</div>
                 <div className="text-lg font-bold text-blue-800">
-                  {calculateDicePool().totalPool}
+                  {dicePool.totalPool}
                 </div>
               </div>
               <div>
@@ -344,7 +345,7 @@ export const DicePoolEditor: React.FC = React.memo(() => {
               </div>
             </div>
             <div className="text-center p-2 bg-blue-100 rounded font-medium text-blue-800">
-              {calculateDicePool().actionPhrase}
+              {dicePool.actionPhrase}
             </div>
           </div>
         </CardContent>
