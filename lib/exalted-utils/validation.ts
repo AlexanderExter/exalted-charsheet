@@ -1,5 +1,13 @@
+import {
+  DEFAULT_MODIFIER_MAX,
+  DEFAULT_MODIFIER_MIN,
+} from "../character-defaults";
+
 export const clampModifier = (value: number): number => {
-  return Math.max(-5, Math.min(5, value));
+  return Math.max(
+    DEFAULT_MODIFIER_MIN,
+    Math.min(DEFAULT_MODIFIER_MAX, value),
+  );
 };
 
 export const validateStatValue = (value: number): number => {

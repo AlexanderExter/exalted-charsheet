@@ -22,6 +22,10 @@ import type {
 } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
 import { useCharacterContext } from "@/hooks/CharacterContext"
+import {
+  DEFAULT_MODIFIER_MAX,
+  DEFAULT_MODIFIER_MIN,
+} from "@/lib/character-defaults"
 
 const virtueOptions: Array<NonNullable<VirtueType>> = [
   "ambition",
@@ -180,14 +184,20 @@ export const SocialTab: React.FC = React.memo(() => {
                 type="number"
                 value={character?.staticValues?.resolveModifier || 0}
                 onChange={e => {
-                  const value = Math.max(-5, Math.min(5, Number.parseInt(e.target.value) || 0))
+                  const value = Math.max(
+                    DEFAULT_MODIFIER_MIN,
+                    Math.min(
+                      DEFAULT_MODIFIER_MAX,
+                      Number.parseInt(e.target.value) || 0,
+                    ),
+                  )
                   updateCharacter({
                     staticValues: { ...character.staticValues, resolveModifier: value },
                   })
                 }}
                 className="w-12 text-center text-xs"
-                min={-5}
-                max={5}
+                min={DEFAULT_MODIFIER_MIN}
+                max={DEFAULT_MODIFIER_MAX}
               />
             </div>
           </div>
