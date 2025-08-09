@@ -107,7 +107,6 @@ export const createDefaultDicePool = (): DicePool => ({
 // Default combat bonuses
 export const createDefaultCombat = (): Combat => ({
   power: 0,
-  joinBattleBonus: 0,
   joinBattleDiceBonus: 0,
   joinBattleSuccessBonus: 0,
   decisiveExtraDice: 0,
