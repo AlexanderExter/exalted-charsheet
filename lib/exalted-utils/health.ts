@@ -1,5 +1,23 @@
 import type { HealthLevels, ExaltType } from "../character-types";
 
+const GENERIC_OX_BODY_LEVELS: HealthLevels[] = Array.from({ length: 5 }, () => ({
+  zero: 0,
+  minusOne: 1,
+  minusTwo: 2,
+  incap: 0,
+}));
+
+const LUNAR_OX_BODY_LEVELS: HealthLevels[] = Array.from({ length: 5 }, () => ({
+  zero: 1,
+  minusOne: 2,
+  minusTwo: 2,
+  incap: 0,
+}));
+
+const OX_BODY_TABLE: Partial<Record<ExaltType, HealthLevels[]>> = {
+  lunar: LUNAR_OX_BODY_LEVELS,
+};
+
 export const calculateHealthLevels = (
   baseline: HealthLevels,
   oxBodyLevels: number,
@@ -12,42 +30,13 @@ export const calculateHealthLevels = (
   let oxBodyMinusTwo = 0;
   let oxBodyIncap = 0;
 
-  // Ox-Body calculations based on Exalt type
-  switch (exaltType) {
-    case "lunar":
-      // Lunar Ox-Body: +1 -0, +2 -1, +2 -2
-      if (clampedOxBody >= 1) {
-        oxBodyZero += 1;
-        oxBodyMinusOne += 2;
-        oxBodyMinusTwo += 2;
-      }
-      if (clampedOxBody >= 2) {
-        oxBodyZero += 1;
-        oxBodyMinusOne += 2;
-        oxBodyMinusTwo += 2;
-      }
-      if (clampedOxBody >= 3) {
-        oxBodyZero += 1;
-        oxBodyMinusOne += 2;
-        oxBodyMinusTwo += 2;
-      }
-      if (clampedOxBody >= 4) {
-        oxBodyZero += 1;
-        oxBodyMinusOne += 2;
-        oxBodyMinusTwo += 2;
-      }
-      if (clampedOxBody >= 5) {
-        oxBodyZero += 1;
-        oxBodyMinusOne += 2;
-        oxBodyMinusTwo += 2;
-      }
-      break;
-    default:
-      // Generic Ox-Body: +1 -1, +2 -2
-      for (let i = 0; i < clampedOxBody; i++) {
-        oxBodyMinusOne += 1;
-        oxBodyMinusTwo += 2;
-      }
+  const levels = OX_BODY_TABLE[exaltType] ?? GENERIC_OX_BODY_LEVELS;
+  for (let i = 0; i < clampedOxBody; i++) {
+    const bonus = levels[i];
+    oxBodyZero += bonus.zero;
+    oxBodyMinusOne += bonus.minusOne;
+    oxBodyMinusTwo += bonus.minusTwo;
+    oxBodyIncap += bonus.incap;
   }
 
   return {
