@@ -142,7 +142,7 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 - V0-accelerated character manager
 - Modern shadcn/ui component architecture
 - Complete character sheet functionality
-- 8-tab system
+- 7-tab system (Core Stats, Combat, Equipment, Powers, Socials, Advancement, Rulings)
 - Import/export system
 - Local storage persistence
 - Mobile-responsive design
