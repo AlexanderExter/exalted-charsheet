@@ -1,19 +1,19 @@
-import React from "react"
-import { Plus, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import type { DramaticInjury } from "@/lib/character-types"
+import React from "react";
+import { Plus, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { DramaticInjury } from "@/lib/character-types";
 
 interface DramaticInjuriesListProps {
-  injuries: DramaticInjury[]
-  addDramaticInjury: () => void
+  injuries: DramaticInjury[];
+  addDramaticInjury: () => void;
   updateDramaticInjury: (
     id: string,
     field: keyof DramaticInjury,
-    value: DramaticInjury[keyof DramaticInjury],
-  ) => void
-  deleteDramaticInjury: (id: string) => void
+    value: DramaticInjury[keyof DramaticInjury]
+  ) => void;
+  deleteDramaticInjury: (id: string) => void;
 }
 
 export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = ({
@@ -50,9 +50,7 @@ export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = ({
                 onChange={e => updateDramaticInjury(injury.id, "description", e.target.value)}
                 placeholder="Injury description..."
                 className={`flex-1 ${
-                  injury.isHealed
-                    ? "text-green-700 bg-green-50"
-                    : "text-red-700 bg-red-50"
+                  injury.isHealed ? "text-green-700 bg-green-50" : "text-red-700 bg-red-50"
                 }`}
               />
               <Button
@@ -67,7 +65,11 @@ export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = ({
               >
                 {injury.isHealed ? "Healed" : "Heal"}
               </Button>
-              <Button onClick={() => deleteDramaticInjury(injury.id)} size="sm" variant="destructive">
+              <Button
+                onClick={() => deleteDramaticInjury(injury.id)}
+                size="sm"
+                variant="destructive"
+              >
                 <Trash2 className="w-4 h-4" />
               </Button>
             </div>
@@ -75,7 +77,7 @@ export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = ({
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-DramaticInjuriesList.displayName = "DramaticInjuriesList"
+DramaticInjuriesList.displayName = "DramaticInjuriesList";

@@ -1,27 +1,24 @@
-import React, { useMemo } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { ArmorPiece, Weapon } from "@/lib/character-types"
+import React, { useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { ArmorPiece, Weapon } from "@/lib/character-types";
 
 interface EquipmentTagReferenceProps {
-  armor: ArmorPiece[]
-  weapons: Weapon[]
+  armor: ArmorPiece[];
+  weapons: Weapon[];
 }
 
-export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({
-  armor,
-  weapons,
-}) => {
+export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({ armor, weapons }) => {
   const { items, tags } = useMemo(() => {
-    const items = [...armor, ...weapons]
-    const allTags = new Set<string>()
+    const items = [...armor, ...weapons];
+    const allTags = new Set<string>();
     items.forEach(item => {
       item.tags.forEach(tag => {
-        const trimmed = tag.trim()
-        if (trimmed) allTags.add(trimmed)
-      })
-    })
-    return { items, tags: Array.from(allTags) }
-  }, [armor, weapons])
+        const trimmed = tag.trim();
+        if (trimmed) allTags.add(trimmed);
+      });
+    });
+    return { items, tags: Array.from(allTags) };
+  }, [armor, weapons]);
 
   return (
     <Card>
@@ -51,8 +48,7 @@ export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-EquipmentTagReference.displayName = "EquipmentTagReference"
-
+EquipmentTagReference.displayName = "EquipmentTagReference";

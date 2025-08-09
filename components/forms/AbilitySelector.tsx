@@ -39,7 +39,7 @@ export const AbilitySelector: React.FC = () => {
                   base: 0,
                   added: 0,
                   bonus: 0,
-                },
+                }
               )}
               )
             </SelectItem>
@@ -51,4 +51,3 @@ export const AbilitySelector: React.FC = () => {
 };
 
 export default AbilitySelector;
-

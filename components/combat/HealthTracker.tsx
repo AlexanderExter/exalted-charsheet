@@ -1,35 +1,30 @@
-import React from "react"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import type { Character, ExaltType, DramaticInjury } from "@/lib/character-types"
-import type { CharacterCalculations } from "@/hooks/useCharacterCalculations"
-import { DramaticInjuriesList } from "@/components/combat/DramaticInjuriesList"
+} from "@/components/ui/select";
+import type { Character, ExaltType, DramaticInjury } from "@/lib/character-types";
+import type { CharacterCalculations } from "@/hooks/useCharacterCalculations";
+import { DramaticInjuriesList } from "@/components/combat/DramaticInjuriesList";
 
 interface HealthTrackerProps {
-  character: Character
-  updateCharacter: (updates: Partial<Character>) => void
-  calculations: CharacterCalculations
-  getTotalHealthLevels: () => number
-  addDramaticInjury: () => void
+  character: Character;
+  updateCharacter: (updates: Partial<Character>) => void;
+  calculations: CharacterCalculations;
+  getTotalHealthLevels: () => number;
+  addDramaticInjury: () => void;
   updateDramaticInjury: (
     id: string,
     field: keyof DramaticInjury,
-    value: DramaticInjury[keyof DramaticInjury],
-  ) => void
-  deleteDramaticInjury: (id: string) => void
+    value: DramaticInjury[keyof DramaticInjury]
+  ) => void;
+  deleteDramaticInjury: (id: string) => void;
 }
 
 export const HealthTracker: React.FC<HealthTrackerProps> = ({
@@ -84,13 +79,13 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 type="number"
                 value={character?.health?.baseline?.zero || 1}
                 onChange={e => {
-                  const value = Math.max(0, Number.parseInt(e.target.value) || 0)
+                  const value = Math.max(0, Number.parseInt(e.target.value) || 0);
                   updateCharacter({
                     health: {
                       ...character.health,
                       baseline: { ...character.health?.baseline, zero: value },
                     },
-                  })
+                  });
                 }}
                 className="text-center"
                 min={0}
@@ -103,13 +98,13 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 type="number"
                 value={character?.health?.baseline?.minusOne || 2}
                 onChange={e => {
-                  const value = Math.max(0, Number.parseInt(e.target.value) || 0)
+                  const value = Math.max(0, Number.parseInt(e.target.value) || 0);
                   updateCharacter({
                     health: {
                       ...character.health,
                       baseline: { ...character.health?.baseline, minusOne: value },
                     },
-                  })
+                  });
                 }}
                 className="text-center"
                 min={0}
@@ -122,13 +117,13 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 type="number"
                 value={character?.health?.baseline?.minusTwo || 2}
                 onChange={e => {
-                  const value = Math.max(0, Number.parseInt(e.target.value) || 0)
+                  const value = Math.max(0, Number.parseInt(e.target.value) || 0);
                   updateCharacter({
                     health: {
                       ...character.health,
                       baseline: { ...character.health?.baseline, minusTwo: value },
                     },
-                  })
+                  });
                 }}
                 className="text-center"
                 min={0}
@@ -141,13 +136,13 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 type="number"
                 value={character?.health?.baseline?.incap || 1}
                 onChange={e => {
-                  const value = Math.max(0, Number.parseInt(e.target.value) || 0)
+                  const value = Math.max(0, Number.parseInt(e.target.value) || 0);
                   updateCharacter({
                     health: {
                       ...character.health,
                       baseline: { ...character.health?.baseline, incap: value },
                     },
-                  })
+                  });
                 }}
                 className="text-center"
                 min={0}
@@ -164,10 +159,10 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
               type="number"
               value={character?.health?.oxBodyLevels || 0}
               onChange={e => {
-                const value = Math.max(0, Number.parseInt(e.target.value) || 0)
+                const value = Math.max(0, Number.parseInt(e.target.value) || 0);
                 updateCharacter({
                   health: { ...character.health, oxBodyLevels: value },
-                })
+                });
               }}
               className="text-center"
               min={0}
@@ -196,11 +191,10 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
             {/* Incapacitation Rules */}
             {calculations.healthPenalty === -4 && (
               <div className="mt-3 border-t pt-3 bg-red-50 p-2 rounded">
-                <div className="text-xs font-medium text-red-700 mb-1">
-                  Incapacitation Rules:
-                </div>
+                <div className="text-xs font-medium text-red-700 mb-1">Incapacitation Rules:</div>
                 <div className="text-xs text-red-600">
-                  [Placeholder: Character is incapacitated and cannot take actions except for reflexive actions and one-die stunts]
+                  [Placeholder: Character is incapacitated and cannot take actions except for
+                  reflexive actions and one-die stunts]
                 </div>
               </div>
             )}
@@ -214,16 +208,16 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 type="number"
                 value={character?.health?.bashingDamage || 0}
                 onChange={e => {
-                  const rawValue = Number.parseInt(e.target.value) || 0
-                  const totalHealth = getTotalHealthLevels()
+                  const rawValue = Number.parseInt(e.target.value) || 0;
+                  const totalHealth = getTotalHealthLevels();
                   const otherDamage =
                     (character?.health?.lethalDamage || 0) +
-                    (character?.health?.aggravatedDamage || 0)
-                  const maxAllowed = Math.max(0, totalHealth - otherDamage)
-                  const value = Math.max(0, Math.min(maxAllowed, rawValue))
+                    (character?.health?.aggravatedDamage || 0);
+                  const maxAllowed = Math.max(0, totalHealth - otherDamage);
+                  const value = Math.max(0, Math.min(maxAllowed, rawValue));
                   updateCharacter({
                     health: { ...character.health, bashingDamage: value },
-                  })
+                  });
                 }}
                 className="text-center"
                 min={0}
@@ -237,16 +231,16 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 type="number"
                 value={character?.health?.lethalDamage || 0}
                 onChange={e => {
-                  const rawValue = Number.parseInt(e.target.value) || 0
-                  const totalHealth = getTotalHealthLevels()
+                  const rawValue = Number.parseInt(e.target.value) || 0;
+                  const totalHealth = getTotalHealthLevels();
                   const otherDamage =
                     (character?.health?.bashingDamage || 0) +
-                    (character?.health?.aggravatedDamage || 0)
-                  const maxAllowed = Math.max(0, totalHealth - otherDamage)
-                  const value = Math.max(0, Math.min(maxAllowed, rawValue))
+                    (character?.health?.aggravatedDamage || 0);
+                  const maxAllowed = Math.max(0, totalHealth - otherDamage);
+                  const value = Math.max(0, Math.min(maxAllowed, rawValue));
                   updateCharacter({
                     health: { ...character.health, lethalDamage: value },
-                  })
+                  });
                 }}
                 className="text-center"
                 min={0}
@@ -260,16 +254,16 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 type="number"
                 value={character?.health?.aggravatedDamage || 0}
                 onChange={e => {
-                  const rawValue = Number.parseInt(e.target.value) || 0
-                  const totalHealth = getTotalHealthLevels()
+                  const rawValue = Number.parseInt(e.target.value) || 0;
+                  const totalHealth = getTotalHealthLevels();
                   const otherDamage =
                     (character?.health?.bashingDamage || 0) +
-                    (character?.health?.lethalDamage || 0)
-                  const maxAllowed = Math.max(0, totalHealth - otherDamage)
-                  const value = Math.max(0, Math.min(maxAllowed, rawValue))
+                    (character?.health?.lethalDamage || 0);
+                  const maxAllowed = Math.max(0, totalHealth - otherDamage);
+                  const value = Math.max(0, Math.min(maxAllowed, rawValue));
                   updateCharacter({
                     health: { ...character.health, aggravatedDamage: value },
-                  })
+                  });
                 }}
                 className="text-center"
                 min={0}
@@ -288,7 +282,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-HealthTracker.displayName = "HealthTracker"
+HealthTracker.displayName = "HealthTracker";

@@ -13,9 +13,7 @@ export const ModifierInputs: React.FC = () => {
       <div className="space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <Label className="block text-sm font-medium text-gray-600 mb-1">
-              Target Number
-            </Label>
+            <Label className="block text-sm font-medium text-gray-600 mb-1">Target Number</Label>
             <Input
               type="number"
               value={character?.dicePool?.targetNumber || 7}
@@ -66,10 +64,7 @@ export const ModifierInputs: React.FC = () => {
                 updateCharacter({
                   dicePool: {
                     ...character.dicePool,
-                    extraDiceBonus: Math.min(
-                      10,
-                      Math.max(0, Number.parseInt(e.target.value) || 0),
-                    ),
+                    extraDiceBonus: Math.min(10, Math.max(0, Number.parseInt(e.target.value) || 0)),
                   },
                 })
               }
@@ -114,7 +109,7 @@ export const ModifierInputs: React.FC = () => {
                     ...character.dicePool,
                     extraSuccessBonus: Math.min(
                       DEFAULT_MODIFIER_MAX,
-                      Math.max(0, Number.parseInt(e.target.value) || 0),
+                      Math.max(0, Number.parseInt(e.target.value) || 0)
                     ),
                   },
                 })
@@ -123,9 +118,7 @@ export const ModifierInputs: React.FC = () => {
               min={0}
               max={DEFAULT_MODIFIER_MAX}
             />
-            <div className="text-xs text-gray-500 mt-1">
-              Max: {DEFAULT_MODIFIER_MAX}
-            </div>
+            <div className="text-xs text-gray-500 mt-1">Max: {DEFAULT_MODIFIER_MAX}</div>
           </div>
           <div>
             <Label className="block text-sm font-medium text-gray-600 mb-1">
@@ -138,10 +131,7 @@ export const ModifierInputs: React.FC = () => {
                 updateCharacter({
                   dicePool: {
                     ...character.dicePool,
-                    extraSuccessNonBonus: Math.max(
-                      0,
-                      Number.parseInt(e.target.value) || 0,
-                    ),
+                    extraSuccessNonBonus: Math.max(0, Number.parseInt(e.target.value) || 0),
                   },
                 })
               }
@@ -176,4 +166,3 @@ export const ModifierInputs: React.FC = () => {
 };
 
 export default ModifierInputs;
-

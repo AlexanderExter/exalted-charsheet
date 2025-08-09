@@ -1,33 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import type React from "react";
-import {
-  Plus,
-  Trash2,
-  User,
-  Download,
-  Upload,
-  Search,
-  RefreshCw,
-  Save,
-} from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { Plus, Trash2, User, Download, Upload, Search, RefreshCw, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { exportCharacters } from "@/lib/character-storage";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import type { Character } from "@/lib/character-types";
 
 interface CharacterSelectProps {
@@ -57,10 +36,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredCharacters = useMemo(
-    () =>
-      characters.filter(char =>
-        char.name.toLowerCase().includes(searchTerm.toLowerCase())
-      ),
+    () => characters.filter(char => char.name.toLowerCase().includes(searchTerm.toLowerCase())),
     [characters, searchTerm]
   );
 
@@ -74,9 +50,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-center">
-            Exalted: Essence Character Manager
-          </CardTitle>
+          <CardTitle className="text-center">Exalted: Essence Character Manager</CardTitle>
           <CardDescription className="text-center">
             Create and manage your Exalted characters
           </CardDescription>
@@ -101,20 +75,14 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>
-                  Characters are saved automatically in your browser&apos;s local
-                  storage
-                </p>
+                <p>Characters are saved automatically in your browser&apos;s local storage</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
 
           {/* Import/Export Controls */}
           <div className="flex justify-center gap-3">
-            <Button
-              variant="outline"
-              onClick={() => fileInputRef.current?.click()}
-            >
+            <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
               <Upload className="w-4 h-4 mr-2" />
               Import Character(s)
             </Button>
@@ -126,10 +94,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
               className="hidden"
             />
             {characters.length > 0 && (
-              <Button
-                variant="outline"
-                onClick={() => exportCharacters(characters)}
-              >
+              <Button variant="outline" onClick={() => exportCharacters(characters)}>
                 <Download className="w-4 h-4 mr-2" />
                 Export All
               </Button>

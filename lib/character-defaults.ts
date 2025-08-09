@@ -13,22 +13,22 @@ import type {
   Combat,
   Social,
   ExaltType,
-} from "./character-types"
-import { v4 as uuidv4 } from "uuid"
+} from "./character-types";
+import { v4 as uuidv4 } from "uuid";
 
 // Default stat block
 const createDefaultStatBlock = (baseValue: number = 0): StatBlock => ({
   base: baseValue,
   added: 0,
   bonus: 0,
-})
+});
 
 // Default attributes (minimum 1 for all)
 export const createDefaultAttributes = (): Attributes => ({
   fortitude: createDefaultStatBlock(1),
   finesse: createDefaultStatBlock(1),
   force: createDefaultStatBlock(1),
-})
+});
 
 // Default abilities (all start at 0)
 export const createDefaultAbilities = (): Abilities => ({
@@ -46,7 +46,7 @@ export const createDefaultAbilities = (): Abilities => ({
   sagacity: createDefaultStatBlock(0),
   stealth: createDefaultStatBlock(0),
   war: createDefaultStatBlock(0),
-})
+});
 
 // Default essence pool
 export const createDefaultEssence = (): Essence => ({
@@ -55,7 +55,7 @@ export const createDefaultEssence = (): Essence => ({
   spent: 0,
   anima: 0,
   rating: 1,
-})
+});
 
 // Default static value modifiers
 export const createDefaultStaticValues = (): StaticValues => ({
@@ -65,7 +65,7 @@ export const createDefaultStaticValues = (): StaticValues => ({
   resolveModifier: 0,
   soakModifier: 0,
   hardnessModifier: 0,
-})
+});
 
 // Default health configuration
 export const createDefaultHealth = (): Health => ({
@@ -81,7 +81,7 @@ export const createDefaultHealth = (): Health => ({
   lethalDamage: 0,
   aggravatedDamage: 0,
   dramaticInjuries: [],
-})
+});
 
 // Default milestones
 export const createDefaultMilestones = (): Milestones => ({
@@ -89,7 +89,7 @@ export const createDefaultMilestones = (): Milestones => ({
   exalt: 0,
   minor: 0,
   major: 0,
-})
+});
 
 // Default dice pool configuration
 export const createDefaultDicePool = (): DicePool => ({
@@ -102,7 +102,7 @@ export const createDefaultDicePool = (): DicePool => ({
   extraSuccessBonus: 0,
   extraSuccessNonBonus: 0,
   isStunted: false,
-})
+});
 
 // Default combat bonuses
 export const createDefaultCombat = (): Combat => ({
@@ -111,7 +111,7 @@ export const createDefaultCombat = (): Combat => ({
   joinBattleSuccessBonus: 0,
   decisiveExtraDice: 0,
   decisiveExtraSuccess: 0,
-})
+});
 
 // Default social configuration
 export const createDefaultSocial = (): Social => ({
@@ -121,7 +121,7 @@ export const createDefaultSocial = (): Social => ({
   },
   intimacies: [],
   backgrounds: [],
-})
+});
 
 // Complete character template
 export const createNewCharacter = (name: string): Character => ({
@@ -142,7 +142,7 @@ export const createNewCharacter = (name: string): Character => ({
   combat: createDefaultCombat(),
   social: createDefaultSocial(),
   rulings: [],
-})
+});
 
 // Mapping of Exalt types to default mote values
 const defaultMotesByExaltType: Record<ExaltType, number> = {
@@ -153,52 +153,52 @@ const defaultMotesByExaltType: Record<ExaltType, number> = {
   abyssal: 7,
   liminal: 5,
   exigent: 5,
-}
+};
 
 // Generic character template factory
 export const createCharacterTemplate = (name: string, type: ExaltType): Character => {
-  const character = createNewCharacter(name)
-  character.health.exaltType = type
-  character.essence.motes = defaultMotesByExaltType[type]
-  return character
-}
+  const character = createNewCharacter(name);
+  character.health.exaltType = type;
+  character.essence.motes = defaultMotesByExaltType[type];
+  return character;
+};
 
 // Preset character templates for different Exalt types
 export const createSolarCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "solar")
+  createCharacterTemplate(name, "solar");
 
 export const createDragonBloodCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "dragon-blood")
+  createCharacterTemplate(name, "dragon-blood");
 
 export const createLunarCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "lunar")
+  createCharacterTemplate(name, "lunar");
 
 export const createSiderealCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "sidereal")
+  createCharacterTemplate(name, "sidereal");
 
 export const createAbyssalCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "abyssal")
+  createCharacterTemplate(name, "abyssal");
 
 export const createLiminalCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "liminal")
+  createCharacterTemplate(name, "liminal");
 
 export const createExigentCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "exigent")
+  createCharacterTemplate(name, "exigent");
 
 // Character template selector
 export const createCharacterByType = (name: string, exaltType: string): Character => {
   if (exaltType in defaultMotesByExaltType) {
-    return createCharacterTemplate(name, exaltType as ExaltType)
+    return createCharacterTemplate(name, exaltType as ExaltType);
   }
-  return createCharacterTemplate(name, "lunar") // Default to Lunar
-}
+  return createCharacterTemplate(name, "lunar"); // Default to Lunar
+};
 
 // Validation defaults
-export const DEFAULT_ATTRIBUTE_MIN = 1
-export const DEFAULT_ATTRIBUTE_MAX = 5
-export const DEFAULT_ABILITY_MIN = 0
-export const DEFAULT_ABILITY_MAX = 5
-export const DEFAULT_ESSENCE_MIN = 1
-export const DEFAULT_ESSENCE_MAX = 10
-export const DEFAULT_MODIFIER_MIN = -5
-export const DEFAULT_MODIFIER_MAX = 5
+export const DEFAULT_ATTRIBUTE_MIN = 1;
+export const DEFAULT_ATTRIBUTE_MAX = 5;
+export const DEFAULT_ABILITY_MIN = 0;
+export const DEFAULT_ABILITY_MAX = 5;
+export const DEFAULT_ESSENCE_MIN = 1;
+export const DEFAULT_ESSENCE_MAX = 10;
+export const DEFAULT_MODIFIER_MIN = -5;
+export const DEFAULT_MODIFIER_MAX = 5;

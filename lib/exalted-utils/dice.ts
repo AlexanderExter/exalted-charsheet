@@ -15,7 +15,7 @@ export const calculateDicePool = (
   extraDiceNonBonus: number,
   extraSuccessBonus: number,
   extraSuccessNonBonus: number,
-  isStunted: boolean = false,
+  isStunted: boolean = false
 ): DicePoolResult => {
   const basePool = attributeValue + abilityValue;
 
@@ -42,4 +42,3 @@ export const calculateDicePool = (
     actionPhrase,
   };
 };
-

@@ -20,7 +20,7 @@ This is a digital character manager built specifically for **Exalted: Essence**.
 ## Version
 
 **v0.0.5-alpha** — Initial public release  
-*Note: Features are subject to change. Export formats may break in future versions.*
+_Note: Features are subject to change. Export formats may break in future versions._
 
 ---
 
@@ -33,4 +33,4 @@ Contact: [exteralexander@gmail.com](mailto:exteralexander@gmail.com)
 
 ---
 
-*Happy gaming, and may your dice always explode!*
+_Happy gaming, and may your dice always explode!_

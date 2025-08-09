@@ -14,4 +14,3 @@ export const getActiveAnimaRulings = (anima: number): string[] => {
   if (anima >= 10) rulings.push("Iconic effect available");
   return rulings;
 };
-

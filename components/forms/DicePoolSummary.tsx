@@ -38,4 +38,3 @@ export const DicePoolSummary: React.FC = () => {
 };
 
 export default DicePoolSummary;
-

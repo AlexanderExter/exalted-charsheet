@@ -21,7 +21,7 @@ const OX_BODY_TABLE: Partial<Record<ExaltType, HealthLevels[]>> = {
 export const calculateHealthLevels = (
   baseline: HealthLevels,
   oxBodyLevels: number,
-  exaltType: ExaltType,
+  exaltType: ExaltType
 ): HealthLevels => {
   const clampedOxBody = Math.max(0, Math.min(5, oxBodyLevels));
 
@@ -51,7 +51,7 @@ export const calculateHealthPenalty = (
   healthLevels: HealthLevels,
   bashingDamage: number,
   lethalDamage: number,
-  aggravatedDamage: number,
+  aggravatedDamage: number
 ): number => {
   const totalDamage = bashingDamage + lethalDamage + aggravatedDamage;
 
@@ -84,4 +84,3 @@ export const calculateHealthPenalty = (
 
   return penalty;
 };
-

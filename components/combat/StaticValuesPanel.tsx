@@ -1,18 +1,15 @@
-import React from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import type { Character } from "@/lib/character-types"
-import type { CharacterCalculations } from "@/hooks/useCharacterCalculations"
-import {
-  DEFAULT_MODIFIER_MAX,
-  DEFAULT_MODIFIER_MIN,
-} from "@/lib/character-defaults"
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import type { Character } from "@/lib/character-types";
+import type { CharacterCalculations } from "@/hooks/useCharacterCalculations";
+import { DEFAULT_MODIFIER_MAX, DEFAULT_MODIFIER_MIN } from "@/lib/character-defaults";
 
 interface StaticValuesPanelProps {
-  character: Character
-  updateCharacter: (updates: Partial<Character>) => void
-  calculations: CharacterCalculations
+  character: Character;
+  updateCharacter: (updates: Partial<Character>) => void;
+  calculations: CharacterCalculations;
 }
 
 export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
@@ -46,14 +43,11 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   onChange={e => {
                     const value = Math.max(
                       DEFAULT_MODIFIER_MIN,
-                      Math.min(
-                        DEFAULT_MODIFIER_MAX,
-                        Number.parseInt(e.target.value) || 0,
-                      ),
-                    )
+                      Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
+                    );
                     updateCharacter({
                       staticValues: { ...character.staticValues, defenseModifier: value },
-                    })
+                    });
                   }}
                   className="w-12 text-center text-xs"
                   min={DEFAULT_MODIFIER_MIN}
@@ -79,14 +73,11 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   onChange={e => {
                     const value = Math.max(
                       DEFAULT_MODIFIER_MIN,
-                      Math.min(
-                        DEFAULT_MODIFIER_MAX,
-                        Number.parseInt(e.target.value) || 0,
-                      ),
-                    )
+                      Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
+                    );
                     updateCharacter({
                       staticValues: { ...character.staticValues, evasionModifier: value },
-                    })
+                    });
                   }}
                   className="w-12 text-center text-xs"
                   min={DEFAULT_MODIFIER_MIN}
@@ -112,14 +103,11 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   onChange={e => {
                     const value = Math.max(
                       DEFAULT_MODIFIER_MIN,
-                      Math.min(
-                        DEFAULT_MODIFIER_MAX,
-                        Number.parseInt(e.target.value) || 0,
-                      ),
-                    )
+                      Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
+                    );
                     updateCharacter({
                       staticValues: { ...character.staticValues, parryModifier: value },
-                    })
+                    });
                   }}
                   className="w-12 text-center text-xs"
                   min={DEFAULT_MODIFIER_MIN}
@@ -149,14 +137,11 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   onChange={e => {
                     const value = Math.max(
                       DEFAULT_MODIFIER_MIN,
-                      Math.min(
-                        DEFAULT_MODIFIER_MAX,
-                        Number.parseInt(e.target.value) || 0,
-                      ),
-                    )
+                      Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
+                    );
                     updateCharacter({
                       staticValues: { ...character.staticValues, resolveModifier: value },
-                    })
+                    });
                   }}
                   className="w-12 text-center text-xs"
                   min={DEFAULT_MODIFIER_MIN}
@@ -177,7 +162,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   Armor: +
                   {(character?.armor || []).reduce(
                     (total: number, armor) => total + (armor.soak || 0),
-                    0,
+                    0
                   )}
                 </div>
               </div>
@@ -189,14 +174,11 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   onChange={e => {
                     const value = Math.max(
                       DEFAULT_MODIFIER_MIN,
-                      Math.min(
-                        DEFAULT_MODIFIER_MAX,
-                        Number.parseInt(e.target.value) || 0,
-                      ),
-                    )
+                      Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
+                    );
                     updateCharacter({
                       staticValues: { ...character.staticValues, soakModifier: value },
-                    })
+                    });
                   }}
                   className="w-12 text-center text-xs"
                   min={DEFAULT_MODIFIER_MIN}
@@ -217,7 +199,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   Armor: +
                   {(character?.armor || []).reduce(
                     (total: number, armor) => total + (armor.hardness || 0),
-                    0,
+                    0
                   )}
                 </div>
               </div>
@@ -229,14 +211,11 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                   onChange={e => {
                     const value = Math.max(
                       DEFAULT_MODIFIER_MIN,
-                      Math.min(
-                        DEFAULT_MODIFIER_MAX,
-                        Number.parseInt(e.target.value) || 0,
-                      ),
-                    )
+                      Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
+                    );
                     updateCharacter({
                       staticValues: { ...character.staticValues, hardnessModifier: value },
-                    })
+                    });
                   }}
                   className="w-12 text-center text-xs"
                   min={DEFAULT_MODIFIER_MIN}
@@ -248,7 +227,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-StaticValuesPanel.displayName = "StaticValuesPanel"
+StaticValuesPanel.displayName = "StaticValuesPanel";

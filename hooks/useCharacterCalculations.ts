@@ -1,16 +1,8 @@
 // Character calculation hook for derived values
 
-import { useMemo } from "react"
-import type {
-  Character,
-  AttributeType,
-  AbilityType,
-  StatBlock,
-} from "@/lib/character-types"
-import {
-  calculateStatTotal,
-  getHighestAttributeValue,
-} from "@/lib/exalted-utils"
+import { useMemo } from "react";
+import type { Character, AttributeType, AbilityType, StatBlock } from "@/lib/character-types";
+import { calculateStatTotal, getHighestAttributeValue } from "@/lib/exalted-utils";
 import {
   calculateEvasion,
   calculateParry,
@@ -18,41 +10,35 @@ import {
   calculateResolve,
   calculateSoak,
   calculateHardness,
-} from "@/lib/exalted-utils/static-values"
-import {
-  calculateHealthLevels,
-  calculateHealthPenalty,
-} from "@/lib/exalted-utils/health"
-import {
-  calculateDicePool,
-  type DicePoolResult,
-} from "@/lib/exalted-utils/dice"
+} from "@/lib/exalted-utils/static-values";
+import { calculateHealthLevels, calculateHealthPenalty } from "@/lib/exalted-utils/health";
+import { calculateDicePool, type DicePoolResult } from "@/lib/exalted-utils/dice";
 
 export interface CharacterCalculations {
   // Static values
-  defense: number
-  evasion: number
-  parry: number
-  resolve: number
-  soak: number
-  hardness: number
+  defense: number;
+  evasion: number;
+  parry: number;
+  resolve: number;
+  soak: number;
+  hardness: number;
 
   // Health calculations
   healthLevels: {
-    zero: number
-    minusOne: number
-    minusTwo: number
-    incap: number
-  }
-  healthPenalty: number
+    zero: number;
+    minusOne: number;
+    minusTwo: number;
+    incap: number;
+  };
+  healthPenalty: number;
 
   // Attribute/ability helpers
-  highestAttribute: number
-  getAttributeTotal: (attributeKey: string) => number
-  getAbilityTotal: (abilityKey: string) => number
+  highestAttribute: number;
+  getAttributeTotal: (attributeKey: string) => number;
+  getAbilityTotal: (abilityKey: string) => number;
 
   // Dice pool calculation
-  dicePoolResult: DicePoolResult
+  dicePoolResult: DicePoolResult;
 }
 
 export const useCharacterCalculations = (character: Character | null): CharacterCalculations => {
@@ -78,72 +64,72 @@ export const useCharacterCalculations = (character: Character | null): Character
           cappedBonusDice: 0,
           actionPhrase: "Roll 0, TN 7 Double 10s",
         },
-      }
+      };
     }
 
     // Helper functions
     const getAttributeTotal = (attributeKey: AttributeType): number => {
-      const attribute: StatBlock | undefined = character.attributes[attributeKey]
-      return attribute ? calculateStatTotal(attribute) : 0
-    }
+      const attribute: StatBlock | undefined = character.attributes[attributeKey];
+      return attribute ? calculateStatTotal(attribute) : 0;
+    };
 
     const getAbilityTotal = (abilityKey: AbilityType): number => {
-      const ability: StatBlock | undefined = character.abilities[abilityKey]
-      return ability ? calculateStatTotal(ability) : 0
-    }
+      const ability: StatBlock | undefined = character.abilities[abilityKey];
+      return ability ? calculateStatTotal(ability) : 0;
+    };
 
     // Calculate highest attribute value
-    const highestAttribute = getHighestAttributeValue(character.attributes)
+    const highestAttribute = getHighestAttributeValue(character.attributes);
 
     // Calculate static values
     const evasion = calculateEvasion(
       character.abilities.athletics,
       character.attributes,
       character.staticValues.evasionModifier
-    )
+    );
 
     const parry = calculateParry(
       character.abilities.closeCombat,
       character.attributes,
       character.staticValues.parryModifier
-    )
+    );
 
-    const defense = calculateDefense(evasion, parry, character.staticValues.defenseModifier)
+    const defense = calculateDefense(evasion, parry, character.staticValues.defenseModifier);
 
     const resolve = calculateResolve(
       character.abilities.integrity,
       character.staticValues.resolveModifier
-    )
+    );
 
     const soak = calculateSoak(
       character.abilities.physique,
       character.armor,
       character.staticValues.soakModifier
-    )
+    );
 
     const hardness = calculateHardness(
       character.essence.rating,
       character.armor,
       character.staticValues.hardnessModifier
-    )
+    );
 
     // Calculate health
     const healthLevels = calculateHealthLevels(
       character.health.baseline,
       character.health.oxBodyLevels,
       character.health.exaltType
-    )
+    );
 
     const healthPenalty = calculateHealthPenalty(
       healthLevels,
       character.health.bashingDamage,
       character.health.lethalDamage,
       character.health.aggravatedDamage
-    )
+    );
 
     // Calculate dice pool
-    const attributeValue = getAttributeTotal(character.dicePool.attribute)
-    const abilityValue = getAbilityTotal(character.dicePool.ability)
+    const attributeValue = getAttributeTotal(character.dicePool.attribute);
+    const abilityValue = getAbilityTotal(character.dicePool.ability);
 
     const dicePoolResult = calculateDicePool(
       attributeValue,
@@ -155,7 +141,7 @@ export const useCharacterCalculations = (character: Character | null): Character
       character.dicePool.extraSuccessBonus,
       character.dicePool.extraSuccessNonBonus,
       character.dicePool.isStunted
-    )
+    );
 
     return {
       defense,
@@ -170,48 +156,48 @@ export const useCharacterCalculations = (character: Character | null): Character
       getAttributeTotal,
       getAbilityTotal,
       dicePoolResult,
-    }
-  }, [character])
-}
+    };
+  }, [character]);
+};
 
 // Specialized hooks for specific calculations
 export const useStaticValues = (character: Character | null) => {
   return useMemo(() => {
     if (!character) {
-      return { defense: 0, evasion: 0, parry: 0, resolve: 2, soak: 1, hardness: 3 }
+      return { defense: 0, evasion: 0, parry: 0, resolve: 2, soak: 1, hardness: 3 };
     }
 
     const evasion = calculateEvasion(
       character.abilities.athletics,
       character.attributes,
       character.staticValues.evasionModifier
-    )
+    );
 
     const parry = calculateParry(
       character.abilities.closeCombat,
       character.attributes,
       character.staticValues.parryModifier
-    )
+    );
 
-    const defense = calculateDefense(evasion, parry, character.staticValues.defenseModifier)
+    const defense = calculateDefense(evasion, parry, character.staticValues.defenseModifier);
     const resolve = calculateResolve(
       character.abilities.integrity,
       character.staticValues.resolveModifier
-    )
+    );
     const soak = calculateSoak(
       character.abilities.physique,
       character.armor,
       character.staticValues.soakModifier
-    )
+    );
     const hardness = calculateHardness(
       character.essence.rating,
       character.armor,
       character.staticValues.hardnessModifier
-    )
+    );
 
-    return { defense, evasion, parry, resolve, soak, hardness }
-  }, [character])
-}
+    return { defense, evasion, parry, resolve, soak, hardness };
+  }, [character]);
+};
 
 export const useHealthCalculations = (character: Character | null) => {
   return useMemo(() => {
@@ -221,37 +207,37 @@ export const useHealthCalculations = (character: Character | null) => {
         healthPenalty: 0,
         totalHealthLevels: 7,
         damageTotal: 0,
-      }
+      };
     }
 
     const healthLevels = calculateHealthLevels(
       character.health.baseline,
       character.health.oxBodyLevels,
       character.health.exaltType
-    )
+    );
 
     const healthPenalty = calculateHealthPenalty(
       healthLevels,
       character.health.bashingDamage,
       character.health.lethalDamage,
       character.health.aggravatedDamage
-    )
+    );
 
     const totalHealthLevels =
-      healthLevels.zero + healthLevels.minusOne + healthLevels.minusTwo + healthLevels.incap
+      healthLevels.zero + healthLevels.minusOne + healthLevels.minusTwo + healthLevels.incap;
     const damageTotal =
       character.health.bashingDamage +
       character.health.lethalDamage +
-      character.health.aggravatedDamage
+      character.health.aggravatedDamage;
 
     return {
       healthLevels,
       healthPenalty,
       totalHealthLevels,
       damageTotal,
-    }
-  }, [character])
-}
+    };
+  }, [character]);
+};
 
 export const useDicePoolCalculation = (character: Character | null) => {
   return useMemo(() => {
@@ -262,15 +248,11 @@ export const useDicePoolCalculation = (character: Character | null) => {
         totalPool: 0,
         cappedBonusDice: 0,
         actionPhrase: "Roll 0, TN 7 Double 10s",
-      }
+      };
     }
 
-    const attributeValue = calculateStatTotal(
-      character.attributes[character.dicePool.attribute]
-    )
-    const abilityValue = calculateStatTotal(
-      character.abilities[character.dicePool.ability]
-    )
+    const attributeValue = calculateStatTotal(character.attributes[character.dicePool.attribute]);
+    const abilityValue = calculateStatTotal(character.abilities[character.dicePool.ability]);
 
     return calculateDicePool(
       attributeValue,
@@ -282,6 +264,6 @@ export const useDicePoolCalculation = (character: Character | null) => {
       character.dicePool.extraSuccessBonus,
       character.dicePool.extraSuccessNonBonus,
       character.dicePool.isStunted
-    )
-  }, [character])
-}
+    );
+  }, [character]);
+};

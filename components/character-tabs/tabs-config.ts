@@ -1,5 +1,13 @@
-import type { LucideIcon } from "lucide-react";
-import { User, Swords, Shield, BookOpen, TrendingUp, Users, Scroll } from "lucide-react";
+import {
+  User,
+  Swords,
+  Shield,
+  BookOpen,
+  TrendingUp,
+  Users,
+  Scroll,
+  type LucideIcon,
+} from "lucide-react";
 import type React from "react";
 import { CoreStatsTab } from "./CoreStatsTab";
 import { CombatTab } from "./CombatTab";
@@ -62,4 +70,3 @@ export const tabs: TabConfig[] = [
 ];
 
 export default tabs;
-
