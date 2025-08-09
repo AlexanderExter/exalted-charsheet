@@ -14,7 +14,6 @@ export interface TabConfig {
   label: string;
   icon: LucideIcon;
   component: React.ComponentType<any>;
-  componentProps?: string[];
 }
 
 export const tabs: TabConfig[] = [
@@ -23,19 +22,12 @@ export const tabs: TabConfig[] = [
     label: "Core Stats",
     icon: User,
     component: CoreStatsTab,
-    componentProps: [
-      "calculateAbilityTotal",
-      "calculateDicePool",
-      "globalAbilityAttribute",
-      "setGlobalAbilityAttribute",
-    ],
   },
   {
     id: "combat",
     label: "Combat",
     icon: Swords,
     component: CombatTab,
-    componentProps: ["calculations"],
   },
   {
     id: "equipment",
@@ -54,7 +46,6 @@ export const tabs: TabConfig[] = [
     label: "Socials",
     icon: Users,
     component: SocialTab,
-    componentProps: ["resolve"],
   },
   {
     id: "advancement",

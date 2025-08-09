@@ -4,7 +4,6 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import type { Character, AttributeType, AbilityType } from "@/lib/character-types";
 import { calculateStatTotal } from "@/lib/exalted-utils";
 import { StatTable } from "@/components/forms/StatTable";
 import { attributeConfig, abilityConfig } from "@/lib/stat-config";
@@ -12,154 +11,135 @@ import { DicePoolEditor } from "@/components/forms/DicePoolEditor";
 import { EssencePanel } from "@/components/character-tabs/common/EssencePanel";
 import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard";
 import { createDefaultEssence } from "@/lib/character-defaults";
-
-interface CoreStatsTabProps {
-  character: Character | null;
-  updateCharacter: (updates: Partial<Character>) => void;
-  calculateAbilityTotal: (abilityKey: AbilityType) => number;
-  calculateDicePool: () => {
-    basePool: number;
-    extraDice: number;
-    totalPool: number;
-    cappedBonusDice: number;
-    actionPhrase: string;
-  };
-  globalAbilityAttribute: AttributeType | "none";
-  setGlobalAbilityAttribute: (attribute: AttributeType | "none") => void;
-}
-
-export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(
-  ({
+import { useCharacterContext } from "@/hooks/CharacterContext";
+export const CoreStatsTab: React.FC = React.memo(() => {
+  const {
     character,
     updateCharacter,
     calculateAbilityTotal,
     calculateDicePool,
     globalAbilityAttribute,
     setGlobalAbilityAttribute,
-  }) => {
-    if (!character) {
-      return <NoCharacterCard />;
-    }
+  } = useCharacterContext();
 
-    const abilityTotalColor =
-      globalAbilityAttribute === "fortitude"
-        ? "text-green-600"
-        : globalAbilityAttribute === "finesse"
-          ? "text-blue-600"
-          : globalAbilityAttribute === "force"
-            ? "text-red-600"
-            : "text-gray-700";
+  if (!character) {
+    return <NoCharacterCard />;
+  }
 
-    return (
-      <div className="space-y-6">
-        <EssencePanel
-          essence={character.essence || createDefaultEssence()}
-          onChange={essence => updateCharacter({ essence })}
-        />
+  const abilityTotalColor =
+    globalAbilityAttribute === "fortitude"
+      ? "text-green-600"
+      : globalAbilityAttribute === "finesse"
+        ? "text-blue-600"
+        : globalAbilityAttribute === "force"
+          ? "text-red-600"
+          : "text-gray-700";
 
-        {/* Attributes and Abilities */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Attributes</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <StatTable
-                config={attributeConfig}
-                stats={character.attributes}
-                onChange={(key, stat) =>
-                  updateCharacter({
-                    attributes: { ...character.attributes, [key]: stat },
-                  })
-                }
-                getTotal={key => calculateStatTotal(character.attributes[key])}
-                minBase={1}
-              />
-            </CardContent>
-          </Card>
+  return (
+    <div className="space-y-6">
+      <EssencePanel
+        essence={character.essence || createDefaultEssence()}
+        onChange={essence => updateCharacter({ essence })}
+      />
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Abilities</CardTitle>
-              <CardDescription>
-                <div className="flex items-center gap-2 mt-2">
-                  <Label className="text-sm">Add Attribute to All:</Label>
-                  <div className="flex gap-1">
-                    <Button
-                      variant={globalAbilityAttribute === "none" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setGlobalAbilityAttribute("none")}
-                    >
-                      None
-                    </Button>
-                    <Button
-                      variant={globalAbilityAttribute === "fortitude" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setGlobalAbilityAttribute("fortitude")}
-                      className={
-                        globalAbilityAttribute === "fortitude"
-                          ? "bg-green-600 hover:bg-green-700"
-                          : "text-green-600 border-green-600 hover:bg-green-50"
-                      }
-                    >
-                      Fortitude
-                    </Button>
-                    <Button
-                      variant={globalAbilityAttribute === "finesse" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setGlobalAbilityAttribute("finesse")}
-                      className={
-                        globalAbilityAttribute === "finesse"
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                      }
-                    >
-                      Finesse
-                    </Button>
-                    <Button
-                      variant={globalAbilityAttribute === "force" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setGlobalAbilityAttribute("force")}
-                      className={
-                        globalAbilityAttribute === "force"
-                          ? "bg-red-600 hover:bg-red-700"
-                          : "text-red-600 border-red-600 hover:bg-red-50"
-                      }
-                    >
-                      Force
-                    </Button>
-                  </div>
+      {/* Attributes and Abilities */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Attributes</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <StatTable
+              config={attributeConfig}
+              stats={character.attributes}
+              onChange={(key, stat) =>
+                updateCharacter({
+                  attributes: { ...character.attributes, [key]: stat },
+                })
+              }
+              getTotal={key => calculateStatTotal(character.attributes[key])}
+              minBase={1}
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Abilities</CardTitle>
+            <CardDescription>
+              <div className="flex items-center gap-2 mt-2">
+                <Label className="text-sm">Add Attribute to All:</Label>
+                <div className="flex gap-1">
+                  <Button
+                    variant={globalAbilityAttribute === "none" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setGlobalAbilityAttribute("none")}
+                  >
+                    None
+                  </Button>
+                  <Button
+                    variant={globalAbilityAttribute === "fortitude" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setGlobalAbilityAttribute("fortitude")}
+                    className={
+                      globalAbilityAttribute === "fortitude"
+                        ? "bg-green-600 hover:bg-green-700"
+                        : "text-green-600 border-green-600 hover:bg-green-50"
+                    }
+                  >
+                    Fortitude
+                  </Button>
+                  <Button
+                    variant={globalAbilityAttribute === "finesse" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setGlobalAbilityAttribute("finesse")}
+                    className={
+                      globalAbilityAttribute === "finesse"
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                    }
+                  >
+                    Finesse
+                  </Button>
+                  <Button
+                    variant={globalAbilityAttribute === "force" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setGlobalAbilityAttribute("force")}
+                    className={
+                      globalAbilityAttribute === "force"
+                        ? "bg-red-600 hover:bg-red-700"
+                        : "text-red-600 border-red-600 hover:bg-red-50"
+                    }
+                  >
+                    Force
+                  </Button>
                 </div>
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <StatTable
-                config={abilityConfig}
-                stats={character.abilities}
-                onChange={(key, stat) =>
-                  updateCharacter({
-                    abilities: { ...character.abilities, [key]: stat },
-                  })
-                }
-                getTotal={calculateAbilityTotal}
-                minBase={0}
-                scrollable
-                totalColorClass={abilityTotalColor}
-              />
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Roll Assembler */}
-        <DicePoolEditor
-          character={character}
-          updateCharacter={updateCharacter}
-          calculateDicePool={calculateDicePool}
-        />
+              </div>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <StatTable
+              config={abilityConfig}
+              stats={character.abilities}
+              onChange={(key, stat) =>
+                updateCharacter({
+                  abilities: { ...character.abilities, [key]: stat },
+                })
+              }
+              getTotal={calculateAbilityTotal}
+              minBase={0}
+              scrollable
+              totalColorClass={abilityTotalColor}
+            />
+          </CardContent>
+        </Card>
       </div>
-    );
-  },
-);
+
+      {/* Roll Assembler */}
+      <DicePoolEditor />
+    </div>
+  );
+});
 
 CoreStatsTab.displayName = "CoreStatsTab";
 
