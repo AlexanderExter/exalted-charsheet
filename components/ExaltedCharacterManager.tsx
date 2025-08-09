@@ -28,7 +28,7 @@ const ExaltedCharacterManager = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { isSaving, lastSaved } = useAutoSave(characters, "exalted-characters");
+  const { isSaving, lastSaved } = useAutoSave(characters);
 
   const handleExport = async (character: Character) => {
     try {
