@@ -12,7 +12,7 @@ export const useAutoSave = <T,>(
 ): UseAutoSaveReturn => {
   const [isSaving, setIsSaving] = useState(false)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     if (timeoutRef.current) {
