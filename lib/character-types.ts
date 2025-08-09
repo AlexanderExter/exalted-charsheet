@@ -170,7 +170,6 @@ export interface Spell {
 
 export interface Combat {
   power: number
-  joinBattleBonus: number
   joinBattleDiceBonus: number
   joinBattleSuccessBonus: number
   decisiveExtraDice: number
