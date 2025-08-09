@@ -10,6 +10,7 @@ import { StatTable } from "@/components/forms/StatTable";
 import { attributeConfig, abilityConfig } from "@/lib/stat-config";
 import { DicePoolEditor } from "@/components/forms/DicePoolEditor";
 import { EssencePanel } from "@/components/character-tabs/common/EssencePanel";
+import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard";
 import { createDefaultEssence } from "@/lib/character-defaults";
 
 interface CoreStatsTabProps {
@@ -37,15 +38,7 @@ export const CoreStatsTab: React.FC<CoreStatsTabProps> = React.memo(
     setGlobalAbilityAttribute,
   }) => {
     if (!character) {
-      return (
-        <div className="space-y-6">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-500 italic">No character selected.</p>
-            </CardContent>
-          </Card>
-        </div>
-      );
+      return <NoCharacterCard />;
     }
 
     const abilityTotalColor =

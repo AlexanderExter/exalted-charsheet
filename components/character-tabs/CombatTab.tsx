@@ -1,7 +1,6 @@
 // Combat Tab Component - Essence, health, static values, and combat mechanics
 
 import React from "react"
-import { Card, CardContent } from "@/components/ui/card"
 import { CombatRolls } from "@/components/combat/CombatRolls"
 import { StaticValuesPanel } from "@/components/combat/StaticValuesPanel"
 import { HealthTracker } from "@/components/combat/HealthTracker"
@@ -9,6 +8,7 @@ import type { Character } from "@/lib/character-types"
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations"
 import { useCombat } from "@/hooks/useCombat"
 import { EssencePanel } from "@/components/character-tabs/common/EssencePanel"
+import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
 import { createDefaultEssence } from "@/lib/character-defaults"
 
 interface CombatTabProps {
@@ -28,15 +28,7 @@ export const CombatTab: React.FC<CombatTabProps> = React.memo(
     } = useCombat({ character, updateCharacter, calculations })
 
     if (!character) {
-      return (
-        <div className="space-y-6">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-500 italic">No character selected.</p>
-            </CardContent>
-          </Card>
-        </div>
-      )
+      return <NoCharacterCard />
     }
 
     return (
