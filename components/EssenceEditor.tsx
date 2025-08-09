@@ -21,6 +21,8 @@ export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence
 
   const remain = motes - commitments - spent;
   const open = motes - commitments;
+  const remainPercent = motes > 0 ? Math.max(0, Math.min(100, (remain / motes) * 100)) : 0;
+  const openPercent = motes > 0 ? Math.max(0, Math.min(100, (open / motes) * 100)) : 0;
 
   return (
     <div className="space-y-4">
@@ -80,13 +82,29 @@ export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence
       </div>
       <Separator />
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
+        <div className="space-y-1">
           <Label className="font-medium text-blue-600">Remain</Label>
-          <span className="font-bold text-blue-600">{remain}</span>
+          <div className="relative h-4 w-full rounded bg-blue-200">
+            <div
+              className="h-full rounded bg-blue-600"
+              style={{ width: `${remainPercent}%` }}
+            />
+            <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-blue-600">
+              {remain}
+            </span>
+          </div>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="space-y-1">
           <Label className="font-medium text-green-600">Open</Label>
-          <span className="font-bold text-green-600">{open}</span>
+          <div className="relative h-4 w-full rounded bg-green-200">
+            <div
+              className="h-full rounded bg-green-600"
+              style={{ width: `${openPercent}%` }}
+            />
+            <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-green-600">
+              {open}
+            </span>
+          </div>
         </div>
       </div>
     </div>
