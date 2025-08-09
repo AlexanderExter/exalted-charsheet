@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { ArmorPiece, Weapon } from "@/lib/character-types"
 
@@ -11,15 +11,17 @@ export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({
   armor,
   weapons,
 }) => {
-  const items = [...armor, ...weapons]
-  const allTags = new Set<string>()
-  items.forEach(item => {
-    item.tags.forEach(tag => {
-      const trimmed = tag.trim()
-      if (trimmed) allTags.add(trimmed)
+  const { items, tags } = useMemo(() => {
+    const items = [...armor, ...weapons]
+    const allTags = new Set<string>()
+    items.forEach(item => {
+      item.tags.forEach(tag => {
+        const trimmed = tag.trim()
+        if (trimmed) allTags.add(trimmed)
+      })
     })
-  })
-  const tags = Array.from(allTags)
+    return { items, tags: Array.from(allTags) }
+  }, [armor, weapons])
 
   return (
     <Card>
