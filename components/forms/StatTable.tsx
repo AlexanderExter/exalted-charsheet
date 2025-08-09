@@ -45,7 +45,9 @@ export function StatTable<T extends string>({
             const maxAdded = Math.max(0, 5 - stat.base);
             return (
               <tr key={item.key} className="border-b border-gray-200">
-                <td className={`py-2 px-3 font-medium text-sm capitalize ${color}`}>{item.label}</td>
+                <td className={`py-2 px-3 font-medium text-sm capitalize ${color}`}>
+                  {item.label}
+                </td>
                 <td className="py-2 px-3">
                   <Input
                     type="number"
@@ -53,7 +55,7 @@ export function StatTable<T extends string>({
                     onChange={e => {
                       const value = Math.max(
                         minBase,
-                        Math.min(5, Number.parseInt(e.target.value) || minBase),
+                        Math.min(5, Number.parseInt(e.target.value) || minBase)
                       );
                       onChange(item.key, { ...stat, base: value });
                     }}
@@ -69,7 +71,7 @@ export function StatTable<T extends string>({
                     onChange={e => {
                       const value = Math.min(
                         maxAdded,
-                        Math.max(0, Number.parseInt(e.target.value) || 0),
+                        Math.max(0, Number.parseInt(e.target.value) || 0)
                       );
                       onChange(item.key, { ...stat, added: value });
                     }}

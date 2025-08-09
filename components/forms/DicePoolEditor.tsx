@@ -31,4 +31,3 @@ export const DicePoolEditor: React.FC = React.memo(() => {
 DicePoolEditor.displayName = "DicePoolEditor";
 
 export default DicePoolEditor;
-

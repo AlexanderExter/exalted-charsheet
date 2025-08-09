@@ -1,14 +1,14 @@
-import React from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { EssenceEditor } from "@/components/EssenceEditor"
-import { getAnimaLevel, getActiveAnimaRulings } from "@/lib/exalted-utils/anima"
-import type { Essence } from "@/lib/character-types"
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { EssenceEditor } from "@/components/EssenceEditor";
+import { getAnimaLevel, getActiveAnimaRulings } from "@/lib/exalted-utils/anima";
+import type { Essence } from "@/lib/character-types";
 
 interface EssencePanelProps {
-  essence: Essence
-  onChange: (essence: Essence) => void
+  essence: Essence;
+  onChange: (essence: Essence) => void;
 }
 
 export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange }) => {
@@ -38,9 +38,7 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange })
                   max="10"
                   step="1"
                   value={essence.anima || 0}
-                  onChange={e =>
-                    onChange({ ...essence, anima: Number.parseInt(e.target.value) })
-                  }
+                  onChange={e => onChange({ ...essence, anima: Number.parseInt(e.target.value) })}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                 />
                 <div className="flex justify-between text-xs text-gray-600">
@@ -58,9 +56,7 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange })
               </div>
               {getActiveAnimaRulings(essence.anima || 0).length > 0 && (
                 <div className="bg-purple-50 p-3 rounded-lg">
-                  <div className="text-sm font-medium text-purple-700 mb-2">
-                    Active Effects:
-                  </div>
+                  <div className="text-sm font-medium text-purple-700 mb-2">Active Effects:</div>
                   {getActiveAnimaRulings(essence.anima || 0).map((ruling, index) => (
                     <div key={index} className="text-sm text-purple-600">
                       • {ruling}
@@ -73,10 +69,9 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange })
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-EssencePanel.displayName = "EssencePanel"
+EssencePanel.displayName = "EssencePanel";
 
-export default EssencePanel
-
+export default EssencePanel;

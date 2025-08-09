@@ -1,26 +1,22 @@
-import React from "react"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import React from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import type { Weapon, WeaponRange } from "@/lib/character-types"
-import { parseTagsFromString, stringifyTags } from "@/components/equipment/tag-utils"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import type { Weapon, WeaponRange } from "@/lib/character-types";
+import { parseTagsFromString, stringifyTags } from "@/components/equipment/tag-utils";
 
 interface WeaponEditorProps {
-  weapon: Weapon
-  updateWeapon: (
-    id: string,
-    field: keyof Weapon,
-    value: Weapon[keyof Weapon]
-  ) => void
-  deleteWeapon: (id: string) => void
+  weapon: Weapon;
+  updateWeapon: (id: string, field: keyof Weapon, value: Weapon[keyof Weapon]) => void;
+  deleteWeapon: (id: string) => void;
 }
 
 export const WeaponEditor: React.FC<WeaponEditorProps> = ({
@@ -47,11 +43,7 @@ export const WeaponEditor: React.FC<WeaponEditorProps> = ({
             type="number"
             value={weapon.accuracy}
             onChange={e =>
-              updateWeapon(
-                weapon.id,
-                "accuracy",
-                Number.parseInt(e.target.value) || 0,
-              )
+              updateWeapon(weapon.id, "accuracy", Number.parseInt(e.target.value) || 0)
             }
           />
         </div>
@@ -61,9 +53,7 @@ export const WeaponEditor: React.FC<WeaponEditorProps> = ({
             id={`weapon-damage-${weapon.id}`}
             type="number"
             value={weapon.damage}
-            onChange={e =>
-              updateWeapon(weapon.id, "damage", Number.parseInt(e.target.value) || 0)
-            }
+            onChange={e => updateWeapon(weapon.id, "damage", Number.parseInt(e.target.value) || 0)}
             min={0}
           />
         </div>
@@ -76,9 +66,7 @@ export const WeaponEditor: React.FC<WeaponEditorProps> = ({
             id={`weapon-defence-${weapon.id}`}
             type="number"
             value={weapon.defence}
-            onChange={e =>
-              updateWeapon(weapon.id, "defence", Number.parseInt(e.target.value) || 0)
-            }
+            onChange={e => updateWeapon(weapon.id, "defence", Number.parseInt(e.target.value) || 0)}
           />
         </div>
         <div>
@@ -88,11 +76,7 @@ export const WeaponEditor: React.FC<WeaponEditorProps> = ({
             type="number"
             value={weapon.overwhelming}
             onChange={e =>
-              updateWeapon(
-                weapon.id,
-                "overwhelming",
-                Number.parseInt(e.target.value) || 0,
-              )
+              updateWeapon(weapon.id, "overwhelming", Number.parseInt(e.target.value) || 0)
             }
             min={0}
           />
@@ -119,9 +103,7 @@ export const WeaponEditor: React.FC<WeaponEditorProps> = ({
           <Input
             id={`weapon-tags-${weapon.id}`}
             value={stringifyTags(weapon.tags)}
-            onChange={e =>
-              updateWeapon(weapon.id, "tags", parseTagsFromString(e.target.value))
-            }
+            onChange={e => updateWeapon(weapon.id, "tags", parseTagsFromString(e.target.value))}
             placeholder="e.g., Lethal, Thrown"
           />
         </div>
@@ -145,8 +127,7 @@ export const WeaponEditor: React.FC<WeaponEditorProps> = ({
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-WeaponEditor.displayName = "WeaponEditor"
-
+WeaponEditor.displayName = "WeaponEditor";

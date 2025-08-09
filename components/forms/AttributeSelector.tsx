@@ -43,16 +43,14 @@ export const AttributeSelector: React.FC = () => {
               })
             }
             className={
-              character?.dicePool?.attribute === attr.key
-                ? attr.activeClass
-                : attr.inactiveClass
+              character?.dicePool?.attribute === attr.key ? attr.activeClass : attr.inactiveClass
             }
           >
             <div>{attr.label}</div>
             <div className="text-xs opacity-75">
               (
               {calculateStatTotal(
-                character?.attributes?.[attr.key] || { base: 0, added: 0, bonus: 0 },
+                character?.attributes?.[attr.key] || { base: 0, added: 0, bonus: 0 }
               )}
               )
             </div>
@@ -64,4 +62,3 @@ export const AttributeSelector: React.FC = () => {
 };
 
 export default AttributeSelector;
-

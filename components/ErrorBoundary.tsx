@@ -1,55 +1,55 @@
-"use client"
+"use client";
 
-import React, { Component, type ReactNode } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { RefreshCw, AlertTriangle } from "lucide-react"
+import React, { Component, type ReactNode } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { RefreshCw, AlertTriangle } from "lucide-react";
 
 interface ErrorBoundaryProps {
-  children: ReactNode
-  fallback?: ReactNode
+  children: ReactNode;
+  fallback?: ReactNode;
 }
 
 interface ErrorBoundaryState {
-  hasError: boolean
-  error?: Error
-  errorInfo?: React.ErrorInfo
+  hasError: boolean;
+  error?: Error;
+  errorInfo?: React.ErrorInfo;
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
-    super(props)
-    this.state = { hasError: false }
+    super(props);
+    this.state = { hasError: false };
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error }
+    return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     this.setState({
       error,
       errorInfo,
-    })
+    });
 
     // Log error to console in development
     if (process.env.NODE_ENV === "development") {
-      console.error("Error Boundary caught an error:", error, errorInfo)
+      console.error("Error Boundary caught an error:", error, errorInfo);
     }
   }
 
   handleRetry = () => {
-    this.setState({ hasError: false, error: undefined, errorInfo: undefined })
-  }
+    this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+  };
 
   handleReload = () => {
-    window.location.reload()
-  }
+    window.location.reload();
+  };
 
   render() {
     if (this.state.hasError) {
       if (this.props.fallback) {
-        return this.props.fallback
+        return this.props.fallback;
       }
 
       return (
@@ -99,10 +99,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             </CardContent>
           </Card>
         </div>
-      )
+      );
     }
 
-    return this.props.children
+    return this.props.children;
   }
 }
 
@@ -111,5 +111,5 @@ export const ErrorBoundaryWrapper: React.FC<{ children: ReactNode; fallback?: Re
   children,
   fallback,
 }) => {
-  return <ErrorBoundary fallback={fallback}>{children}</ErrorBoundary>
-}
+  return <ErrorBoundary fallback={fallback}>{children}</ErrorBoundary>;
+};

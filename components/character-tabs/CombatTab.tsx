@@ -1,16 +1,16 @@
 // Combat Tab Component - Essence, health, static values, and combat mechanics
 
-import React from "react"
-import { CombatRolls } from "@/components/combat/CombatRolls"
-import { StaticValuesPanel } from "@/components/combat/StaticValuesPanel"
-import { HealthTracker } from "@/components/combat/HealthTracker"
-import { useCombat } from "@/hooks/useCombat"
-import { EssencePanel } from "@/components/character-tabs/common/EssencePanel"
-import { createDefaultEssence } from "@/lib/character-defaults"
-import { useCharacterContext } from "@/hooks/CharacterContext"
+import React from "react";
+import { CombatRolls } from "@/components/combat/CombatRolls";
+import { StaticValuesPanel } from "@/components/combat/StaticValuesPanel";
+import { HealthTracker } from "@/components/combat/HealthTracker";
+import { useCombat } from "@/hooks/useCombat";
+import { EssencePanel } from "@/components/character-tabs/common/EssencePanel";
+import { createDefaultEssence } from "@/lib/character-defaults";
+import { useCharacterContext } from "@/hooks/CharacterContext";
 
 export const CombatTab: React.FC = React.memo(() => {
-  const { character, updateCharacter, calculations } = useCharacterContext()
+  const { character, updateCharacter, calculations } = useCharacterContext();
 
   const {
     getHighestAttribute,
@@ -18,7 +18,7 @@ export const CombatTab: React.FC = React.memo(() => {
     addDramaticInjury,
     updateDramaticInjury,
     deleteDramaticInjury,
-  } = useCombat({ character, updateCharacter, calculations })
+  } = useCombat({ character, updateCharacter, calculations });
 
   return (
     <div className="space-y-6">
@@ -49,7 +49,7 @@ export const CombatTab: React.FC = React.memo(() => {
         deleteDramaticInjury={deleteDramaticInjury}
       />
     </div>
-  )
-})
+  );
+});
 
-CombatTab.displayName = "CombatTab"
+CombatTab.displayName = "CombatTab";

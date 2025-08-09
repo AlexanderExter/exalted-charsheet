@@ -21,7 +21,7 @@ export function useCharacterManagement() {
       addCharacter(name.trim());
       setShowCharacterSelect(false);
     },
-    [addCharacter],
+    [addCharacter]
   );
 
   const selectCharacter = useCallback(
@@ -29,14 +29,14 @@ export function useCharacterManagement() {
       setCurrentCharacter(id);
       setShowCharacterSelect(false);
     },
-    [setCurrentCharacter],
+    [setCurrentCharacter]
   );
 
   const updateCharacter = useCallback(
     (updates: Partial<Character>) => {
       updateCurrentCharacter(updates);
     },
-    [updateCurrentCharacter],
+    [updateCurrentCharacter]
   );
 
   return {

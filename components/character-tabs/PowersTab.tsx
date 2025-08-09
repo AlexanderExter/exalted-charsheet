@@ -1,28 +1,27 @@
 // Powers Tab Component - Charms and Spells management
 
-import React, { useCallback } from "react"
-import { Plus, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import React, { useCallback } from "react";
+import { Plus, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import type { Charm, Spell, SpellCircle } from "@/lib/character-types"
-import { v4 as uuidv4 } from "uuid"
-import { useCharacterContext } from "@/hooks/CharacterContext"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import type { Charm, Spell, SpellCircle } from "@/lib/character-types";
+import { v4 as uuidv4 } from "uuid";
+import { useCharacterContext } from "@/hooks/CharacterContext";
 
 export const PowersTab: React.FC = React.memo(() => {
-  const { character, updateCharacter } = useCharacterContext()
+  const { character, updateCharacter } = useCharacterContext();
   // Charm management functions
-    const addCharm = useCallback(() => {
-
+  const addCharm = useCallback(() => {
     const newCharm: Charm = {
       id: uuidv4(),
       name: "",
@@ -33,40 +32,35 @@ export const PowersTab: React.FC = React.memo(() => {
       pageReference: "",
       prerequisites: [],
       dateAdded: new Date().toLocaleDateString(),
-    }
+    };
 
     updateCharacter({
       charms: [...(character.charms || []), newCharm],
-    })
-  }, [character, updateCharacter])
+    });
+  }, [character, updateCharacter]);
 
-    const updateCharm = useCallback(
-      (
-        id: string,
-        field: keyof Charm,
-        value: Charm[keyof Charm]
-      ) => {
-        updateCharacter({
-          charms: (character.charms || []).map(charm =>
-            charm.id === id ? { ...charm, [field]: value } : charm
-          ),
-        })
-      },
-      [character, updateCharacter]
-    )
+  const updateCharm = useCallback(
+    (id: string, field: keyof Charm, value: Charm[keyof Charm]) => {
+      updateCharacter({
+        charms: (character.charms || []).map(charm =>
+          charm.id === id ? { ...charm, [field]: value } : charm
+        ),
+      });
+    },
+    [character, updateCharacter]
+  );
 
-    const deleteCharm = useCallback(
-      (id: string) => {
-        updateCharacter({
-          charms: (character.charms || []).filter(charm => charm.id !== id),
-        })
-      },
-      [character, updateCharacter]
-    )
+  const deleteCharm = useCallback(
+    (id: string) => {
+      updateCharacter({
+        charms: (character.charms || []).filter(charm => charm.id !== id),
+      });
+    },
+    [character, updateCharacter]
+  );
 
   // Spell management functions
-    const addSpell = useCallback(() => {
-
+  const addSpell = useCallback(() => {
     const newSpell: Spell = {
       id: uuidv4(),
       name: "",
@@ -77,38 +71,34 @@ export const PowersTab: React.FC = React.memo(() => {
       pageReference: "",
       dateAdded: new Date().toLocaleDateString(),
       components: [],
-    }
+    };
 
     updateCharacter({
       spells: [...(character.spells || []), newSpell],
-    })
-  }, [character, updateCharacter])
+    });
+  }, [character, updateCharacter]);
 
-    const updateSpell = useCallback(
-      (
-        id: string,
-        field: keyof Spell,
-        value: Spell[keyof Spell]
-      ) => {
-        updateCharacter({
-          spells: (character.spells || []).map(spell =>
-            spell.id === id ? { ...spell, [field]: value } : spell
-          ),
-        })
-      },
-      [character, updateCharacter]
-    )
+  const updateSpell = useCallback(
+    (id: string, field: keyof Spell, value: Spell[keyof Spell]) => {
+      updateCharacter({
+        spells: (character.spells || []).map(spell =>
+          spell.id === id ? { ...spell, [field]: value } : spell
+        ),
+      });
+    },
+    [character, updateCharacter]
+  );
 
-    const deleteSpell = useCallback(
-      (id: string) => {
-        updateCharacter({
-          spells: (character.spells || []).filter(spell => spell.id !== id),
-        })
-      },
-      [character, updateCharacter]
-    )
+  const deleteSpell = useCallback(
+    (id: string) => {
+      updateCharacter({
+        spells: (character.spells || []).filter(spell => spell.id !== id),
+      });
+    },
+    [character, updateCharacter]
+  );
 
-    return (
+  return (
     <div className="space-y-6">
       {/* Charms */}
       <Card>
@@ -330,7 +320,7 @@ export const PowersTab: React.FC = React.memo(() => {
         </CardContent>
       </Card>
     </div>
-  )
-})
+  );
+});
 
-PowersTab.displayName = "PowersTab"
+PowersTab.displayName = "PowersTab";

@@ -48,7 +48,7 @@ const ExaltedCharacterManager = () => {
       toast.success(`Successfully imported ${imported.length} character(s)`);
     } catch {
       toast.error(
-        "Failed to import character(s). Please ensure the file is a valid character export.",
+        "Failed to import character(s). Please ensure the file is a valid character export."
       );
     }
   };
@@ -95,10 +95,7 @@ const ExaltedCharacterManager = () => {
             onImport={handleImport}
             onSwitch={() => setShowCharacterSelect(true)}
           />
-          <CharacterProvider
-            character={currentCharacter}
-            updateCharacter={updateCharacter}
-          >
+          <CharacterProvider character={currentCharacter} updateCharacter={updateCharacter}>
             <CharacterTabs activeTab={activeTab} onTabChange={setActiveTab} />
           </CharacterProvider>
         </div>

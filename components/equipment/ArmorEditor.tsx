@@ -1,33 +1,25 @@
-import React from "react"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import React from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import type { ArmorPiece, ArmorType } from "@/lib/character-types"
-import { parseTagsFromString, stringifyTags } from "@/components/equipment/tag-utils"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import type { ArmorPiece, ArmorType } from "@/lib/character-types";
+import { parseTagsFromString, stringifyTags } from "@/components/equipment/tag-utils";
 
 interface ArmorEditorProps {
-  armor: ArmorPiece
-  updateArmor: (
-    id: string,
-    field: keyof ArmorPiece,
-    value: ArmorPiece[keyof ArmorPiece]
-  ) => void
-  deleteArmor: (id: string) => void
+  armor: ArmorPiece;
+  updateArmor: (id: string, field: keyof ArmorPiece, value: ArmorPiece[keyof ArmorPiece]) => void;
+  deleteArmor: (id: string) => void;
 }
 
-export const ArmorEditor: React.FC<ArmorEditorProps> = ({
-  armor,
-  updateArmor,
-  deleteArmor,
-}) => {
+export const ArmorEditor: React.FC<ArmorEditorProps> = ({ armor, updateArmor, deleteArmor }) => {
   return (
     <div className="p-4 bg-white rounded border border-gray-200 space-y-3">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -61,9 +53,7 @@ export const ArmorEditor: React.FC<ArmorEditorProps> = ({
             id={`armor-soak-${armor.id}`}
             type="number"
             value={armor.soak}
-            onChange={e =>
-              updateArmor(armor.id, "soak", Number.parseInt(e.target.value) || 0)
-            }
+            onChange={e => updateArmor(armor.id, "soak", Number.parseInt(e.target.value) || 0)}
             min={0}
           />
         </div>
@@ -76,13 +66,7 @@ export const ArmorEditor: React.FC<ArmorEditorProps> = ({
             id={`armor-hardness-${armor.id}`}
             type="number"
             value={armor.hardness}
-            onChange={e =>
-              updateArmor(
-                armor.id,
-                "hardness",
-                Number.parseInt(e.target.value) || 0,
-              )
-            }
+            onChange={e => updateArmor(armor.id, "hardness", Number.parseInt(e.target.value) || 0)}
             min={0}
           />
         </div>
@@ -92,13 +76,7 @@ export const ArmorEditor: React.FC<ArmorEditorProps> = ({
             id={`armor-mobility-${armor.id}`}
             type="number"
             value={armor.mobility}
-            onChange={e =>
-              updateArmor(
-                armor.id,
-                "mobility",
-                Number.parseInt(e.target.value) || 0,
-              )
-            }
+            onChange={e => updateArmor(armor.id, "mobility", Number.parseInt(e.target.value) || 0)}
           />
         </div>
         <div>
@@ -106,9 +84,7 @@ export const ArmorEditor: React.FC<ArmorEditorProps> = ({
           <Input
             id={`armor-tags-${armor.id}`}
             value={stringifyTags(armor.tags)}
-            onChange={e =>
-              updateArmor(armor.id, "tags", parseTagsFromString(e.target.value))
-            }
+            onChange={e => updateArmor(armor.id, "tags", parseTagsFromString(e.target.value))}
             placeholder="e.g., Concealable, Balanced"
           />
         </div>
@@ -132,8 +108,7 @@ export const ArmorEditor: React.FC<ArmorEditorProps> = ({
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-ArmorEditor.displayName = "ArmorEditor"
-
+ArmorEditor.displayName = "ArmorEditor";

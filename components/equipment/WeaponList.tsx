@@ -1,19 +1,15 @@
-import React from "react"
-import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { Weapon } from "@/lib/character-types"
-import { WeaponEditor } from "@/components/equipment/WeaponEditor"
+import React from "react";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Weapon } from "@/lib/character-types";
+import { WeaponEditor } from "@/components/equipment/WeaponEditor";
 
 interface WeaponListProps {
-  weapons: Weapon[]
-  addWeapon: () => void
-  updateWeapon: (
-    id: string,
-    field: keyof Weapon,
-    value: Weapon[keyof Weapon]
-  ) => void
-  deleteWeapon: (id: string) => void
+  weapons: Weapon[];
+  addWeapon: () => void;
+  updateWeapon: (id: string, field: keyof Weapon, value: Weapon[keyof Weapon]) => void;
+  deleteWeapon: (id: string) => void;
 }
 
 export const WeaponList: React.FC<WeaponListProps> = ({
@@ -49,7 +45,6 @@ export const WeaponList: React.FC<WeaponListProps> = ({
       )}
     </CardContent>
   </Card>
-)
+);
 
-WeaponList.displayName = "WeaponList"
-
+WeaponList.displayName = "WeaponList";

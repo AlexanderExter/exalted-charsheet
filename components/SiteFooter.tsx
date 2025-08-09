@@ -1,34 +1,34 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import ReactMarkdown from "react-markdown"
+import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 export default function SiteFooter() {
-  const [showAboutModal, setShowAboutModal] = useState(false)
-  const [showLegalModal, setShowLegalModal] = useState(false)
-  const [aboutContent, setAboutContent] = useState("")
-  const [legalContent, setLegalContent] = useState("")
+  const [showAboutModal, setShowAboutModal] = useState(false);
+  const [showLegalModal, setShowLegalModal] = useState(false);
+  const [aboutContent, setAboutContent] = useState("");
+  const [legalContent, setLegalContent] = useState("");
 
   useEffect(() => {
     const loadMarkdownContent = async () => {
       try {
-        const aboutResponse = await fetch("/content/about.md")
-        const aboutText = await aboutResponse.text()
-        setAboutContent(aboutText)
+        const aboutResponse = await fetch("/content/about.md");
+        const aboutText = await aboutResponse.text();
+        setAboutContent(aboutText);
 
-        const legalResponse = await fetch("/content/legal.md")
-        const legalText = await legalResponse.text()
-        setLegalContent(legalText)
+        const legalResponse = await fetch("/content/legal.md");
+        const legalText = await legalResponse.text();
+        setLegalContent(legalText);
       } catch (error) {
-        setAboutContent("# About\n\nInformation about this application.")
-        setLegalContent("# Legal\n\nLegal information and disclaimers.")
+        setAboutContent("# About\n\nInformation about this application.");
+        setLegalContent("# Legal\n\nLegal information and disclaimers.");
       }
-    }
+    };
 
-    loadMarkdownContent()
-  }, [])
+    loadMarkdownContent();
+  }, []);
 
   return (
     <>
@@ -88,5 +88,5 @@ export default function SiteFooter() {
         </div>
       )}
     </>
-  )
+  );
 }

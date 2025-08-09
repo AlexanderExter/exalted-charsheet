@@ -2,7 +2,10 @@ import React, { createContext, useContext, useState, useCallback, useMemo } from
 import type { Character, AttributeType, AbilityType } from "@/lib/character-types";
 import { calculateStatTotal } from "@/lib/exalted-utils";
 import { calculateDicePool as calculateDicePoolUtil } from "@/lib/exalted-utils/dice";
-import { useCharacterCalculations, type CharacterCalculations } from "@/hooks/useCharacterCalculations";
+import {
+  useCharacterCalculations,
+  type CharacterCalculations,
+} from "@/hooks/useCharacterCalculations";
 
 type DicePoolResult = ReturnType<typeof calculateDicePoolUtil>;
 
@@ -24,8 +27,14 @@ interface CharacterProviderProps {
   children: React.ReactNode;
 }
 
-export function CharacterProvider({ character, updateCharacter, children }: CharacterProviderProps) {
-  const [globalAbilityAttribute, setGlobalAbilityAttribute] = useState<AttributeType | "none">("none");
+export function CharacterProvider({
+  character,
+  updateCharacter,
+  children,
+}: CharacterProviderProps) {
+  const [globalAbilityAttribute, setGlobalAbilityAttribute] = useState<AttributeType | "none">(
+    "none"
+  );
 
   const calculations = useCharacterCalculations(character);
 
@@ -37,7 +46,7 @@ export function CharacterProvider({ character, updateCharacter, children }: Char
       const attribute = character.attributes[globalAbilityAttribute];
       return abilityTotal + calculateStatTotal(attribute);
     },
-    [character, globalAbilityAttribute],
+    [character, globalAbilityAttribute]
   );
 
   const calculateDicePool = useCallback((): DicePoolResult => {
@@ -65,7 +74,7 @@ export function CharacterProvider({ character, updateCharacter, children }: Char
       extraDiceNonBonus,
       extraSuccessBonus,
       extraSuccessNonBonus,
-      isStunted,
+      isStunted
     );
   }, [character]);
 
@@ -86,7 +95,7 @@ export function CharacterProvider({ character, updateCharacter, children }: Char
       calculateAbilityTotal,
       calculateDicePool,
       globalAbilityAttribute,
-    ],
+    ]
   );
 
   return <CharacterContext.Provider value={value}>{children}</CharacterContext.Provider>;
@@ -99,4 +108,3 @@ export function useCharacterContext() {
   }
   return context;
 }
-

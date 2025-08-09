@@ -1,19 +1,15 @@
-import React from "react"
-import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { ArmorPiece } from "@/lib/character-types"
-import { ArmorEditor } from "@/components/equipment/ArmorEditor"
+import React from "react";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { ArmorPiece } from "@/lib/character-types";
+import { ArmorEditor } from "@/components/equipment/ArmorEditor";
 
 interface ArmorListProps {
-  armor: ArmorPiece[]
-  addArmor: () => void
-  updateArmor: (
-    id: string,
-    field: keyof ArmorPiece,
-    value: ArmorPiece[keyof ArmorPiece]
-  ) => void
-  deleteArmor: (id: string) => void
+  armor: ArmorPiece[];
+  addArmor: () => void;
+  updateArmor: (id: string, field: keyof ArmorPiece, value: ArmorPiece[keyof ArmorPiece]) => void;
+  deleteArmor: (id: string) => void;
 }
 
 export const ArmorList: React.FC<ArmorListProps> = ({
@@ -49,7 +45,6 @@ export const ArmorList: React.FC<ArmorListProps> = ({
       )}
     </CardContent>
   </Card>
-)
+);
 
-ArmorList.displayName = "ArmorList"
-
+ArmorList.displayName = "ArmorList";

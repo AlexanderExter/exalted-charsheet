@@ -74,6 +74,7 @@ out
 
 # TypeScript build info
 tsconfig.tsbuildinfo
+*.tsbuildinfo
 
 # nuxt.js build output
 .nuxt
@@ -98,7 +99,33 @@ tsconfig.tsbuildinfo
 
 # Development and AI assistant files (not for distribution)
 .claude/
-CLAUDE.md
-scripts/
-docs/
-nul
+
+# Testing
+*.lcov
+coverage/
+.nyc_output
+
+# Prettier cache
+.prettiercache
+
+# Turbopack cache
+.turbo/
+
+# Vitest cache
+vitest/
+
+# Modern build tools
+.swc/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary files
+*.tmp
+*.temp

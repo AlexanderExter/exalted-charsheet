@@ -28,4 +28,3 @@ export * from "./static-values";
 export * from "./health";
 export * from "./dice";
 export * from "./validation";
-

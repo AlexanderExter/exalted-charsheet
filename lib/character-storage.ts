@@ -22,7 +22,7 @@ export async function exportCharacter(character: Character): Promise<void> {
 
 export async function exportCharacters(
   characters: Character[],
-  filename = "all_exalted_characters.json",
+  filename = "all_exalted_characters.json"
 ): Promise<void> {
   const dataStr = JSON.stringify(characters, null, 2);
   const dataBlob = new Blob([dataStr], { type: "application/json" });
@@ -42,9 +42,7 @@ export async function exportCharacters(
 export async function importCharacters(file: File): Promise<Character[]> {
   const text = await file.text();
   const importedData = JSON.parse(text);
-  const charactersToImport = Array.isArray(importedData)
-    ? importedData
-    : [importedData];
+  const charactersToImport = Array.isArray(importedData) ? importedData : [importedData];
 
   return charactersToImport.map((char: Partial<Character>) => ({
     ...createNewCharacter(char.name ?? "Unnamed"),

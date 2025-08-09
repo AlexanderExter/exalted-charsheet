@@ -1,31 +1,28 @@
 // Social Tab Component - Virtues, intimacies, and resolve management
 
-import React, { useCallback } from "react"
-import { Plus, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import React, { useCallback } from "react";
+import { Plus, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import type {
   VirtueType,
   Intimacy,
   Background,
   BackgroundType,
   BackgroundLevel,
-} from "@/lib/character-types"
-import { v4 as uuidv4 } from "uuid"
-import { useCharacterContext } from "@/hooks/CharacterContext"
-import {
-  DEFAULT_MODIFIER_MAX,
-  DEFAULT_MODIFIER_MIN,
-} from "@/lib/character-defaults"
+} from "@/lib/character-types";
+import { v4 as uuidv4 } from "uuid";
+import { useCharacterContext } from "@/hooks/CharacterContext";
+import { DEFAULT_MODIFIER_MAX, DEFAULT_MODIFIER_MIN } from "@/lib/character-defaults";
 
 const virtueOptions: Array<NonNullable<VirtueType>> = [
   "ambition",
@@ -35,10 +32,10 @@ const virtueOptions: Array<NonNullable<VirtueType>> = [
   "justice",
   "loyalty",
   "wonder",
-]
+];
 
 export const SocialTab: React.FC = React.memo(() => {
-  const { character, updateCharacter, calculations } = useCharacterContext()
+  const { character, updateCharacter, calculations } = useCharacterContext();
   const resolve = calculations.resolve;
   // Virtue management functions
   const setVirtue = useCallback(
@@ -51,10 +48,10 @@ export const SocialTab: React.FC = React.memo(() => {
             [type]: virtue,
           },
         },
-      })
+      });
     },
     [character, updateCharacter]
-  )
+  );
 
   // Intimacy management functions
   const addIntimacy = useCallback(() => {
@@ -62,15 +59,15 @@ export const SocialTab: React.FC = React.memo(() => {
       id: uuidv4(),
       description: "",
       intensity: "minor",
-    }
+    };
 
     updateCharacter({
       social: {
         ...character.social,
         intimacies: [...(character.social?.intimacies || []), newIntimacy],
       },
-    })
-  }, [character, updateCharacter])
+    });
+  }, [character, updateCharacter]);
 
   const updateIntimacy = useCallback(
     (id: string, field: keyof Intimacy, value: Intimacy[keyof Intimacy]) => {
@@ -81,10 +78,10 @@ export const SocialTab: React.FC = React.memo(() => {
             intimacy.id === id ? { ...intimacy, [field]: value } : intimacy
           ),
         },
-      })
+      });
     },
     [character, updateCharacter]
-  )
+  );
 
   const deleteIntimacy = useCallback(
     (id: string) => {
@@ -93,10 +90,10 @@ export const SocialTab: React.FC = React.memo(() => {
           ...character.social,
           intimacies: (character.social?.intimacies || []).filter(intimacy => intimacy.id !== id),
         },
-      })
+      });
     },
     [character, updateCharacter]
-  )
+  );
 
   // Background management functions
   const addBackground = useCallback(() => {
@@ -105,15 +102,15 @@ export const SocialTab: React.FC = React.memo(() => {
       type: "artifact",
       level: "tertiary",
       description: "",
-    }
+    };
 
     updateCharacter({
       social: {
         ...character.social,
         backgrounds: [...(character.social?.backgrounds || []), newBackground],
       },
-    })
-  }, [character, updateCharacter])
+    });
+  }, [character, updateCharacter]);
 
   const updateBackground = useCallback(
     (id: string, field: keyof Background, value: Background[keyof Background]) => {
@@ -124,10 +121,10 @@ export const SocialTab: React.FC = React.memo(() => {
             background.id === id ? { ...background, [field]: value } : background
           ),
         },
-      })
+      });
     },
     [character, updateCharacter]
-  )
+  );
 
   const deleteBackground = useCallback(
     (id: string) => {
@@ -138,10 +135,10 @@ export const SocialTab: React.FC = React.memo(() => {
             background => background.id !== id
           ),
         },
-      })
+      });
     },
     [character, updateCharacter]
-  )
+  );
 
   return (
     <div className="space-y-6">
@@ -186,14 +183,11 @@ export const SocialTab: React.FC = React.memo(() => {
                 onChange={e => {
                   const value = Math.max(
                     DEFAULT_MODIFIER_MIN,
-                    Math.min(
-                      DEFAULT_MODIFIER_MAX,
-                      Number.parseInt(e.target.value) || 0,
-                    ),
-                  )
+                    Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
+                  );
                   updateCharacter({
                     staticValues: { ...character.staticValues, resolveModifier: value },
-                  })
+                  });
                 }}
                 className="w-12 text-center text-xs"
                 min={DEFAULT_MODIFIER_MIN}
@@ -390,7 +384,7 @@ export const SocialTab: React.FC = React.memo(() => {
         </CardContent>
       </Card>
     </div>
-  )
-})
+  );
+});
 
-SocialTab.displayName = "SocialTab"
+SocialTab.displayName = "SocialTab";
