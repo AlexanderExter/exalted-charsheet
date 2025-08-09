@@ -59,7 +59,7 @@ export function CharacterToolbar({
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Characters are automatically saved to your browser&apos;s local storage every 10 minutes</p>
+                <p>Characters are saved automatically in your browser&apos;s local storage.</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

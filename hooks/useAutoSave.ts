@@ -7,7 +7,6 @@ interface UseAutoSaveReturn {
 
 export const useAutoSave = <T,>(
   data: T,
-  key: string,
   delay = 600000 // 10 minutes default
 ): UseAutoSaveReturn => {
   const [isSaving, setIsSaving] = useState(false)
@@ -20,10 +19,13 @@ export const useAutoSave = <T,>(
     }
 
     timeoutRef.current = setTimeout(() => {
+      // Persist middleware handles saving; we only update UI indicators
       setIsSaving(true)
-      localStorage.setItem(key, JSON.stringify(data))
-      setIsSaving(false)
-      setLastSaved(new Date())
+      // briefly show the saving state then update the timestamp
+      setTimeout(() => {
+        setIsSaving(false)
+        setLastSaved(new Date())
+      }, 500)
     }, delay)
 
     return () => {
@@ -31,7 +33,7 @@ export const useAutoSave = <T,>(
         clearTimeout(timeoutRef.current)
       }
     }
-  }, [data, key, delay])
+  }, [data, delay])
 
   return { isSaving, lastSaved }
 }
