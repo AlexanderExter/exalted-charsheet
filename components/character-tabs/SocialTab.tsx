@@ -21,7 +21,6 @@ import type {
   BackgroundLevel,
 } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
-import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
 import { useCharacterContext } from "@/hooks/CharacterContext"
 
 const virtueOptions: Array<NonNullable<VirtueType>> = [
@@ -40,8 +39,6 @@ export const SocialTab: React.FC = React.memo(() => {
     // Virtue management functions
     const setVirtue = useCallback(
       (type: "major" | "minor", virtue: VirtueType) => {
-        if (!character) return
-
         updateCharacter({
           social: {
             ...character.social,
@@ -57,8 +54,6 @@ export const SocialTab: React.FC = React.memo(() => {
 
     // Intimacy management functions
     const addIntimacy = useCallback(() => {
-      if (!character) return
-
       const newIntimacy: Intimacy = {
         id: uuidv4(),
         description: "",
@@ -79,8 +74,6 @@ export const SocialTab: React.FC = React.memo(() => {
         field: keyof Intimacy,
         value: Intimacy[keyof Intimacy]
       ) => {
-        if (!character) return
-
         updateCharacter({
           social: {
             ...character.social,
@@ -95,8 +88,6 @@ export const SocialTab: React.FC = React.memo(() => {
 
     const deleteIntimacy = useCallback(
       (id: string) => {
-        if (!character) return
-
         updateCharacter({
           social: {
             ...character.social,
@@ -109,8 +100,6 @@ export const SocialTab: React.FC = React.memo(() => {
 
     // Background management functions
     const addBackground = useCallback(() => {
-      if (!character) return
-
       const newBackground: Background = {
         id: uuidv4(),
         type: "artifact",
@@ -132,8 +121,6 @@ export const SocialTab: React.FC = React.memo(() => {
         field: keyof Background,
         value: Background[keyof Background]
       ) => {
-        if (!character) return
-
         updateCharacter({
           social: {
             ...character.social,
@@ -148,8 +135,6 @@ export const SocialTab: React.FC = React.memo(() => {
 
     const deleteBackground = useCallback(
       (id: string) => {
-        if (!character) return
-
         updateCharacter({
           social: {
             ...character.social,
@@ -161,10 +146,6 @@ export const SocialTab: React.FC = React.memo(() => {
       },
       [character, updateCharacter]
     )
-
-    if (!character) {
-      return <NoCharacterCard />
-    }
 
     return (
       <div className="space-y-6">

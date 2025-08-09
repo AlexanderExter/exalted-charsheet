@@ -16,7 +16,6 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import type { AdvancementEntry, AdvancementStatus } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
-import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
 import { useCharacterContext } from "@/hooks/CharacterContext"
 
 export const AdvancementTab: React.FC = React.memo(() => {
@@ -25,7 +24,6 @@ export const AdvancementTab: React.FC = React.memo(() => {
 
     // Advancement entry management functions
     const addAdvancementEntry = useCallback(() => {
-      if (!character) return
 
       const newEntry: AdvancementEntry = {
         id: uuidv4(),
@@ -46,8 +44,6 @@ export const AdvancementTab: React.FC = React.memo(() => {
         field: keyof AdvancementEntry,
         value: AdvancementEntry[keyof AdvancementEntry]
       ) => {
-        if (!character) return
-
         updateCharacter({
           advancement: (character.advancement || []).map(entry =>
             entry.id === id ? { ...entry, [field]: value } : entry
@@ -59,8 +55,6 @@ export const AdvancementTab: React.FC = React.memo(() => {
 
     const deleteAdvancementEntry = useCallback(
       (id: string) => {
-        if (!character) return
-
         updateCharacter({
           advancement: (character.advancement || []).filter(entry => entry.id !== id),
         })
@@ -80,10 +74,6 @@ export const AdvancementTab: React.FC = React.memo(() => {
       const accrued = character?.milestones?.[milestoneType] || 0
       const spent = getSpentCount(status)
       return accrued - spent
-    }
-
-    if (!character) {
-      return <NoCharacterCard />
     }
 
     return (

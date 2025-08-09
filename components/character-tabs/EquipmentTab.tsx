@@ -16,7 +16,6 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import type { ArmorPiece, Weapon, ArmorType, WeaponRange } from "@/lib/character-types"
 import { v4 as uuidv4 } from "uuid"
-import { NoCharacterCard } from "@/components/character-tabs/common/NoCharacterCard"
 import { useCharacterContext } from "@/hooks/CharacterContext"
 
 export const EquipmentTab: React.FC = React.memo(() => {
@@ -24,7 +23,6 @@ export const EquipmentTab: React.FC = React.memo(() => {
 
   // Armor management functions
   const addArmor = useCallback(() => {
-    if (!character) return
 
     const newArmor: ArmorPiece = {
       id: uuidv4(),
@@ -42,37 +40,32 @@ export const EquipmentTab: React.FC = React.memo(() => {
     })
   }, [character, updateCharacter])
 
-    const updateArmor = useCallback(
-      (
-        id: string,
-        field: keyof ArmorPiece,
-        value: ArmorPiece[keyof ArmorPiece]
-      ) => {
-        if (!character) return
+  const updateArmor = useCallback(
+    (
+      id: string,
+      field: keyof ArmorPiece,
+      value: ArmorPiece[keyof ArmorPiece]
+    ) => {
+      updateCharacter({
+        armor: (character.armor || []).map(armor =>
+          armor.id === id ? { ...armor, [field]: value } : armor
+        ),
+      })
+    },
+    [character, updateCharacter]
+  )
 
-        updateCharacter({
-          armor: (character.armor || []).map(armor =>
-            armor.id === id ? { ...armor, [field]: value } : armor
-          ),
-        })
-      },
-      [character, updateCharacter]
-    )
-
-    const deleteArmor = useCallback(
-      (id: string) => {
-        if (!character) return
-
-        updateCharacter({
-          armor: (character.armor || []).filter(armor => armor.id !== id),
-        })
-      },
-      [character, updateCharacter]
-    )
+  const deleteArmor = useCallback(
+    (id: string) => {
+      updateCharacter({
+        armor: (character.armor || []).filter(armor => armor.id !== id),
+      })
+    },
+    [character, updateCharacter]
+  )
 
     // Weapon management functions
-    const addWeapon = useCallback(() => {
-      if (!character) return
+  const addWeapon = useCallback(() => {
 
       const newWeapon: Weapon = {
         id: uuidv4(),
@@ -91,32 +84,28 @@ export const EquipmentTab: React.FC = React.memo(() => {
       })
     }, [character, updateCharacter])
 
-    const updateWeapon = useCallback(
-      (
-        id: string,
-        field: keyof Weapon,
-        value: Weapon[keyof Weapon]
-      ) => {
-        if (!character) return
+  const updateWeapon = useCallback(
+    (
+      id: string,
+      field: keyof Weapon,
+      value: Weapon[keyof Weapon]
+    ) => {
+      updateCharacter({
+        weapons: (character.weapons || []).map(weapon =>
+          weapon.id === id ? { ...weapon, [field]: value } : weapon
+        ),
+      })
+    },
+    [character, updateCharacter]
+  )
 
-        updateCharacter({
-          weapons: (character.weapons || []).map(weapon =>
-            weapon.id === id ? { ...weapon, [field]: value } : weapon
-          ),
-        })
-      },
-      [character, updateCharacter]
-    )
-
-    const deleteWeapon = useCallback(
-      (id: string) => {
-        if (!character) return
-
-        updateCharacter({
-          weapons: (character.weapons || []).filter(weapon => weapon.id !== id),
-        })
-      },
-      [character, updateCharacter]
+  const deleteWeapon = useCallback(
+    (id: string) => {
+      updateCharacter({
+        weapons: (character.weapons || []).filter(weapon => weapon.id !== id),
+      })
+    },
+    [character, updateCharacter]
   )
 
   // Utility functions
@@ -129,10 +118,6 @@ export const EquipmentTab: React.FC = React.memo(() => {
 
   const stringifyTags = (tags: string[]): string => {
     return tags.join(", ")
-  }
-
-  if (!character) {
-    return <NoCharacterCard />
   }
 
   return (
