@@ -144,22 +144,10 @@ export const createNewCharacter = (name: string): Character => ({
   rulings: [],
 });
 
-// Mapping of Exalt types to default mote values
-const defaultMotesByExaltType: Record<ExaltType, number> = {
-  solar: 7,
-  "dragon-blood": 4,
-  lunar: 5,
-  sidereal: 6,
-  abyssal: 7,
-  liminal: 5,
-  exigent: 5,
-};
-
 // Generic character template factory
 export const createCharacterTemplate = (name: string, type: ExaltType): Character => {
   const character = createNewCharacter(name);
   character.health.exaltType = type;
-  character.essence.motes = defaultMotesByExaltType[type];
   return character;
 };
 
@@ -186,8 +174,18 @@ export const createExigentCharacter = (name: string): Character =>
   createCharacterTemplate(name, "exigent");
 
 // Character template selector
+const validExaltTypes: ExaltType[] = [
+  "solar",
+  "dragon-blood",
+  "lunar",
+  "sidereal",
+  "abyssal",
+  "liminal",
+  "exigent",
+];
+
 export const createCharacterByType = (name: string, exaltType: string): Character => {
-  if (exaltType in defaultMotesByExaltType) {
+  if (validExaltTypes.includes(exaltType as ExaltType)) {
     return createCharacterTemplate(name, exaltType as ExaltType);
   }
   return createCharacterTemplate(name, "lunar"); // Default to Lunar
@@ -199,6 +197,6 @@ export const DEFAULT_ATTRIBUTE_MAX = 5;
 export const DEFAULT_ABILITY_MIN = 0;
 export const DEFAULT_ABILITY_MAX = 5;
 export const DEFAULT_ESSENCE_MIN = 1;
-export const DEFAULT_ESSENCE_MAX = 10;
+export const DEFAULT_ESSENCE_MAX = 5;
 export const DEFAULT_MODIFIER_MIN = -5;
 export const DEFAULT_MODIFIER_MAX = 5;

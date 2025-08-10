@@ -1,7 +1,8 @@
 import type { AnimaLevel } from "../character-types";
 
 export const getAnimaLevel = (anima: number): AnimaLevel => {
-  if (anima <= 4) return "Dim";
+  if (anima <= 2) return "Dim";
+  if (anima <= 4) return "Glowing";
   if (anima <= 6) return "Burning";
   if (anima <= 9) return "Bonfire";
   return "Iconic";

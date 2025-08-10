@@ -12,6 +12,19 @@ interface EssencePanelProps {
 }
 
 export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange }) => {
+  const animaValue = essence.anima || 0;
+  const progressPercent = (animaValue / 10) * 100;
+  const sliderColor =
+    animaValue <= 2
+      ? "#9ca3af"
+      : animaValue <= 4
+        ? "#facc15"
+        : animaValue <= 6
+          ? "#f59e0b"
+          : animaValue <= 9
+            ? "#fb923c"
+            : "#a855f7";
+
   return (
     <Card>
       <CardHeader>
@@ -26,24 +39,46 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange })
             <div className="space-y-3">
               <Label className="text-sm font-medium">Anima Level</Label>
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs text-gray-600">
-                  <span>Dim</span>
-                  <span>Burning</span>
-                  <span>Bonfire</span>
-                  <span>Iconic</span>
+                <div className="relative h-6">
+                  {[
+                    { label: "Dim", value: 1, color: "text-gray-600" },
+                    { label: "Glowing", value: 3, color: "text-yellow-600" },
+                    { label: "Burning", value: 5, color: "text-amber-600" },
+                    { label: "Bonfire", value: 7, color: "text-orange-600" },
+                    { label: "Iconic", value: 10, color: "text-purple-600" },
+                  ].map(({ label, value, color }) => {
+                    const positionClass = value === 10 ? "-translate-x-full" : "-translate-x-1/2";
+                    return (
+                      <div
+                        key={label}
+                        className={`absolute top-0 flex flex-col items-center ${positionClass}`}
+                        style={{ left: `${(value / 10) * 100}%` }}
+                      >
+                        <span className={`text-xs ${color}`}>{label}</span>
+                        <div className="w-px h-2 bg-current mt-1" />
+                      </div>
+                    );
+                  })}
                 </div>
                 <input
                   type="range"
                   min="0"
                   max="10"
                   step="1"
-                  value={essence.anima || 0}
+                  value={animaValue}
                   onChange={e => onChange({ ...essence, anima: Number.parseInt(e.target.value) })}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, ${sliderColor} 0%, ${sliderColor} ${progressPercent}%, #e5e7eb ${progressPercent}%, #e5e7eb 100%)`,
+                  }}
                 />
-                <div className="flex justify-between text-xs text-gray-600">
-                  <span>0</span>
-                  <span>10</span>
+                <div className="mt-2 h-6 flex justify-between text-xs text-gray-600">
+                  {Array.from({ length: 11 }, (_, i) => (
+                    <div key={i} className="relative w-0">
+                      <div className="w-px h-2 bg-gray-400" />
+                      <span className="absolute top-2 left-1/2 -translate-x-1/2">{i}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

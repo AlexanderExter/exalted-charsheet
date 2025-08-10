@@ -14,8 +14,16 @@ export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence
     onChange({ ...essence, [field]: value });
   };
 
+  const motesByEssence: Record<number, number> = {
+    1: 5,
+    2: 7,
+    3: 10,
+    4: 12,
+    5: 15,
+  };
+
   const rating = essence.rating ?? 1;
-  const motes = essence.motes ?? 5;
+  const motes = motesByEssence[rating] ?? 0;
   const commitments = essence.commitments ?? 0;
   const spent = essence.spent ?? 0;
 
@@ -30,27 +38,17 @@ export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence
           type="number"
           value={rating}
           onChange={e => {
-            const value = Math.max(0, Math.min(10, Number.parseInt(e.target.value) || 0));
-            update("rating", value);
+            const value = Math.max(1, Math.min(5, Number.parseInt(e.target.value) || 0));
+            onChange({ ...essence, rating: value, motes: motesByEssence[value] ?? 0 });
           }}
           className="w-20 text-center"
-          min={0}
-          max={10}
+          min={1}
+          max={5}
         />
       </div>
       <div className="flex items-center justify-between">
         <Label>Motes</Label>
-        <Input
-          type="number"
-          value={motes}
-          onChange={e => {
-            const value = Math.max(0, Math.min(50, Number.parseInt(e.target.value) || 0));
-            update("motes", value);
-          }}
-          className="w-20 text-center"
-          min={0}
-          max={50}
-        />
+        <span className="font-bold">{motes}</span>
       </div>
       <div className="flex items-center justify-between">
         <Label>Commitments</Label>

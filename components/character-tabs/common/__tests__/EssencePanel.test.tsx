@@ -11,6 +11,12 @@ describe("EssencePanel", () => {
     render(<EssencePanel essence={essence} onChange={() => {}} />);
     expect(screen.getByText("Essence")).toBeInTheDocument();
     expect(screen.getByText("Anima Level")).toBeInTheDocument();
+    ["Dim", "Glowing", "Burning", "Bonfire", "Iconic"].forEach(label => {
+      expect(screen.getAllByText(label)[0]).toBeInTheDocument();
+    });
+    for (let i = 0; i <= 10; i++) {
+      expect(screen.getAllByText(String(i))[0]).toBeInTheDocument();
+    }
   });
 
   it("calls onChange when anima slider changes", () => {

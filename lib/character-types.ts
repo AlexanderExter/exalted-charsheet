@@ -247,4 +247,4 @@ export type AttributeUpdate = Partial<Attributes>;
 export type AbilityUpdate = Partial<Abilities>;
 
 // Animation levels for essence system
-export type AnimaLevel = "Dim" | "Burning" | "Bonfire" | "Iconic";
+export type AnimaLevel = "Dim" | "Glowing" | "Burning" | "Bonfire" | "Iconic";
