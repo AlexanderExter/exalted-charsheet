@@ -15,13 +15,15 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange })
   const animaValue = essence.anima || 0;
   const progressPercent = (animaValue / 10) * 100;
   const sliderColor =
-    animaValue <= 4
+    animaValue <= 2
       ? "#9ca3af"
-      : animaValue <= 6
-        ? "#f59e0b"
-        : animaValue <= 9
-          ? "#fb923c"
-          : "#a855f7";
+      : animaValue <= 4
+        ? "#facc15"
+        : animaValue <= 6
+          ? "#f59e0b"
+          : animaValue <= 9
+            ? "#fb923c"
+            : "#a855f7";
 
   return (
     <Card>
@@ -39,13 +41,13 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange })
               <div className="space-y-2">
                 <div className="relative h-6">
                   {[
-                    { label: "Dim", value: 0, color: "text-gray-600" },
+                    { label: "Dim", value: 1, color: "text-gray-600" },
+                    { label: "Glowing", value: 3, color: "text-yellow-600" },
                     { label: "Burning", value: 5, color: "text-amber-600" },
                     { label: "Bonfire", value: 7, color: "text-orange-600" },
                     { label: "Iconic", value: 10, color: "text-purple-600" },
                   ].map(({ label, value, color }) => {
-                    const positionClass =
-                      value === 0 ? "" : value === 10 ? "-translate-x-full" : "-translate-x-1/2";
+                    const positionClass = value === 10 ? "-translate-x-full" : "-translate-x-1/2";
                     return (
                       <div
                         key={label}
