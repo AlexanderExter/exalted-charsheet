@@ -1,7 +1,6 @@
 // Equipment Tab Component - Armor, weapons, and equipment management
 
 import React, { useCallback } from "react";
-import { v4 as uuidv4 } from "uuid";
 import type { ArmorPiece, Weapon } from "@/lib/character-types";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 import { ArmorList } from "@/components/equipment/ArmorList";
@@ -13,7 +12,7 @@ export const EquipmentTab: React.FC = React.memo(() => {
 
   const addArmor = useCallback(() => {
     const newArmor: ArmorPiece = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       name: "",
       type: "light",
       soak: 0,
@@ -57,7 +56,7 @@ export const EquipmentTab: React.FC = React.memo(() => {
 
   const addWeapon = useCallback(() => {
     const newWeapon: Weapon = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       name: "",
       accuracy: 0,
       damage: 0,

@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { AdvancementEntry, AdvancementStatus } from "@/lib/character-types";
-import { v4 as uuidv4 } from "uuid";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 
 export const AdvancementTab: React.FC = React.memo(() => {
@@ -25,7 +24,7 @@ export const AdvancementTab: React.FC = React.memo(() => {
   // Advancement entry management functions
   const addAdvancementEntry = useCallback(() => {
     const newEntry: AdvancementEntry = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       item: "",
       status: "Planned",
       timestamp: new Date().toLocaleDateString(),

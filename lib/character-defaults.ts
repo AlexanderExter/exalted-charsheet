@@ -14,7 +14,6 @@ import type {
   Social,
   ExaltType,
 } from "./character-types";
-import { v4 as uuidv4 } from "uuid";
 
 // Default stat block
 const createDefaultStatBlock = (baseValue: number = 0): StatBlock => ({
@@ -125,7 +124,7 @@ export const createDefaultSocial = (): Social => ({
 
 // Complete character template
 export const createNewCharacter = (name: string): Character => ({
-  id: uuidv4(),
+  id: crypto.randomUUID(),
   name,
   attributes: createDefaultAttributes(),
   abilities: createDefaultAbilities(),

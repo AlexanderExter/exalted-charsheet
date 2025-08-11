@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { Charm, Spell, SpellCircle } from "@/lib/character-types";
-import { v4 as uuidv4 } from "uuid";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 
 export const PowersTab: React.FC = React.memo(() => {
@@ -23,7 +22,7 @@ export const PowersTab: React.FC = React.memo(() => {
   // Charm management functions
   const addCharm = useCallback(() => {
     const newCharm: Charm = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       name: "",
       cost: "",
       keywords: [],
@@ -62,7 +61,7 @@ export const PowersTab: React.FC = React.memo(() => {
   // Spell management functions
   const addSpell = useCallback(() => {
     const newSpell: Spell = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       name: "",
       circle: "terrestrial",
       cost: "",

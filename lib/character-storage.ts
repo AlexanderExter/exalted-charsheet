@@ -2,7 +2,6 @@ import { CharacterSchema, type Character } from "@/lib/character-types";
 import { createNewCharacter } from "@/lib/character-defaults";
 import { db, getAllCharacters } from "@/lib/db";
 import { waitForCharacterStoreSave } from "@/hooks/useCharacterStore";
-import { v4 as uuidv4 } from "uuid";
 import superjson from "superjson";
 
 export async function exportCharacter(character: Character): Promise<void> {
@@ -64,7 +63,7 @@ export async function importCharacters(file: File): Promise<Character[]> {
   const characters = parsed.map(char => ({
     ...createNewCharacter(char.name ?? "Unnamed"),
     ...char,
-    id: uuidv4(),
+    id: crypto.randomUUID(),
   }));
 
   if (db) {

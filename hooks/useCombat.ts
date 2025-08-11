@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { produce } from "immer";
 import type { Character, DramaticInjury } from "@/lib/character-types";
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations";
-import { v4 as uuidv4 } from "uuid";
 
 interface UseCombatProps {
   character: Character | null;
@@ -29,7 +28,7 @@ export function useCombat({ character, updateCharacter, calculations }: UseComba
     if (!character) return;
 
     const newInjury: DramaticInjury = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       description: "",
       isHealed: false,
     };

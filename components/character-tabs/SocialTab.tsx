@@ -20,7 +20,6 @@ import type {
   BackgroundType,
   BackgroundLevel,
 } from "@/lib/character-types";
-import { v4 as uuidv4 } from "uuid";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 import { DEFAULT_MODIFIER_MAX, DEFAULT_MODIFIER_MIN } from "@/lib/character-defaults";
 
@@ -56,7 +55,7 @@ export const SocialTab: React.FC = React.memo(() => {
   // Intimacy management functions
   const addIntimacy = useCallback(() => {
     const newIntimacy: Intimacy = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       description: "",
       intensity: "minor",
     };
@@ -98,7 +97,7 @@ export const SocialTab: React.FC = React.memo(() => {
   // Background management functions
   const addBackground = useCallback(() => {
     const newBackground: Background = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       type: "artifact",
       level: "tertiary",
       description: "",
