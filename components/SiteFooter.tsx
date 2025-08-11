@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export default function SiteFooter() {
   const [showAboutModal, setShowAboutModal] = useState(false);
@@ -23,8 +24,14 @@ export default function SiteFooter() {
         setLegalContent(legalText);
       } catch (error) {
         console.error(error);
-        setAboutContent("# About\n\nInformation about this application.");
-        setLegalContent("# Legal\n\nLegal information and disclaimers.");
+        toast.error("Failed to load footer content.");
+        setAboutContent(
+          "# About\n\nInformation about this application could not be loaded."
+        );
+        setLegalContent(
+          "# Legal\n\nLegal information could not be loaded."
+        );
+
       }
     };
 
