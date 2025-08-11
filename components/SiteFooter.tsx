@@ -31,6 +31,7 @@ export default function SiteFooter() {
         setLegalContent(
           "# Legal\n\nLegal information could not be loaded."
         );
+
       }
     };
 

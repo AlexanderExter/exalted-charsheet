@@ -13,13 +13,13 @@ This is a digital character manager built specifically for **Exalted: Essence**.
 - **TypeScript**
 - Data stored locally in your browser (Local Storage)
 - All code generated with the help of AI
-- Code lives on [![Github](https://img.shields.io/badge/version-0.0.5--alpha-orange.svg)](https://github.com/AlexanderExter/exalted-charsheet/releases)
+- Code lives on [![Github](https://img.shields.io/badge/version-0.0.6-orange.svg)](https://github.com/AlexanderExter/exalted-charsheet/releases)
 
 ---
 
 ## Version
 
-**v0.0.5-alpha** — Initial public release  
+**v0.0.6** — Dexie import persistence and server safeguards
 _Note: Features are subject to change. Export formats may break in future versions._
 
 ---

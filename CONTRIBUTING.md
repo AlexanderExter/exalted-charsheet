@@ -26,6 +26,7 @@ Thank you for your interest in improving the **Exalted: Essence Character Manage
 
 - Use **functional React components** and hooks.
 - Follow **TypeScript** best practices.
+- Run `npm run type-check` to ensure the project passes strict type checking.
 - Apply **Tailwind CSS** classes consistently.
 - Write defensive code (null checks, fallbacks).
 

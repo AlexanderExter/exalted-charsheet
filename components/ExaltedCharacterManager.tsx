@@ -26,14 +26,15 @@ const ExaltedCharacterManager = () => {
 
   const [activeTab, setActiveTab] = useState("core");
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null!);
 
   const { isSaving, lastSaved } = useAutoSave(characters);
 
   const handleExport = async (character: Character) => {
     try {
       await exportCharacter(character);
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to export character. Please try again.");
     }
   };
@@ -46,7 +47,8 @@ const ExaltedCharacterManager = () => {
         selectCharacter(imported[0].id);
       }
       toast.success(`Successfully imported ${imported.length} character(s)`);
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast.error(
         "Failed to import character(s). Please ensure the file is a valid character export."
       );
