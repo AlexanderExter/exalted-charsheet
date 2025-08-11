@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.6] - 2025-08-11
+
+### Added
+
+- Persist imported characters to Dexie sequentially with export support
+- Script to sync documentation versions with package.json
+
+### Fixed
+
+- Guard Dexie usage for server environments
+
 ## [0.0.5-alpha] - 2025-01-26
 
 ### Added
