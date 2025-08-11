@@ -62,7 +62,7 @@ export async function importCharacters(file: File): Promise<Character[]> {
   }));
 
   if (db) {
-    await db.characters.bulkPut(characters);
+    await Promise.all(characters.map(char => db.characters.put(char)));
   }
 
   return characters;
