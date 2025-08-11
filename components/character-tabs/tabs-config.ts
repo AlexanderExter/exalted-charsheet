@@ -17,11 +17,13 @@ import { SocialTab } from "./SocialTab";
 import { AdvancementTab } from "./AdvancementTab";
 import { RulingsTab } from "./RulingsTab";
 
+export interface TabProps {}
+
 export interface TabConfig {
   id: string;
   label: string;
   icon: LucideIcon;
-  component: React.ComponentType<any>;
+  component: React.ComponentType<TabProps>;
 }
 
 export const tabs: TabConfig[] = [
