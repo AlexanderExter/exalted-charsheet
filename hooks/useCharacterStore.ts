@@ -62,6 +62,24 @@ export const useCharacterStore = create<CharacterState>()(
         });
       },
     }),
-    { name: "exalted-characters" }
+    {
+      name: "exalted-characters",
+      merge: (persistedState, currentState) => {
+        try {
+          const persisted = persistedState as Partial<CharacterState>;
+          const parsed = CharacterSchema.array().parse(persisted.characters) as Character[];
+          const currentCharacter =
+            parsed.find(c => c.id === persisted.currentCharacterId) ?? parsed[0] ?? null;
+          return {
+            ...currentState,
+            characters: parsed,
+            currentCharacterId: currentCharacter?.id ?? null,
+            currentCharacter,
+          };
+        } catch {
+          return currentState;
+        }
+      },
+    }
   )
 );
