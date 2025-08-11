@@ -128,4 +128,4 @@ vitest/
 
 # Temporary files
 *.tmp
-*.temp
+*.temppackage-lock.json
