@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { createNewCharacter } from "@/lib/character-defaults";
-import type { Character } from "@/lib/character-types";
+import { CharacterSchema, type Character } from "@/lib/character-types";
 
 interface CharacterState {
   characters: Character[];
@@ -54,10 +54,11 @@ export const useCharacterStore = create<CharacterState>()(
         });
       },
       loadCharacters: characters => {
+        const parsed = CharacterSchema.array().parse(characters);
         set({
-          characters,
-          currentCharacterId: characters[0]?.id ?? null,
-          currentCharacter: characters[0] ?? null,
+          characters: parsed,
+          currentCharacterId: parsed[0]?.id ?? null,
+          currentCharacter: parsed[0] ?? null,
         });
       },
     }),
