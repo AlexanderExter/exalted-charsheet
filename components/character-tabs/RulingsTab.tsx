@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { Ruling } from "@/lib/character-types";
-import { v4 as uuidv4 } from "uuid";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 
 export const RulingsTab: React.FC = React.memo(() => {
@@ -23,7 +22,7 @@ export const RulingsTab: React.FC = React.memo(() => {
   // Ruling management functions
   const addRuling = useCallback(() => {
     const newRuling: Ruling = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       title: "New Ruling",
       description: "",
       category: "house-rule",
