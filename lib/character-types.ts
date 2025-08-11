@@ -1,255 +1,7 @@
 // Exalted: Essence Character Type Definitions
 import { z } from "zod";
-export interface StatBlock {
-  base: number;
-  added: number;
-  bonus: number;
-}
 
-export interface Attributes {
-  fortitude: StatBlock;
-  finesse: StatBlock;
-  force: StatBlock;
-}
-
-export interface Abilities {
-  athletics: StatBlock;
-  awareness: StatBlock;
-  closeCombat: StatBlock;
-  craft: StatBlock;
-  embassy: StatBlock;
-  integrity: StatBlock;
-  navigate: StatBlock;
-  physique: StatBlock;
-  presence: StatBlock;
-  performance: StatBlock;
-  rangedCombat: StatBlock;
-  sagacity: StatBlock;
-  stealth: StatBlock;
-  war: StatBlock;
-}
-
-export interface Essence {
-  motes: number;
-  commitments: number;
-  spent: number;
-  anima: number;
-  rating: number;
-}
-
-export interface StaticValues {
-  defenseModifier: number;
-  evasionModifier: number;
-  parryModifier: number;
-  resolveModifier: number;
-  soakModifier: number;
-  hardnessModifier: number;
-}
-
-export interface HealthLevels {
-  zero: number;
-  minusOne: number;
-  minusTwo: number;
-  incap: number;
-}
-
-export type ExaltType =
-  | "lunar"
-  | "solar"
-  | "dragon-blood"
-  | "sidereal"
-  | "abyssal"
-  | "liminal"
-  | "exigent";
-
-export interface DramaticInjury {
-  id: string;
-  description: string;
-  isHealed: boolean;
-}
-
-export interface Health {
-  baseline: HealthLevels;
-  oxBodyLevels: number;
-  exaltType: ExaltType;
-  bashingDamage: number;
-  lethalDamage: number;
-  aggravatedDamage: number;
-  dramaticInjuries: DramaticInjury[];
-}
-
-export type ArmorType = "light" | "heavy";
-export type WeaponRange = "close" | "short" | "mid" | "long";
-
-export interface ArmorPiece {
-  id: string;
-  name: string;
-  type: ArmorType;
-  soak: number;
-  hardness: number;
-  mobility: number;
-  tags: string[];
-  description?: string;
-}
-
-export interface Weapon {
-  id: string;
-  name: string;
-  accuracy: number;
-  damage: number;
-  defence: number;
-  overwhelming: number;
-  range: WeaponRange;
-  tags: string[];
-  description?: string;
-}
-
-export interface Milestones {
-  personal: number;
-  exalt: number;
-  minor: number;
-  major: number;
-}
-
-export type AdvancementStatus =
-  | "Planned"
-  | "Paid with Personal"
-  | "Paid with Exalt"
-  | "Paid with Minor"
-  | "Paid with Major"
-  | "Initial";
-
-export interface AdvancementEntry {
-  id: string;
-  item: string;
-  status: AdvancementStatus;
-  timestamp: string;
-  description?: string;
-}
-
-export type AttributeType = keyof Attributes;
-export type AbilityType = keyof Abilities;
-
-export interface DicePool {
-  attribute: AttributeType;
-  ability: AbilityType;
-  targetNumber: number;
-  doublesThreshold: number;
-  extraDiceBonus: number;
-  extraDiceNonBonus: number;
-  extraSuccessBonus: number;
-  extraSuccessNonBonus: number;
-  isStunted: boolean;
-}
-
-export type SpellCircle = "terrestrial" | "celestial" | "solar";
-
-export interface Charm {
-  id: string;
-  name: string;
-  cost: string;
-  keywords: string[];
-  description: string;
-  step: number | null; // Combat step when used
-  pageReference: string;
-  prerequisites: string[];
-  dateAdded: string;
-}
-
-export interface Spell {
-  id: string;
-  name: string;
-  circle: SpellCircle;
-  cost: string;
-  description: string;
-  step: number | null; // Combat step when cast
-  pageReference: string;
-  dateAdded: string;
-  components: string[]; // Material components if any
-}
-
-export interface Combat {
-  power: number;
-  joinBattleDiceBonus: number;
-  joinBattleSuccessBonus: number;
-  decisiveExtraDice: number;
-  decisiveExtraSuccess: number;
-}
-
-export type VirtueType =
-  | "ambition"
-  | "compassion"
-  | "courage"
-  | "discipline"
-  | "justice"
-  | "loyalty"
-  | "wonder"
-  | null;
-
-export interface Virtues {
-  major: VirtueType;
-  minor: VirtueType;
-}
-
-export interface Intimacy {
-  id: string;
-  description: string;
-  intensity: "minor" | "major";
-}
-
-export type BackgroundType = "artifact" | "resources" | "followers";
-export type BackgroundLevel = "tertiary" | "secondary" | "primary";
-
-export interface Background {
-  id: string;
-  type: BackgroundType;
-  level: BackgroundLevel;
-  description: string;
-}
-
-export interface Social {
-  virtues: Virtues;
-  intimacies: Intimacy[];
-  backgrounds: Background[];
-}
-
-export interface Ruling {
-  id: string;
-  title: string;
-  description: string;
-  category: "house-rule" | "clarification" | "edge-case";
-  dateCreated: string;
-}
-
-export interface Character {
-  id: string;
-  name: string;
-  attributes: Attributes;
-  abilities: Abilities;
-  essence: Essence;
-  staticValues: StaticValues;
-  health: Health;
-  armor: ArmorPiece[];
-  weapons: Weapon[];
-  milestones: Milestones;
-  advancement: AdvancementEntry[];
-  dicePool: DicePool;
-  charms: Charm[];
-  spells: Spell[];
-  combat: Combat;
-  social: Social;
-  rulings: Ruling[];
-}
-
-// Utility types for updates
-export type CharacterUpdate = Partial<Character>;
-export type AttributeUpdate = Partial<Attributes>;
-export type AbilityUpdate = Partial<Abilities>;
-
-// Animation levels for essence system
-export type AnimaLevel = "Dim" | "Glowing" | "Burning" | "Bonfire" | "Iconic";
-
-// Zod schemas mirroring the TypeScript interfaces above
+// Zod schemas
 export const StatBlockSchema = z.object({
   base: z.number(),
   added: z.number(),
@@ -486,3 +238,46 @@ export const CharacterSchema = z.object({
   social: SocialSchema,
   rulings: RulingSchema.array(),
 });
+
+export const AnimaLevelSchema = z.enum(["Dim", "Glowing", "Burning", "Bonfire", "Iconic"]);
+
+// Inferred types
+export type StatBlock = z.infer<typeof StatBlockSchema>;
+export type Attributes = z.infer<typeof AttributesSchema>;
+export type Abilities = z.infer<typeof AbilitiesSchema>;
+export type Essence = z.infer<typeof EssenceSchema>;
+export type StaticValues = z.infer<typeof StaticValuesSchema>;
+export type HealthLevels = z.infer<typeof HealthLevelsSchema>;
+export type ExaltType = z.infer<typeof ExaltTypeSchema>;
+export type DramaticInjury = z.infer<typeof DramaticInjurySchema>;
+export type Health = z.infer<typeof HealthSchema>;
+export type ArmorType = z.infer<typeof ArmorTypeSchema>;
+export type WeaponRange = z.infer<typeof WeaponRangeSchema>;
+export type ArmorPiece = z.infer<typeof ArmorPieceSchema>;
+export type Weapon = z.infer<typeof WeaponSchema>;
+export type Milestones = z.infer<typeof MilestonesSchema>;
+export type AdvancementStatus = z.infer<typeof AdvancementStatusSchema>;
+export type AdvancementEntry = z.infer<typeof AdvancementEntrySchema>;
+export type AttributeType = z.infer<typeof AttributeTypeSchema>;
+export type AbilityType = z.infer<typeof AbilityTypeSchema>;
+export type DicePool = z.infer<typeof DicePoolSchema>;
+export type SpellCircle = z.infer<typeof SpellCircleSchema>;
+export type Charm = z.infer<typeof CharmSchema>;
+export type Spell = z.infer<typeof SpellSchema>;
+export type Combat = z.infer<typeof CombatSchema>;
+export type VirtueType = z.infer<typeof VirtueTypeSchema>;
+export type Virtues = z.infer<typeof VirtuesSchema>;
+export type Intimacy = z.infer<typeof IntimacySchema>;
+export type BackgroundType = z.infer<typeof BackgroundTypeSchema>;
+export type BackgroundLevel = z.infer<typeof BackgroundLevelSchema>;
+export type Background = z.infer<typeof BackgroundSchema>;
+export type Social = z.infer<typeof SocialSchema>;
+export type Ruling = z.infer<typeof RulingSchema>;
+export type Character = z.infer<typeof CharacterSchema>;
+export type AnimaLevel = z.infer<typeof AnimaLevelSchema>;
+
+// Utility types for updates
+export type CharacterUpdate = Partial<Character>;
+export type AttributeUpdate = Partial<Attributes>;
+export type AbilityUpdate = Partial<Abilities>;
+
