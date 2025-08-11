@@ -93,7 +93,9 @@
     "@hookform/resolvers": "^3.9.0",
     "zod": "^4.0.17",
     "zustand": "^5.0.0",
-    "immer": "^10.1.1"
+    "immer": "^10.1.1",
+    "dexie": "^4.0.3",
+    "dexie-export-import": "^4.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
