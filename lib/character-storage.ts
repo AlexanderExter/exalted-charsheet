@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import superjson from "superjson";
 
 export async function exportCharacter(character: Character): Promise<void> {
-  const dataStr = superjson.stringify(character, { space: 2 });
+  const dataStr = JSON.stringify(superjson.serialize(character), null, 2);
   const dataBlob = new Blob([dataStr], { type: "application/json" });
   const link = document.createElement("a");
   const url = window.URL.createObjectURL(dataBlob);
@@ -25,7 +25,7 @@ export async function exportCharacters(
   characters: Character[],
   filename = "all_exalted_characters.json"
 ): Promise<void> {
-  const dataStr = superjson.stringify(characters, { space: 2 });
+  const dataStr = JSON.stringify(superjson.serialize(characters), null, 2);
   const dataBlob = new Blob([dataStr], { type: "application/json" });
   const link = document.createElement("a");
   const url = window.URL.createObjectURL(dataBlob);
