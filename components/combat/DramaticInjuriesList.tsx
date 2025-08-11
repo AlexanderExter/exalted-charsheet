@@ -4,14 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { DramaticInjury } from "@/lib/character-types";
+import type { Draft } from "immer";
 
 interface DramaticInjuriesListProps {
   injuries: DramaticInjury[];
   addDramaticInjury: () => void;
-  updateDramaticInjury: (
+  updateDramaticInjury: <K extends keyof DramaticInjury>(
     id: string,
-    field: keyof DramaticInjury,
-    value: DramaticInjury[keyof DramaticInjury]
+    field: K,
+    value: Draft<DramaticInjury>[K]
   ) => void;
   deleteDramaticInjury: (id: string) => void;
 }

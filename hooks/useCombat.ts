@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { produce } from "immer";
+import { produce, type Draft } from "immer";
 import type { Character, DramaticInjury } from "@/lib/character-types";
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations";
 
@@ -43,13 +43,15 @@ export function useCombat({ character, updateCharacter, calculations }: UseComba
   }, [character, updateCharacter]);
 
   const updateDramaticInjury = useCallback(
-    (id: string, field: keyof DramaticInjury, value: DramaticInjury[keyof DramaticInjury]) => {
+    <K extends keyof DramaticInjury>(id: string, field: K, value: Draft<DramaticInjury>[K]) => {
       if (!character) return;
 
       const updatedHealth = produce(character.health, draft => {
-        const injury = draft.dramaticInjuries.find(inj => inj.id === id);
+        const injury = draft.dramaticInjuries.find(inj => inj.id === id) as
+          | Draft<DramaticInjury>
+          | undefined;
         if (injury) {
-          (injury as any)[field] = value;
+          injury[field] = value;
         }
       });
 
