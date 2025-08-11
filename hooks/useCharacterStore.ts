@@ -1,9 +1,15 @@
 import { create } from "zustand";
-import { persist, subscribeWithSelector, type PersistStorage } from "zustand/middleware";
+import { subscribeWithSelector } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { createNewCharacter } from "@/lib/character-defaults";
 import { CharacterSchema, type Character } from "@/lib/character-types";
-import superjson from "superjson";
+import {
+  getAllCharacters,
+  saveCharacter as saveCharacterToDB,
+  deleteCharacter as deleteCharacterFromDB,
+  getCurrentCharacterId,
+  setCurrentCharacterId as setCurrentCharacterIdInDB,
+} from "@/lib/db";
 
 interface CharacterState {
   characters: Character[];
@@ -13,95 +19,81 @@ interface CharacterState {
   updateCurrentCharacter: (updates: Partial<Character>) => void;
   deleteCharacter: (id: string) => void;
   setCurrentCharacter: (id: string) => void;
-  loadCharacters: (characters: Character[]) => void;
+  loadCharacters: () => Promise<void>;
 }
 
 export const useCharacterStore = create<CharacterState>()(
   subscribeWithSelector(
-    persist(
-      immer((set, get) => ({
-        characters: [],
-        currentCharacterId: null,
-        currentCharacter: null,
-        addCharacter: name => {
-          const char = createNewCharacter(name);
-          set(state => {
-            state.characters.push(char);
-            state.currentCharacterId = char.id;
-            state.currentCharacter = char;
-          });
-        },
-        updateCurrentCharacter: updates => {
-          const id = get().currentCharacterId;
-          if (!id) return;
-          set(state => {
-            const char = state.characters.find(c => c.id === id);
-            if (!char) return;
-            Object.assign(char, updates);
-            state.currentCharacter = char;
-          });
-        },
-        deleteCharacter: id => {
-          set(state => {
-            state.characters = state.characters.filter(c => c.id !== id);
-            if (id === state.currentCharacterId) {
-              state.currentCharacterId = state.characters[0]?.id ?? null;
-              state.currentCharacter = state.characters[0] ?? null;
-            } else {
-              state.currentCharacter =
-                state.characters.find(c => c.id === state.currentCharacterId) ?? null;
-            }
-          });
-        },
-        setCurrentCharacter: id => {
-          set(state => {
-            state.currentCharacterId = id;
-            state.currentCharacter = state.characters.find(c => c.id === id) ?? null;
-          });
-        },
-        loadCharacters: characters => {
-          const parsed = CharacterSchema.array().parse(characters) as Character[];
-          set(state => {
-            state.characters = parsed;
-            state.currentCharacterId = parsed[0]?.id ?? null;
-            state.currentCharacter = parsed[0] ?? null;
-          });
-        },
-      })),
-      {
-        name: "exalted-characters",
-        storage: {
-          getItem: name => {
-            const str = localStorage.getItem(name);
-            return str ? superjson.parse(str) : null;
-          },
-          setItem: (name, value) => {
-            localStorage.setItem(name, superjson.stringify(value));
-          },
-          removeItem: name => {
-            localStorage.removeItem(name);
-          },
-        } as PersistStorage<CharacterState>,
-        merge: (persistedState, currentState) => {
-          try {
-            const persisted = persistedState as Partial<CharacterState>;
-            const parsed = CharacterSchema.array().parse(persisted.characters) as Character[];
-            const currentCharacter =
-              parsed.find(c => c.id === persisted.currentCharacterId) ?? parsed[0] ?? null;
-            return {
-              ...currentState,
-              characters: parsed,
-              currentCharacterId: currentCharacter?.id ?? null,
-              currentCharacter,
-            };
-          } catch {
-            return currentState;
+    immer((set, get) => ({
+      characters: [],
+      currentCharacterId: null,
+      currentCharacter: null,
+      addCharacter: name => {
+        const char = createNewCharacter(name);
+        set(state => {
+          state.characters.push(char);
+          state.currentCharacterId = char.id;
+          state.currentCharacter = char;
+        });
+        void saveCharacterToDB(char);
+        void setCurrentCharacterIdInDB(char.id);
+      },
+      updateCurrentCharacter: updates => {
+        const id = get().currentCharacterId;
+        if (!id) return;
+        let updated: Character | undefined;
+        set(state => {
+          const char = state.characters.find(c => c.id === id);
+          if (!char) return;
+          Object.assign(char, updates);
+          state.currentCharacter = char;
+          updated = char;
+        });
+        if (updated) void saveCharacterToDB(updated);
+      },
+      deleteCharacter: id => {
+        let newCurrentId: string | null = null;
+        set(state => {
+          state.characters = state.characters.filter(c => c.id !== id);
+          if (id === state.currentCharacterId) {
+            newCurrentId = state.characters[0]?.id ?? null;
+            state.currentCharacterId = newCurrentId;
+            state.currentCharacter = state.characters[0] ?? null;
+          } else {
+            newCurrentId = state.currentCharacterId;
+            state.currentCharacter =
+              state.characters.find(c => c.id === state.currentCharacterId) ?? null;
           }
-        },
-      }
-    )
+        });
+        void deleteCharacterFromDB(id);
+        void setCurrentCharacterIdInDB(newCurrentId);
+      },
+      setCurrentCharacter: id => {
+        set(state => {
+          state.currentCharacterId = id;
+          state.currentCharacter = state.characters.find(c => c.id === id) ?? null;
+        });
+        void setCurrentCharacterIdInDB(id);
+      },
+      loadCharacters: async () => {
+        const [charsFromDB, currentId] = await Promise.all([
+          getAllCharacters(),
+          getCurrentCharacterId(),
+        ]);
+        const parsed = CharacterSchema.array().parse(charsFromDB) as Character[];
+        const currentChar =
+          parsed.find(c => c.id === currentId) ?? parsed[0] ?? null;
+        set(state => {
+          state.characters = parsed;
+          state.currentCharacterId = currentChar?.id ?? null;
+          state.currentCharacter = currentChar;
+        });
+      },
+    }))
   )
 );
+
+void useCharacterStore.getState().loadCharacters();
 
 export const subscribeToCharacterStore = <T>(
   selector: (state: CharacterState) => T,
