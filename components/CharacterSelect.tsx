@@ -94,7 +94,7 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
               className="hidden"
             />
             {characters.length > 0 && (
-              <Button variant="outline" onClick={() => exportCharacters(characters)}>
+              <Button variant="outline" onClick={() => exportCharacters()}>
                 <Download className="w-4 h-4 mr-2" />
                 Export All
               </Button>

@@ -9,7 +9,6 @@ import { useAutoSave } from "@/hooks/useAutoSave";
 import { useCharacterManagement } from "@/hooks/useCharacterManagement";
 import type { Character } from "@/lib/character-types";
 import { importCharacters, exportCharacter } from "@/lib/character-storage";
-import { saveCharacter } from "@/lib/db";
 import { toast } from "sonner";
 
 const ExaltedCharacterManager = () => {
@@ -42,9 +41,6 @@ const ExaltedCharacterManager = () => {
   const handleImport = async (file: File) => {
     try {
       const imported = await importCharacters(file);
-      for (const char of imported) {
-        await saveCharacter(char);
-      }
       await loadCharacters();
       if (imported.length === 1) {
         selectCharacter(imported[0].id);
