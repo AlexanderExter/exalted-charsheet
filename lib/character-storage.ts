@@ -1,5 +1,7 @@
 import { CharacterSchema, type Character } from "@/lib/character-types";
 import { createNewCharacter } from "@/lib/character-defaults";
+import { db, getAllCharacters } from "@/lib/db";
+import { waitForCharacterStoreSave } from "@/hooks/useCharacterStore";
 import { v4 as uuidv4 } from "uuid";
 import superjson from "superjson";
 
@@ -22,9 +24,10 @@ export async function exportCharacter(character: Character): Promise<void> {
 }
 
 export async function exportCharacters(
-  characters: Character[],
   filename = "all_exalted_characters.json"
 ): Promise<void> {
+  await waitForCharacterStoreSave();
+  const characters = await getAllCharacters();
   const dataStr = JSON.stringify(superjson.serialize(characters), null, 2);
   const dataBlob = new Blob([dataStr], { type: "application/json" });
   const link = document.createElement("a");
@@ -52,9 +55,15 @@ export async function importCharacters(file: File): Promise<Character[]> {
     ? (CharacterSchema.array().parse(importedData) as Character[])
     : [CharacterSchema.parse(importedData) as Character];
 
-  return parsed.map(char => ({
+  const characters = parsed.map(char => ({
     ...createNewCharacter(char.name ?? "Unnamed"),
     ...char,
     id: uuidv4(),
   }));
+
+  if (db) {
+    await db.characters.bulkPut(characters);
+  }
+
+  return characters;
 }
