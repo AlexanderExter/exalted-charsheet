@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+import isEqual from "fast-deep-equal";
 import { createNewCharacter } from "@/lib/character-defaults";
 import { CharacterSchema, type Character } from "@/lib/character-types";
 import {
@@ -75,8 +76,7 @@ export const useCharacterStore = create<CharacterState>()(
           getCurrentCharacterId(),
         ]);
         const parsed = CharacterSchema.array().parse(charsFromDB) as Character[];
-        const currentChar =
-          parsed.find(c => c.id === currentId) ?? parsed[0] ?? null;
+        const currentChar = parsed.find(c => c.id === currentId) ?? parsed[0] ?? null;
         set(state => {
           state.characters = parsed;
           state.currentCharacterId = currentChar?.id ?? null;
@@ -108,7 +108,7 @@ useCharacterStore.subscribe(
 
       for (const char of characters) {
         const prevChar = prevMap.get(char.id);
-        if (!prevChar || JSON.stringify(prevChar) !== JSON.stringify(char)) {
+        if (!prevChar || !isEqual(prevChar, char)) {
           operations.push(saveCharacterToDB(char));
         }
       }
