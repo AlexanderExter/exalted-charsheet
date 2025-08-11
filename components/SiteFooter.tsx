@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { logError } from "@/lib/logger";
 
 export default function SiteFooter() {
   const [showAboutModal, setShowAboutModal] = useState(false);
@@ -23,7 +24,7 @@ export default function SiteFooter() {
         const legalText = await legalResponse.text();
         setLegalContent(legalText);
       } catch (error) {
-        console.error(error);
+        logError(error);
         toast.error("Failed to load footer content.");
         setAboutContent(
           "# About\n\nInformation about this application could not be loaded."

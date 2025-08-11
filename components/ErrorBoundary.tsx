@@ -4,6 +4,7 @@ import React, { Component, type ReactNode } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, AlertTriangle } from "lucide-react";
+import { logError } from "@/lib/logger";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -32,10 +33,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       errorInfo,
     });
 
-    // Log error to console in development
-    if (process.env.NODE_ENV === "development") {
-      console.error("Error Boundary caught an error:", error, errorInfo);
-    }
+    // Log error in development environment
+    logError("Error Boundary caught an error:", error, errorInfo);
   }
 
   handleRetry = () => {
