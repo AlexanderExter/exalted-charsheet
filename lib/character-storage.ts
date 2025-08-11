@@ -1,3 +1,5 @@
+"use client";
+
 import { CharacterSchema, type Character } from "@/lib/character-types";
 import { createNewCharacter } from "@/lib/character-defaults";
 import { v4 as uuidv4 } from "uuid";

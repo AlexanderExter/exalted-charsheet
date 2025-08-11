@@ -1,3 +1,5 @@
+"use client";
+
 import Dexie, { type Table } from "dexie";
 import { type Character } from "@/lib/character-types";
 
