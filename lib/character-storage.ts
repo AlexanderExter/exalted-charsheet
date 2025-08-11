@@ -1,5 +1,6 @@
 import type { Character } from "@/lib/character-types";
 import { createNewCharacter } from "@/lib/character-defaults";
+import { CharacterSchema } from "@/lib/character-schema";
 import { v4 as uuidv4 } from "uuid";
 
 export async function exportCharacter(character: Character): Promise<void> {
@@ -42,9 +43,11 @@ export async function exportCharacters(
 export async function importCharacters(file: File): Promise<Character[]> {
   const text = await file.text();
   const importedData = JSON.parse(text);
-  const charactersToImport = Array.isArray(importedData) ? importedData : [importedData];
+  const characters = Array.isArray(importedData)
+    ? CharacterSchema.array().parse(importedData)
+    : [CharacterSchema.parse(importedData)];
 
-  return charactersToImport.map((char: Partial<Character>) => ({
+  return characters.map(char => ({
     ...createNewCharacter(char.name ?? "Unnamed"),
     ...char,
     id: uuidv4(),

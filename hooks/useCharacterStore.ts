@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { createNewCharacter } from "@/lib/character-defaults";
 import type { Character } from "@/lib/character-types";
+import { CharacterSchema } from "@/lib/character-schema";
 
 interface CharacterState {
   characters: Character[];
@@ -61,6 +62,17 @@ export const useCharacterStore = create<CharacterState>()(
         });
       },
     }),
-    { name: "exalted-characters" }
+    {
+      name: "exalted-characters",
+      deserialize: str => {
+        const data = JSON.parse(str);
+        if (data.state?.characters) {
+          data.state.characters = CharacterSchema.array().parse(data.state.characters);
+          data.state.currentCharacter =
+            data.state.characters.find((c: Character) => c.id === data.state.currentCharacterId) ?? null;
+        }
+        return data;
+      },
+    }
   )
 );
