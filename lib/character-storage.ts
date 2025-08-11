@@ -48,8 +48,14 @@ export async function importCharacters(file: File): Promise<Character[]> {
   let importedData: unknown;
   try {
     importedData = superjson.parse(text);
-  } catch {
-    importedData = JSON.parse(text);
+  } catch (err) {
+    console.error("Failed to parse with superjson:", err);
+    try {
+      importedData = JSON.parse(text);
+    } catch (jsonErr) {
+      console.error("Failed to parse with JSON:", jsonErr);
+      throw new Error("Unable to parse character data");
+    }
   }
   const parsed: Character[] = Array.isArray(importedData)
     ? (CharacterSchema.array().parse(importedData) as Character[])
