@@ -282,10 +282,32 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
             {/* Incapacitation Rules */}
             {calculations.healthPenalty === -4 && (
               <div className="mt-3 border-t pt-3 bg-red-50 p-2 rounded">
-                <div className="text-xs font-medium text-red-700 mb-1">Incapacitation Rules:</div>
-                <div className="text-xs text-red-600">
-                  [Placeholder: Character is incapacitated and cannot take actions except for
-                  reflexive actions and one-die stunts]
+                <div className="text-xs font-medium text-red-700 mb-1">
+                  Incapacitation Rules:
+                </div>
+                <div className="text-xs text-red-600 space-y-1">
+                  <p>
+                    Incapacitated characters have their Power reduced to 0 and
+                    cannot Build Power or flurry. Allies can recover them by
+                    Building their Power to 10, which resets the track to 0.
+                  </p>
+                  <p>
+                    A player may ignore incapacitation by accepting a dramatic
+                    injury to an Attribute or Primary Merit, applying a -1 die
+                    penalty or losing access to that trait.
+                  </p>
+                  <p>
+                    See
+                    <a
+                      href="https://exalted.fandom.com/wiki/Exalted_Essence"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline ml-1"
+                    >
+                      Exalted Essence
+                    </a>
+                    for full rules.
+                  </p>
                 </div>
               </div>
             )}
