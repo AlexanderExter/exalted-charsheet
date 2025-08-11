@@ -13,9 +13,12 @@ characters.
 - **Next.js 15**
 - **React 19**
 - **TypeScript**
-- Data stored locally in your browser (Local Storage)
+- **Dexie (IndexedDB)** for persistent storage
+- **shadcn/ui + Radix UI** components
+- **Tailwind CSS 4** styling
+- **Lucide React** icons
 - All code generated with the help of AI
-- Code lives on  
+- Code lives on
   [![GitHub][version-badge]][releases]
 
 ---
