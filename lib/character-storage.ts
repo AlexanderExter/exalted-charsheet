@@ -1,9 +1,10 @@
 import { CharacterSchema, type Character } from "@/lib/character-types";
 import { createNewCharacter } from "@/lib/character-defaults";
 import { v4 as uuidv4 } from "uuid";
+import superjson from "superjson";
 
 export async function exportCharacter(character: Character): Promise<void> {
-  const dataStr = JSON.stringify(character, null, 2);
+  const dataStr = JSON.stringify(superjson.serialize(character), null, 2);
   const dataBlob = new Blob([dataStr], { type: "application/json" });
   const link = document.createElement("a");
   const url = window.URL.createObjectURL(dataBlob);
@@ -24,7 +25,7 @@ export async function exportCharacters(
   characters: Character[],
   filename = "all_exalted_characters.json"
 ): Promise<void> {
-  const dataStr = JSON.stringify(characters, null, 2);
+  const dataStr = JSON.stringify(superjson.serialize(characters), null, 2);
   const dataBlob = new Blob([dataStr], { type: "application/json" });
   const link = document.createElement("a");
   const url = window.URL.createObjectURL(dataBlob);
@@ -41,7 +42,12 @@ export async function exportCharacters(
 
 export async function importCharacters(file: File): Promise<Character[]> {
   const text = await file.text();
-  const importedData = JSON.parse(text);
+  let importedData: unknown;
+  try {
+    importedData = superjson.parse(text);
+  } catch {
+    importedData = JSON.parse(text);
+  }
   const parsed: Character[] = Array.isArray(importedData)
     ? (CharacterSchema.array().parse(importedData) as Character[])
     : [CharacterSchema.parse(importedData) as Character];
