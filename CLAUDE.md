@@ -32,6 +32,34 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm test` - Run tests with Vitest
 - `npm run test:watch` - Run tests in watch mode
 
+### Production
+
+- `npm run start` - Start production server
+- `npm run start:port` - Start production server on custom port
+- `npm run preview` - Build and start production server
+
+### Maintenance
+
+- `npm run clean` - Remove build artifacts
+- `npm run clean:all` - Remove build artifacts and dependencies
+- `npm run deps:update` - Update dependencies and run audit
+- `npm run deps:check` - Show outdated dependencies
+- `npm run deps:audit` - Audit dependencies for vulnerabilities
+- `npm run deps:audit:fix` - Fix dependency vulnerabilities
+
+### Utilities
+
+- `npm run postinstall` - Show setup message after install
+- `npm run validate` - Run linting/type check and build
+- `npm run validate:strict` - Run strict checks and production build
+
+### CI/CD
+
+- `npm run ci:build` - Production build for CI
+- `npm run ci:test` - Run strict checks in CI
+- `npm run ci:lint` - Run strict linting in CI
+- `npm run ci:format` - Check formatting in CI
+
 ## Architecture Overview
 
 This is a Next.js 15 application using the App Router pattern for an Exalted: Essence character sheet manager.
