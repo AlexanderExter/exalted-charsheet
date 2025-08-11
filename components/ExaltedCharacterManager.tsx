@@ -26,7 +26,7 @@ const ExaltedCharacterManager = () => {
 
   const [activeTab, setActiveTab] = useState("core");
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null!);
 
   const { isSaving, lastSaved } = useAutoSave(characters);
 
