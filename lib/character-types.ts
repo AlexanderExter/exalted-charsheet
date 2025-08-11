@@ -297,10 +297,10 @@ export const StaticValuesSchema = z.object({
 });
 
 export const HealthLevelsSchema = z.object({
-  zero: z.number(),
-  minusOne: z.number(),
-  minusTwo: z.number(),
-  incap: z.number(),
+  zero: z.number().int().min(0),
+  minusOne: z.number().int().min(0),
+  minusTwo: z.number().int().min(0),
+  incap: z.number().int().min(0),
 });
 
 export const ExaltTypeSchema = z.enum([
@@ -321,11 +321,11 @@ export const DramaticInjurySchema = z.object({
 
 export const HealthSchema = z.object({
   baseline: HealthLevelsSchema,
-  oxBodyLevels: z.number(),
+  oxBodyLevels: z.number().int().min(0),
   exaltType: ExaltTypeSchema,
-  bashingDamage: z.number(),
-  lethalDamage: z.number(),
-  aggravatedDamage: z.number(),
+  bashingDamage: z.number().int().min(0),
+  lethalDamage: z.number().int().min(0),
+  aggravatedDamage: z.number().int().min(0),
   dramaticInjuries: DramaticInjurySchema.array(),
 });
 
@@ -385,12 +385,12 @@ export const AbilityTypeSchema = AbilitiesSchema.keyof();
 export const DicePoolSchema = z.object({
   attribute: AttributeTypeSchema,
   ability: AbilityTypeSchema,
-  targetNumber: z.number(),
-  doublesThreshold: z.number(),
-  extraDiceBonus: z.number(),
-  extraDiceNonBonus: z.number(),
-  extraSuccessBonus: z.number(),
-  extraSuccessNonBonus: z.number(),
+  targetNumber: z.number().int().min(1).max(10),
+  doublesThreshold: z.number().int().min(1).max(10),
+  extraDiceBonus: z.number().int().min(0).max(10),
+  extraDiceNonBonus: z.number().int().min(0),
+  extraSuccessBonus: z.number().int().min(0).max(5),
+  extraSuccessNonBonus: z.number().int().min(0),
   isStunted: z.boolean(),
 });
 

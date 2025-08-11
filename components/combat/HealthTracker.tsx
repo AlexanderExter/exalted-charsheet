@@ -9,9 +9,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Character, ExaltType, DramaticInjury } from "@/lib/character-types";
+import {
+  HealthLevelsSchema,
+  HealthSchema,
+  type Character,
+  type ExaltType,
+  type DramaticInjury,
+} from "@/lib/character-types";
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations";
 import { DramaticInjuriesList } from "@/components/combat/DramaticInjuriesList";
+import { z } from "zod";
 
 interface HealthTrackerProps {
   character: Character;
@@ -36,6 +43,112 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
   updateDramaticInjury,
   deleteDramaticInjury,
 }) => {
+  const [values, setValues] = React.useState({
+    zero: String(character?.health?.baseline?.zero || 1),
+    minusOne: String(character?.health?.baseline?.minusOne || 2),
+    minusTwo: String(character?.health?.baseline?.minusTwo || 2),
+    incap: String(character?.health?.baseline?.incap || 1),
+    oxBodyLevels: String(character?.health?.oxBodyLevels || 0),
+    bashingDamage: String(character?.health?.bashingDamage || 0),
+    lethalDamage: String(character?.health?.lethalDamage || 0),
+    aggravatedDamage: String(character?.health?.aggravatedDamage || 0),
+  });
+
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
+
+  React.useEffect(() => {
+    setValues({
+      zero: String(character?.health?.baseline?.zero || 1),
+      minusOne: String(character?.health?.baseline?.minusOne || 2),
+      minusTwo: String(character?.health?.baseline?.minusTwo || 2),
+      incap: String(character?.health?.baseline?.incap || 1),
+      oxBodyLevels: String(character?.health?.oxBodyLevels || 0),
+      bashingDamage: String(character?.health?.bashingDamage || 0),
+      lethalDamage: String(character?.health?.lethalDamage || 0),
+      aggravatedDamage: String(character?.health?.aggravatedDamage || 0),
+    });
+  }, [character]);
+
+  const baselineSchemas: Record<string, z.ZodTypeAny> = {
+    zero: HealthLevelsSchema.shape.zero,
+    minusOne: HealthLevelsSchema.shape.minusOne,
+    minusTwo: HealthLevelsSchema.shape.minusTwo,
+    incap: HealthLevelsSchema.shape.incap,
+  };
+
+  const handleBaselineChange = (
+    field: keyof typeof baselineSchemas
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setValues(prev => ({ ...prev, [field]: val }));
+    const result = baselineSchemas[field].safeParse(Number(val));
+    if (result.success) {
+      setErrors(prev => ({ ...prev, [field]: "" }));
+      updateCharacter({
+        health: {
+          ...character.health,
+          baseline: { ...character.health?.baseline, [field]: result.data },
+        },
+      });
+    } else {
+      setErrors(prev => ({
+        ...prev,
+        [field]: result.error.issues[0]?.message || "Invalid value",
+      }));
+    }
+  };
+
+  const handleOxBodyChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const val = e.target.value;
+    setValues(prev => ({ ...prev, oxBodyLevels: val }));
+    const result = HealthSchema.shape.oxBodyLevels.safeParse(Number(val));
+    if (result.success) {
+      setErrors(prev => ({ ...prev, oxBodyLevels: "" }));
+      updateCharacter({
+        health: { ...character.health, oxBodyLevels: result.data },
+      });
+    } else {
+      setErrors(prev => ({
+        ...prev,
+        oxBodyLevels: result.error.issues[0]?.message || "Invalid value",
+      }));
+    }
+  };
+
+  const handleDamageChange = (
+    field: "bashingDamage" | "lethalDamage" | "aggravatedDamage"
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setValues(prev => ({ ...prev, [field]: val }));
+    const total = getTotalHealthLevels();
+    const otherDamage =
+      field === "bashingDamage"
+        ? (character?.health?.lethalDamage || 0) +
+          (character?.health?.aggravatedDamage || 0)
+        : field === "lethalDamage"
+        ? (character?.health?.bashingDamage || 0) +
+          (character?.health?.aggravatedDamage || 0)
+        : (character?.health?.bashingDamage || 0) +
+          (character?.health?.lethalDamage || 0);
+    const maxAllowed = Math.max(0, total - otherDamage);
+    const schema = z.number().int().min(0).max(maxAllowed);
+    const result = schema.safeParse(Number(val));
+    if (result.success) {
+      setErrors(prev => ({ ...prev, [field]: "" }));
+      updateCharacter({
+        health: { ...character.health, [field]: result.data },
+      });
+    } else {
+      setErrors(prev => ({
+        ...prev,
+        [field]:
+          result.error.issues[0]?.message || `Must be between 0 and ${maxAllowed}`,
+      }));
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -77,76 +190,56 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
               <Label className="text-sm font-medium text-gray-700">Zero Penalty</Label>
               <Input
                 type="number"
-                value={character?.health?.baseline?.zero || 1}
-                onChange={e => {
-                  const value = Math.max(0, Number.parseInt(e.target.value) || 0);
-                  updateCharacter({
-                    health: {
-                      ...character.health,
-                      baseline: { ...character.health?.baseline, zero: value },
-                    },
-                  });
-                }}
+                value={values.zero}
+                onChange={handleBaselineChange("zero")}
                 className="text-center"
                 min={0}
               />
+              {errors.zero && (
+                <p className="text-xs text-red-500 mt-1">{errors.zero}</p>
+              )}
             </div>
 
             <div>
               <Label className="text-sm font-medium text-gray-700">-1 Penalty</Label>
               <Input
                 type="number"
-                value={character?.health?.baseline?.minusOne || 2}
-                onChange={e => {
-                  const value = Math.max(0, Number.parseInt(e.target.value) || 0);
-                  updateCharacter({
-                    health: {
-                      ...character.health,
-                      baseline: { ...character.health?.baseline, minusOne: value },
-                    },
-                  });
-                }}
+                value={values.minusOne}
+                onChange={handleBaselineChange("minusOne")}
                 className="text-center"
                 min={0}
               />
+              {errors.minusOne && (
+                <p className="text-xs text-red-500 mt-1">{errors.minusOne}</p>
+              )}
             </div>
 
             <div>
               <Label className="text-sm font-medium text-gray-700">-2 Penalty</Label>
               <Input
                 type="number"
-                value={character?.health?.baseline?.minusTwo || 2}
-                onChange={e => {
-                  const value = Math.max(0, Number.parseInt(e.target.value) || 0);
-                  updateCharacter({
-                    health: {
-                      ...character.health,
-                      baseline: { ...character.health?.baseline, minusTwo: value },
-                    },
-                  });
-                }}
+                value={values.minusTwo}
+                onChange={handleBaselineChange("minusTwo")}
                 className="text-center"
                 min={0}
               />
+              {errors.minusTwo && (
+                <p className="text-xs text-red-500 mt-1">{errors.minusTwo}</p>
+              )}
             </div>
 
             <div>
               <Label className="text-sm font-medium text-gray-700">Incapacitated</Label>
               <Input
                 type="number"
-                value={character?.health?.baseline?.incap || 1}
-                onChange={e => {
-                  const value = Math.max(0, Number.parseInt(e.target.value) || 0);
-                  updateCharacter({
-                    health: {
-                      ...character.health,
-                      baseline: { ...character.health?.baseline, incap: value },
-                    },
-                  });
-                }}
+                value={values.incap}
+                onChange={handleBaselineChange("incap")}
                 className="text-center"
                 min={0}
               />
+              {errors.incap && (
+                <p className="text-xs text-red-500 mt-1">{errors.incap}</p>
+              )}
             </div>
           </div>
 
@@ -157,16 +250,14 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
             </Label>
             <Input
               type="number"
-              value={character?.health?.oxBodyLevels || 0}
-              onChange={e => {
-                const value = Math.max(0, Number.parseInt(e.target.value) || 0);
-                updateCharacter({
-                  health: { ...character.health, oxBodyLevels: value },
-                });
-              }}
+              value={values.oxBodyLevels}
+              onChange={handleOxBodyChange}
               className="text-center"
               min={0}
             />
+            {errors.oxBodyLevels && (
+              <p className="text-xs text-red-500 mt-1">{errors.oxBodyLevels}</p>
+            )}
             <div className="mt-3 p-2 bg-gray-50 rounded">
               <div className="grid grid-cols-4 gap-2 text-xs">
                 <div className="text-center">
@@ -206,69 +297,66 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
               <Label className="text-sm font-medium text-gray-700">Bashing Damage</Label>
               <Input
                 type="number"
-                value={character?.health?.bashingDamage || 0}
-                onChange={e => {
-                  const rawValue = Number.parseInt(e.target.value) || 0;
-                  const totalHealth = getTotalHealthLevels();
-                  const otherDamage =
-                    (character?.health?.lethalDamage || 0) +
-                    (character?.health?.aggravatedDamage || 0);
-                  const maxAllowed = Math.max(0, totalHealth - otherDamage);
-                  const value = Math.max(0, Math.min(maxAllowed, rawValue));
-                  updateCharacter({
-                    health: { ...character.health, bashingDamage: value },
-                  });
-                }}
+                value={values.bashingDamage}
+                onChange={handleDamageChange("bashingDamage")}
                 className="text-center"
                 min={0}
-                max={getTotalHealthLevels()}
+                max={
+                  Math.max(
+                    0,
+                    getTotalHealthLevels() -
+                      ((character?.health?.lethalDamage || 0) +
+                        (character?.health?.aggravatedDamage || 0))
+                  )
+                }
               />
+              {errors.bashingDamage && (
+                <p className="text-xs text-red-500 mt-1">{errors.bashingDamage}</p>
+              )}
             </div>
 
             <div>
               <Label className="text-sm font-medium text-gray-700">Lethal Damage</Label>
               <Input
                 type="number"
-                value={character?.health?.lethalDamage || 0}
-                onChange={e => {
-                  const rawValue = Number.parseInt(e.target.value) || 0;
-                  const totalHealth = getTotalHealthLevels();
-                  const otherDamage =
-                    (character?.health?.bashingDamage || 0) +
-                    (character?.health?.aggravatedDamage || 0);
-                  const maxAllowed = Math.max(0, totalHealth - otherDamage);
-                  const value = Math.max(0, Math.min(maxAllowed, rawValue));
-                  updateCharacter({
-                    health: { ...character.health, lethalDamage: value },
-                  });
-                }}
+                value={values.lethalDamage}
+                onChange={handleDamageChange("lethalDamage")}
                 className="text-center"
                 min={0}
-                max={getTotalHealthLevels()}
+                max={
+                  Math.max(
+                    0,
+                    getTotalHealthLevels() -
+                      ((character?.health?.bashingDamage || 0) +
+                        (character?.health?.aggravatedDamage || 0))
+                  )
+                }
               />
+              {errors.lethalDamage && (
+                <p className="text-xs text-red-500 mt-1">{errors.lethalDamage}</p>
+              )}
             </div>
 
             <div>
               <Label className="text-sm font-medium text-gray-700">Aggravated Damage</Label>
               <Input
                 type="number"
-                value={character?.health?.aggravatedDamage || 0}
-                onChange={e => {
-                  const rawValue = Number.parseInt(e.target.value) || 0;
-                  const totalHealth = getTotalHealthLevels();
-                  const otherDamage =
-                    (character?.health?.bashingDamage || 0) +
-                    (character?.health?.lethalDamage || 0);
-                  const maxAllowed = Math.max(0, totalHealth - otherDamage);
-                  const value = Math.max(0, Math.min(maxAllowed, rawValue));
-                  updateCharacter({
-                    health: { ...character.health, aggravatedDamage: value },
-                  });
-                }}
+                value={values.aggravatedDamage}
+                onChange={handleDamageChange("aggravatedDamage")}
                 className="text-center"
                 min={0}
-                max={getTotalHealthLevels()}
+                max={
+                  Math.max(
+                    0,
+                    getTotalHealthLevels() -
+                      ((character?.health?.bashingDamage || 0) +
+                        (character?.health?.lethalDamage || 0))
+                  )
+                }
               />
+              {errors.aggravatedDamage && (
+                <p className="text-xs text-red-500 mt-1">{errors.aggravatedDamage}</p>
+              )}
             </div>
           </div>
 

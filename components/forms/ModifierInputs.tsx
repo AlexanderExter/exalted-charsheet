@@ -3,9 +3,61 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 import { DEFAULT_MODIFIER_MAX } from "@/lib/character-defaults";
+import { DicePoolSchema } from "@/lib/character-types";
+import { z } from "zod";
 
 export const ModifierInputs: React.FC = () => {
   const { character, updateCharacter } = useCharacterContext();
+
+  const [values, setValues] = React.useState({
+    targetNumber: String(character?.dicePool?.targetNumber || 7),
+    doublesThreshold: String(character?.dicePool?.doublesThreshold || 10),
+    extraDiceBonus: String(character?.dicePool?.extraDiceBonus || 0),
+    extraDiceNonBonus: String(character?.dicePool?.extraDiceNonBonus || 0),
+    extraSuccessBonus: String(character?.dicePool?.extraSuccessBonus || 0),
+    extraSuccessNonBonus: String(character?.dicePool?.extraSuccessNonBonus || 0),
+  });
+
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
+
+  React.useEffect(() => {
+    setValues({
+      targetNumber: String(character?.dicePool?.targetNumber || 7),
+      doublesThreshold: String(character?.dicePool?.doublesThreshold || 10),
+      extraDiceBonus: String(character?.dicePool?.extraDiceBonus || 0),
+      extraDiceNonBonus: String(character?.dicePool?.extraDiceNonBonus || 0),
+      extraSuccessBonus: String(character?.dicePool?.extraSuccessBonus || 0),
+      extraSuccessNonBonus: String(character?.dicePool?.extraSuccessNonBonus || 0),
+    });
+  }, [character]);
+
+  const fieldSchemas: Record<string, z.ZodTypeAny> = {
+    targetNumber: DicePoolSchema.shape.targetNumber,
+    doublesThreshold: DicePoolSchema.shape.doublesThreshold,
+    extraDiceBonus: DicePoolSchema.shape.extraDiceBonus,
+    extraDiceNonBonus: DicePoolSchema.shape.extraDiceNonBonus,
+    extraSuccessBonus: DicePoolSchema.shape.extraSuccessBonus,
+    extraSuccessNonBonus: DicePoolSchema.shape.extraSuccessNonBonus,
+  };
+
+  const handleChange = (field: keyof typeof values) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      setValues(prev => ({ ...prev, [field]: val }));
+      const schema = fieldSchemas[field];
+      const result = schema.safeParse(Number(val));
+      if (result.success) {
+        setErrors(prev => ({ ...prev, [field]: "" }));
+        updateCharacter({
+          dicePool: { ...character.dicePool, [field]: result.data },
+        });
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          [field]: result.error.issues[0]?.message || "Invalid value",
+        }));
+      }
+    };
 
   return (
     <div>
@@ -16,19 +68,16 @@ export const ModifierInputs: React.FC = () => {
             <Label className="block text-sm font-medium text-gray-600 mb-1">Target Number</Label>
             <Input
               type="number"
-              value={character?.dicePool?.targetNumber || 7}
-              onChange={e =>
-                updateCharacter({
-                  dicePool: {
-                    ...character.dicePool,
-                    targetNumber: Number.parseInt(e.target.value) || 7,
-                  },
-                })
-              }
+              value={values.targetNumber}
+              onChange={handleChange("targetNumber")}
               className="text-center"
               min={1}
               max={10}
+              aria-invalid={Boolean(errors.targetNumber)}
             />
+            {errors.targetNumber && (
+              <p className="text-xs text-red-500 mt-1">{errors.targetNumber}</p>
+            )}
           </div>
           <div>
             <Label className="block text-sm font-medium text-gray-600 mb-1">
@@ -36,19 +85,16 @@ export const ModifierInputs: React.FC = () => {
             </Label>
             <Input
               type="number"
-              value={character?.dicePool?.doublesThreshold || 10}
-              onChange={e =>
-                updateCharacter({
-                  dicePool: {
-                    ...character.dicePool,
-                    doublesThreshold: Number.parseInt(e.target.value) || 10,
-                  },
-                })
-              }
+              value={values.doublesThreshold}
+              onChange={handleChange("doublesThreshold")}
               className="text-center"
               min={1}
               max={10}
+              aria-invalid={Boolean(errors.doublesThreshold)}
             />
+            {errors.doublesThreshold && (
+              <p className="text-xs text-red-500 mt-1">{errors.doublesThreshold}</p>
+            )}
           </div>
         </div>
 
@@ -59,20 +105,17 @@ export const ModifierInputs: React.FC = () => {
             </Label>
             <Input
               type="number"
-              value={character?.dicePool?.extraDiceBonus || 0}
-              onChange={e =>
-                updateCharacter({
-                  dicePool: {
-                    ...character.dicePool,
-                    extraDiceBonus: Math.min(10, Math.max(0, Number.parseInt(e.target.value) || 0)),
-                  },
-                })
-              }
+              value={values.extraDiceBonus}
+              onChange={handleChange("extraDiceBonus")}
               className="text-center"
               min={0}
               max={10}
+              aria-invalid={Boolean(errors.extraDiceBonus)}
             />
             <div className="text-xs text-gray-500 mt-1">Max: 10</div>
+            {errors.extraDiceBonus && (
+              <p className="text-xs text-red-500 mt-1">{errors.extraDiceBonus}</p>
+            )}
           </div>
           <div>
             <Label className="block text-sm font-medium text-gray-600 mb-1">
@@ -80,18 +123,15 @@ export const ModifierInputs: React.FC = () => {
             </Label>
             <Input
               type="number"
-              value={character?.dicePool?.extraDiceNonBonus || 0}
-              onChange={e =>
-                updateCharacter({
-                  dicePool: {
-                    ...character.dicePool,
-                    extraDiceNonBonus: Math.max(0, Number.parseInt(e.target.value) || 0),
-                  },
-                })
-              }
+              value={values.extraDiceNonBonus}
+              onChange={handleChange("extraDiceNonBonus")}
               className="text-center"
               min={0}
+              aria-invalid={Boolean(errors.extraDiceNonBonus)}
             />
+            {errors.extraDiceNonBonus && (
+              <p className="text-xs text-red-500 mt-1">{errors.extraDiceNonBonus}</p>
+            )}
           </div>
         </div>
 
@@ -102,23 +142,17 @@ export const ModifierInputs: React.FC = () => {
             </Label>
             <Input
               type="number"
-              value={character?.dicePool?.extraSuccessBonus || 0}
-              onChange={e =>
-                updateCharacter({
-                  dicePool: {
-                    ...character.dicePool,
-                    extraSuccessBonus: Math.min(
-                      DEFAULT_MODIFIER_MAX,
-                      Math.max(0, Number.parseInt(e.target.value) || 0)
-                    ),
-                  },
-                })
-              }
+              value={values.extraSuccessBonus}
+              onChange={handleChange("extraSuccessBonus")}
               className="text-center"
               min={0}
               max={DEFAULT_MODIFIER_MAX}
+              aria-invalid={Boolean(errors.extraSuccessBonus)}
             />
             <div className="text-xs text-gray-500 mt-1">Max: {DEFAULT_MODIFIER_MAX}</div>
+            {errors.extraSuccessBonus && (
+              <p className="text-xs text-red-500 mt-1">{errors.extraSuccessBonus}</p>
+            )}
           </div>
           <div>
             <Label className="block text-sm font-medium text-gray-600 mb-1">
@@ -126,18 +160,15 @@ export const ModifierInputs: React.FC = () => {
             </Label>
             <Input
               type="number"
-              value={character?.dicePool?.extraSuccessNonBonus || 0}
-              onChange={e =>
-                updateCharacter({
-                  dicePool: {
-                    ...character.dicePool,
-                    extraSuccessNonBonus: Math.max(0, Number.parseInt(e.target.value) || 0),
-                  },
-                })
-              }
+              value={values.extraSuccessNonBonus}
+              onChange={handleChange("extraSuccessNonBonus")}
               className="text-center"
               min={0}
+              aria-invalid={Boolean(errors.extraSuccessNonBonus)}
             />
+            {errors.extraSuccessNonBonus && (
+              <p className="text-xs text-red-500 mt-1">{errors.extraSuccessNonBonus}</p>
+            )}
           </div>
         </div>
 
