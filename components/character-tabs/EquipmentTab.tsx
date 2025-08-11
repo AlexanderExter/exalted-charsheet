@@ -48,6 +48,13 @@ export const EquipmentTab: React.FC = React.memo(() => {
     [character, updateCharacter]
   );
 
+  const reorderArmor = useCallback(
+    (armorList: ArmorPiece[]) => {
+      updateCharacter({ armor: armorList });
+    },
+    [updateCharacter]
+  );
+
   const addWeapon = useCallback(() => {
     const newWeapon: Weapon = {
       id: uuidv4(),
@@ -86,6 +93,13 @@ export const EquipmentTab: React.FC = React.memo(() => {
     [character, updateCharacter]
   );
 
+  const reorderWeapons = useCallback(
+    (weaponList: Weapon[]) => {
+      updateCharacter({ weapons: weaponList });
+    },
+    [updateCharacter]
+  );
+
   return (
     <div className="space-y-6">
       <ArmorList
@@ -93,6 +107,7 @@ export const EquipmentTab: React.FC = React.memo(() => {
         addArmor={addArmor}
         updateArmor={updateArmor}
         deleteArmor={deleteArmor}
+        reorderArmor={reorderArmor}
       />
 
       <WeaponList
@@ -100,6 +115,7 @@ export const EquipmentTab: React.FC = React.memo(() => {
         addWeapon={addWeapon}
         updateWeapon={updateWeapon}
         deleteWeapon={deleteWeapon}
+        reorderWeapons={reorderWeapons}
       />
 
       <EquipmentTagReference armor={character.armor || []} weapons={character.weapons || []} />
