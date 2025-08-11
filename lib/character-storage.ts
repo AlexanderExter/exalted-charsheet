@@ -1,6 +1,9 @@
 import { CharacterSchema, type Character } from "@/lib/character-types";
 import { createNewCharacter } from "@/lib/character-defaults";
 import { v4 as uuidv4 } from "uuid";
+import { db } from "@/lib/db";
+import { exportDB, importInto } from "dexie-export-import";
+import { useCharacterStore } from "@/hooks/useCharacterStore";
 
 export async function exportCharacter(character: Character): Promise<void> {
   const dataStr = JSON.stringify(character, null, 2);
@@ -51,4 +54,26 @@ export async function importCharacters(file: File): Promise<Character[]> {
     ...char,
     id: uuidv4(),
   }));
+}
+
+export async function backupDatabase(
+  filename = "exalted-db-backup.json",
+): Promise<void> {
+  const blob = await exportDB(db);
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.style.display = "none";
+  document.body.appendChild(link);
+  link.click();
+  setTimeout(() => {
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }, 100);
+}
+
+export async function restoreDatabase(blob: Blob): Promise<void> {
+  await importInto(db, blob, { clearTablesBeforeImport: true });
+  await useCharacterStore.persist.rehydrate();
 }

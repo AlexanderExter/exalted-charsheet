@@ -1,8 +1,14 @@
 import { create } from "zustand";
-import { persist, subscribeWithSelector } from "zustand/middleware";
+import {
+  persist,
+  subscribeWithSelector,
+  createJSONStorage,
+  type StateStorage,
+} from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { createNewCharacter } from "@/lib/character-defaults";
 import { CharacterSchema, type Character } from "@/lib/character-types";
+import { db } from "@/lib/db";
 
 interface CharacterState {
   characters: Character[];
@@ -14,6 +20,37 @@ interface CharacterState {
   setCurrentCharacter: (id: string) => void;
   loadCharacters: (characters: Character[]) => void;
 }
+
+const dexieStorage: StateStorage = {
+  async getItem() {
+    const characters = await db.characters.toArray();
+    const meta = await db.metadata.get("currentCharacterId");
+    if (characters.length === 0) return null;
+    const currentCharacterId = meta?.value ?? null;
+    const currentCharacter =
+      characters.find(c => c.id === currentCharacterId) ?? null;
+    return JSON.stringify({
+      state: { characters, currentCharacterId, currentCharacter },
+      version: 0,
+    });
+  },
+  async setItem(_name, value) {
+    const { state } = JSON.parse(value) as { state: CharacterState };
+    const chars = CharacterSchema.array().parse(state.characters) as Character[];
+    await db.transaction("rw", db.characters, db.metadata, async () => {
+      await db.characters.clear();
+      await db.characters.bulkPut(chars);
+      await db.metadata.put({
+        key: "currentCharacterId",
+        value: state.currentCharacterId,
+      });
+    });
+  },
+  async removeItem() {
+    await db.characters.clear();
+    await db.metadata.clear();
+  },
+};
 
 export const useCharacterStore = create<CharacterState>()(
   subscribeWithSelector(
@@ -69,6 +106,7 @@ export const useCharacterStore = create<CharacterState>()(
       })),
       {
         name: "exalted-characters",
+        storage: createJSONStorage(() => dexieStorage),
         merge: (persistedState, currentState) => {
           try {
             const persisted = persistedState as Partial<CharacterState>;
