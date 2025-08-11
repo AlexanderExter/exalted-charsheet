@@ -1,8 +1,9 @@
 import { create } from "zustand";
-import { persist, subscribeWithSelector } from "zustand/middleware";
+import { persist, subscribeWithSelector, type PersistStorage } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { createNewCharacter } from "@/lib/character-defaults";
 import { CharacterSchema, type Character } from "@/lib/character-types";
+import superjson from "superjson";
 
 interface CharacterState {
   characters: Character[];
@@ -69,6 +70,18 @@ export const useCharacterStore = create<CharacterState>()(
       })),
       {
         name: "exalted-characters",
+        storage: {
+          getItem: name => {
+            const str = localStorage.getItem(name);
+            return str ? superjson.parse(str) : null;
+          },
+          setItem: (name, value) => {
+            localStorage.setItem(name, superjson.stringify(value));
+          },
+          removeItem: name => {
+            localStorage.removeItem(name);
+          },
+        } as PersistStorage<CharacterState>,
         merge: (persistedState, currentState) => {
           try {
             const persisted = persistedState as Partial<CharacterState>;
