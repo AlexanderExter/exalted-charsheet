@@ -25,7 +25,7 @@ export const DicePoolEditor: React.FC = React.memo(() => {
   React.useEffect(() => {
     const subscription = form.watch(value => {
       if (form.formState.isValid) {
-        updateCharacter({ dicePool: value });
+        updateCharacter({ dicePool: dicePoolFormSchema.parse(value) });
       }
     });
     return () => subscription.unsubscribe();
