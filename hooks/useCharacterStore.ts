@@ -35,21 +35,16 @@ export const useCharacterStore = create<CharacterState>()(
           state.currentCharacterId = char.id;
           state.currentCharacter = char;
         });
-        void saveCharacterToDB(char);
-        void setCurrentCharacterIdInDB(char.id);
       },
       updateCurrentCharacter: updates => {
         const id = get().currentCharacterId;
         if (!id) return;
-        let updated: Character | undefined;
         set(state => {
           const char = state.characters.find(c => c.id === id);
           if (!char) return;
           Object.assign(char, updates);
           state.currentCharacter = char;
-          updated = char;
         });
-        if (updated) void saveCharacterToDB(updated);
       },
       deleteCharacter: id => {
         let newCurrentId: string | null = null;
@@ -65,15 +60,12 @@ export const useCharacterStore = create<CharacterState>()(
               state.characters.find(c => c.id === state.currentCharacterId) ?? null;
           }
         });
-        void deleteCharacterFromDB(id);
-        void setCurrentCharacterIdInDB(newCurrentId);
       },
       setCurrentCharacter: id => {
         set(state => {
           state.currentCharacterId = id;
           state.currentCharacter = state.characters.find(c => c.id === id) ?? null;
         });
-        void setCurrentCharacterIdInDB(id);
       },
       loadCharacters: async () => {
         const [charsFromDB, currentId] = await Promise.all([
@@ -94,6 +86,47 @@ export const useCharacterStore = create<CharacterState>()(
 );
 
 void useCharacterStore.getState().loadCharacters();
+
+let lastSavePromise: Promise<void> = Promise.resolve();
+
+useCharacterStore.subscribe(
+  state => ({
+    characters: state.characters,
+    currentCharacterId: state.currentCharacterId,
+  }),
+  ({ characters, currentCharacterId }, prev) => {
+    lastSavePromise = lastSavePromise.then(async () => {
+      const prevChars = prev?.characters ?? [];
+      const prevId = prev?.currentCharacterId;
+
+      const prevMap = new Map(prevChars.map(c => [c.id, c]));
+      const currMap = new Map(characters.map(c => [c.id, c]));
+
+      const operations: Promise<void>[] = [];
+
+      for (const char of characters) {
+        const prevChar = prevMap.get(char.id);
+        if (!prevChar || JSON.stringify(prevChar) !== JSON.stringify(char)) {
+          operations.push(saveCharacterToDB(char));
+        }
+      }
+
+      for (const prevChar of prevChars) {
+        if (!currMap.has(prevChar.id)) {
+          operations.push(deleteCharacterFromDB(prevChar.id));
+        }
+      }
+
+      if (currentCharacterId !== prevId) {
+        operations.push(setCurrentCharacterIdInDB(currentCharacterId));
+      }
+
+      await Promise.all(operations);
+    });
+  }
+);
+
+export const waitForCharacterStoreSave = () => lastSavePromise;
 
 export const subscribeToCharacterStore = <T>(
   selector: (state: CharacterState) => T,

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { waitForCharacterStoreSave } from "@/hooks/useCharacterStore";
 
 interface UseAutoSaveReturn {
   isSaving: boolean;
@@ -32,12 +33,11 @@ export const useAutoSave = <T>(
     timeoutRef.current = setTimeout(() => {
       if (!isMountedRef.current) return;
 
-      // Persist middleware handles saving; we only update UI indicators
       setIsSaving(true);
-      // briefly show the saving state then update the timestamp
-      innerTimeoutRef.current = setTimeout(() => {
+      innerTimeoutRef.current = setTimeout(async () => {
         if (!isMountedRef.current) return;
-
+        await waitForCharacterStoreSave();
+        if (!isMountedRef.current) return;
         setIsSaving(false);
         setLastSaved(new Date());
       }, 500);
