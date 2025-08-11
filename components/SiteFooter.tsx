@@ -22,6 +22,7 @@ export default function SiteFooter() {
         const legalText = await legalResponse.text();
         setLegalContent(legalText);
       } catch (error) {
+        console.error(error);
         setAboutContent("# About\n\nInformation about this application.");
         setLegalContent("# Legal\n\nLegal information and disclaimers.");
       }
