@@ -34,8 +34,8 @@ export interface CharacterCalculations {
 
   // Attribute/ability helpers
   highestAttribute: number;
-  getAttributeTotal: (attributeKey: string) => number;
-  getAbilityTotal: (abilityKey: string) => number;
+  getAttributeTotal: (attributeKey: AttributeType) => number;
+  getAbilityTotal: (abilityKey: AbilityType) => number;
 
   // Dice pool calculation
   dicePoolResult: DicePoolResult;

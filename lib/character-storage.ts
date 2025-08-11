@@ -62,7 +62,8 @@ export async function importCharacters(file: File): Promise<Character[]> {
   }));
 
   if (db) {
-    await Promise.all(characters.map(char => db.characters.put(char)));
+    const database = db;
+    await Promise.all(characters.map(char => database.characters.put(char)));
   }
 
   return characters;
