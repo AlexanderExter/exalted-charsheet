@@ -54,7 +54,7 @@ export const useCharacterStore = create<CharacterState>()(
         });
       },
       loadCharacters: characters => {
-        const parsed = CharacterSchema.array().parse(characters);
+        const parsed = CharacterSchema.array().parse(characters) as Character[];
         set({
           characters: parsed,
           currentCharacterId: parsed[0]?.id ?? null,

@@ -42,9 +42,9 @@ export async function exportCharacters(
 export async function importCharacters(file: File): Promise<Character[]> {
   const text = await file.text();
   const importedData = JSON.parse(text);
-  const parsed = Array.isArray(importedData)
-    ? CharacterSchema.array().parse(importedData)
-    : [CharacterSchema.parse(importedData)];
+  const parsed: Character[] = Array.isArray(importedData)
+    ? (CharacterSchema.array().parse(importedData) as Character[])
+    : [CharacterSchema.parse(importedData) as Character];
 
   return parsed.map(char => ({
     ...createNewCharacter(char.name ?? "Unnamed"),
