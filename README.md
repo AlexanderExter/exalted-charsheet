@@ -16,6 +16,7 @@
 - [Quick Start](#quick-start)
 - [Tab Overview](#tab-overview)
 - [Data Management](#data-management)
+- [Storage](#storage)
 - [Documentation](#documentation)
 - [Technical Stack](#technical-stack)
 - [Contributing](#contributing)
@@ -33,7 +34,7 @@
 
 - **Multi-Character Management**: Create, switch, and manage multiple characters
 - **Complete Character Tracking**: All Exalted: Essence mechanics supported
-- **Persistent Storage**: Auto-save to browser localStorage
+- **Persistent Storage**: Dexie-backed IndexedDB auto-save
 - **Import/Export**: Full data portability via JSON
 - **Combat Support**: Dice pools, weapon stats, power tracking
 - **Social System**: Virtues, intimacies, resolve calculation
@@ -90,11 +91,19 @@
 - Automatic migration for older formats
 - Easy backup and sharing
 
-**Local Storage**
+**Dexie Storage**
 
 - Auto-save after each change
 - Persistent across sessions
-- Handles migrations on update
+- Handles schema migrations on update
+
+---
+
+## 🗃️ Storage
+
+Character data is persisted using [Dexie](https://dexie.org/), a wrapper around
+the browser's IndexedDB API. This approach supports large rosters, offline
+access, and versioned migrations beyond localStorage limits.
 
 ---
 
@@ -114,7 +123,7 @@
 - **Build**: Turbopack (dev), Next.js (prod)
 - **Styling**: Tailwind CSS 4, CSS variables
 - **Icons**: Lucide React
-- **Storage**: Browser localStorage (custom hooks)
+- **Storage**: Dexie (IndexedDB) for character data
 - **Deployment**: Static export
 
 ---
@@ -147,7 +156,7 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ## 🐛 Known Issues
 
-- Storage limited by browser localStorage
+- Storage limited by browser IndexedDB quotas
 - Basic markdown support only
 - Combat steps are static (not dynamic)
 - Some edge cases handled via text fields
