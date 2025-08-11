@@ -42,15 +42,48 @@ export default function SiteFooter() {
     <>
       <footer className="border-t bg-background mt-8">
         <div className="container mx-auto px-4 py-6 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Exalted Community. All rights reserved.</p>
-          <div className="mt-2 flex justify-center gap-4">
-            <button onClick={() => setShowAboutModal(true)} className="hover:underline">
-              About
-            </button>
-            <button onClick={() => setShowLegalModal(true)} className="hover:underline">
-              Legal
-            </button>
+          <div className="grid gap-6 sm:grid-cols-3">
+            <div>
+              <h3 className="font-semibold mb-2">Resources</h3>
+              <div className="flex justify-center gap-2">
+                <Button asChild size="sm">
+                  <a
+                    href="https://www.drivethrurpg.com/browse.php?keywords=Exalted&affiliate_id="
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Buy Exalted Books
+                  </a>
+                </Button>
+                <Button asChild size="sm">
+                  <a
+                    href="https://discord.gg/exalted"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Official Discord
+                  </a>
+                </Button>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-2">About</h3>
+              <div className="flex justify-center">
+                <button onClick={() => setShowAboutModal(true)} className="hover:underline">
+                  About
+                </button>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-2">Legal</h3>
+              <div className="flex justify-center">
+                <button onClick={() => setShowLegalModal(true)} className="hover:underline">
+                  Legal
+                </button>
+              </div>
+            </div>
           </div>
+          <p className="mt-6">&copy; {new Date().getFullYear()} Exalted Community. All rights reserved.</p>
         </div>
       </footer>
 
