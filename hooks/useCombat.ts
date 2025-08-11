@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { produce } from "immer";
 import type { Character, DramaticInjury } from "@/lib/character-types";
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations";
 import { v4 as uuidv4 } from "uuid";
@@ -33,11 +34,12 @@ export function useCombat({ character, updateCharacter, calculations }: UseComba
       isHealed: false,
     };
 
+    const updatedHealth = produce(character.health, draft => {
+      draft.dramaticInjuries.push(newInjury);
+    });
+
     updateCharacter({
-      health: {
-        ...character.health,
-        dramaticInjuries: [...(character.health?.dramaticInjuries || []), newInjury],
-      },
+      health: updatedHealth,
     });
   }, [character, updateCharacter]);
 
@@ -45,13 +47,15 @@ export function useCombat({ character, updateCharacter, calculations }: UseComba
     (id: string, field: keyof DramaticInjury, value: DramaticInjury[keyof DramaticInjury]) => {
       if (!character) return;
 
+      const updatedHealth = produce(character.health, draft => {
+        const injury = draft.dramaticInjuries.find(inj => inj.id === id);
+        if (injury) {
+          (injury as any)[field] = value;
+        }
+      });
+
       updateCharacter({
-        health: {
-          ...character.health,
-          dramaticInjuries: (character.health?.dramaticInjuries || []).map(injury =>
-            injury.id === id ? { ...injury, [field]: value } : injury
-          ),
-        },
+        health: updatedHealth,
       });
     },
     [character, updateCharacter]
@@ -61,13 +65,15 @@ export function useCombat({ character, updateCharacter, calculations }: UseComba
     (id: string) => {
       if (!character) return;
 
+      const updatedHealth = produce(character.health, draft => {
+        const index = draft.dramaticInjuries.findIndex(injury => injury.id === id);
+        if (index !== -1) {
+          draft.dramaticInjuries.splice(index, 1);
+        }
+      });
+
       updateCharacter({
-        health: {
-          ...character.health,
-          dramaticInjuries: (character.health?.dramaticInjuries || []).filter(
-            injury => injury.id !== id
-          ),
-        },
+        health: updatedHealth,
       });
     },
     [character, updateCharacter]

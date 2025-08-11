@@ -1,4 +1,5 @@
 import React from "react";
+import { produce } from "immer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -46,7 +47,9 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                       Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                     );
                     updateCharacter({
-                      staticValues: { ...character.staticValues, defenseModifier: value },
+                      staticValues: produce(character.staticValues, draft => {
+                        draft.defenseModifier = value;
+                      }),
                     });
                   }}
                   className="w-12 text-center text-xs"
@@ -76,7 +79,9 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                       Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                     );
                     updateCharacter({
-                      staticValues: { ...character.staticValues, evasionModifier: value },
+                      staticValues: produce(character.staticValues, draft => {
+                        draft.evasionModifier = value;
+                      }),
                     });
                   }}
                   className="w-12 text-center text-xs"
@@ -106,7 +111,9 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                       Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                     );
                     updateCharacter({
-                      staticValues: { ...character.staticValues, parryModifier: value },
+                      staticValues: produce(character.staticValues, draft => {
+                        draft.parryModifier = value;
+                      }),
                     });
                   }}
                   className="w-12 text-center text-xs"
@@ -140,7 +147,9 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                       Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                     );
                     updateCharacter({
-                      staticValues: { ...character.staticValues, resolveModifier: value },
+                      staticValues: produce(character.staticValues, draft => {
+                        draft.resolveModifier = value;
+                      }),
                     });
                   }}
                   className="w-12 text-center text-xs"
@@ -177,7 +186,9 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                       Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                     );
                     updateCharacter({
-                      staticValues: { ...character.staticValues, soakModifier: value },
+                      staticValues: produce(character.staticValues, draft => {
+                        draft.soakModifier = value;
+                      }),
                     });
                   }}
                   className="w-12 text-center text-xs"
@@ -214,7 +225,9 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
                       Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                     );
                     updateCharacter({
-                      staticValues: { ...character.staticValues, hardnessModifier: value },
+                      staticValues: produce(character.staticValues, draft => {
+                        draft.hardnessModifier = value;
+                      }),
                     });
                   }}
                   className="w-12 text-center text-xs"
