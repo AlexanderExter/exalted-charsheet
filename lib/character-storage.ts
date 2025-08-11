@@ -3,6 +3,7 @@ import { createNewCharacter } from "@/lib/character-defaults";
 import { db, getAllCharacters } from "@/lib/db";
 import { waitForCharacterStoreSave } from "@/hooks/useCharacterStore";
 import superjson from "superjson";
+import { logError } from "@/lib/logger";
 
 export async function exportCharacter(character: Character): Promise<void> {
   const dataStr = JSON.stringify(superjson.serialize(character), null, 2);
@@ -48,11 +49,11 @@ export async function importCharacters(file: File): Promise<Character[]> {
   try {
     importedData = superjson.parse(text);
   } catch (err) {
-    console.error("Failed to parse with superjson:", err);
+    logError("Failed to parse with superjson:", err);
     try {
       importedData = JSON.parse(text);
     } catch (jsonErr) {
-      console.error("Failed to parse with JSON:", jsonErr);
+      logError("Failed to parse with JSON:", jsonErr);
       throw new Error("Unable to parse character data");
     }
   }

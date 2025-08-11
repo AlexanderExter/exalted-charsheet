@@ -10,6 +10,7 @@ import { useCharacterManagement } from "@/hooks/useCharacterManagement";
 import type { Character } from "@/lib/character-types";
 import { importCharacters, exportCharacter } from "@/lib/character-storage";
 import { toast } from "sonner";
+import { logError } from "@/lib/logger";
 
 const ExaltedCharacterManager = () => {
   const {
@@ -34,7 +35,7 @@ const ExaltedCharacterManager = () => {
     try {
       await exportCharacter(character);
     } catch (err) {
-      console.error(err);
+      logError(err);
       toast.error("Failed to export character. Please try again.");
     }
   };
@@ -48,7 +49,7 @@ const ExaltedCharacterManager = () => {
       }
       toast.success(`Successfully imported ${imported.length} character(s)`);
     } catch (err) {
-      console.error(err);
+      logError(err);
       toast.error(
         "Failed to import character(s). Please ensure the file is a valid character export."
       );
