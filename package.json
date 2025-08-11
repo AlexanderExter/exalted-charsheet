@@ -58,6 +58,11 @@
     "postinstall": "echo \"Setup complete! Run 'npm run dev' to start development.\"",
     "validate": "npm run check && npm run build",
     "validate:strict": "npm run check:strict && npm run build:production",
+    "// Version": "Keep docs in sync with package.json",
+    "sync:version": "node scripts/sync-version.js",
+    "version": "npm run sync:version",
+    "// CI/CD": "Scripts for continuous integration",
+
     "ci:build": "npm run build:production",
     "ci:test": "npm run check:strict",
     "ci:lint": "npm run lint:strict",

@@ -1,6 +1,6 @@
 # Exalted: Essence Character Manager
 
-[![Version](https://img.shields.io/badge/version-0.0.5--alpha-orange.svg)](https://github.com/AlexanderExter/exalted-charsheet/releases)
+[![Version](https://img.shields.io/badge/version-0.0.6-orange.svg)](https://github.com/AlexanderExter/exalted-charsheet/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![React](https://img.shields.io/badge/React-19.1.0-blue.svg)](https://reactjs.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-15.4.3-black.svg)](https://nextjs.org/)
@@ -137,17 +137,11 @@ We welcome contributions! See [Contributing Guide](CONTRIBUTING.md).
 
 See [CHANGELOG.md](CHANGELOG.md) for full history.
 
-**v0.0.5-alpha (Current):**
+**v0.0.6 (Current):**
 
-- V0-accelerated character manager
-- Modern shadcn/ui component architecture
-- Complete character sheet functionality
-- 7-tab system (Core Stats, Combat, Equipment, Powers, Socials, Advancement, Rulings)
-- Import/export system
-- Local storage persistence
-- Mobile-responsive design
-- TypeScript + Radix UI
-- Comprehensive documentation
+- Persist imported characters to Dexie sequentially
+- Export characters from Dexie storage
+- Guard Dexie usage for server environments
 
 ---
 
