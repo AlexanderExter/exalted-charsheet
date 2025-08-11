@@ -73,8 +73,7 @@ export async function backupDatabase(
   }, 100);
 }
 
-export async function restoreDatabase(file: File): Promise<void> {
-  const blob = file instanceof Blob ? file : new Blob([await file.arrayBuffer()]);
+export async function restoreDatabase(blob: Blob): Promise<void> {
   await importInto(db, blob, { clearTablesBeforeImport: true });
   await useCharacterStore.persist.rehydrate();
 }
