@@ -1,8 +1,16 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormControl,
+} from "@/components/ui/form";
+import { useFormContext } from "react-hook-form";
 import { calculateStatTotal } from "@/lib/exalted-utils";
 import { useCharacterContext } from "@/hooks/CharacterContext";
+import type { DicePoolFormValues } from "@/lib/form-schemas";
 
 const attributes = [
   {
@@ -26,38 +34,45 @@ const attributes = [
 ];
 
 export const AttributeSelector: React.FC = () => {
-  const { character, updateCharacter } = useCharacterContext();
+  const { character } = useCharacterContext();
+  const { control } = useFormContext<DicePoolFormValues>();
 
   return (
-    <div>
-      <Label className="block text-sm font-medium text-gray-600 mb-1">Attribute</Label>
-      <div className="flex gap-2">
-        {attributes.map(attr => (
-          <Button
-            key={attr.key}
-            variant={character?.dicePool?.attribute === attr.key ? "default" : "outline"}
-            size="sm"
-            onClick={() =>
-              updateCharacter({
-                dicePool: { ...character.dicePool, attribute: attr.key },
-              })
-            }
-            className={
-              character?.dicePool?.attribute === attr.key ? attr.activeClass : attr.inactiveClass
-            }
-          >
-            <div>{attr.label}</div>
-            <div className="text-xs opacity-75">
-              (
-              {calculateStatTotal(
-                character?.attributes?.[attr.key] || { base: 0, added: 0, bonus: 0 }
-              )}
-              )
+    <FormField
+      control={control}
+      name="attribute"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="block text-sm font-medium text-gray-600 mb-1">
+            Attribute
+          </FormLabel>
+          <FormControl>
+            <div className="flex gap-2">
+              {attributes.map(attr => (
+                <Button
+                  key={attr.key}
+                  type="button"
+                  variant={field.value === attr.key ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => field.onChange(attr.key)}
+                  className={field.value === attr.key ? attr.activeClass : attr.inactiveClass}
+                >
+                  <div>{attr.label}</div>
+                  <div className="text-xs opacity-75">
+                    (
+                    {calculateStatTotal(
+                      character?.attributes?.[attr.key] || { base: 0, added: 0, bonus: 0 }
+                    )}
+                    )
+                  </div>
+                </Button>
+              ))}
             </div>
-          </Button>
-        ))}
-      </div>
-    </div>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 };
 
