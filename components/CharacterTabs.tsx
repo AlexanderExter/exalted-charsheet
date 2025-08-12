@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import tabs from "@/components/character-tabs/tabs-config";
+import tabs from "@/components/character-tabs/tabsConfig";
 
 interface CharacterTabsProps {
   activeTab: string;
