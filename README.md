@@ -77,7 +77,7 @@
 | **Combat**      | Battle mechanics       | Health, Dice pools, Static values |
 | **Equipment**   | Gear management        | Weapons, Armor, Tag references    |
 | **Powers**      | Magical abilities      | Charms, Spells, Descriptions      |
-| **Socials**     | Social mechanics       | Virtues, Intimacies, Resolve      |
+| **Social**      | Social mechanics       | Virtues, Intimacies, Resolve      |
 | **Advancement** | Character progression  | Milestones, XP tracking           |
 | **Rulings**     | GM decisions           | House rules, edge cases           |
 

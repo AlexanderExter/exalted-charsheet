@@ -46,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### User Interface
 
-- 📱 **7-Tab Organization** - Core Stats, Combat, Equipment, Powers, Socials, Advancement, Rulings
+- 📱 **7-Tab Organization** - Core Stats, Combat, Equipment, Powers, Social, Advancement, Rulings
 - 📱 **Mobile-Responsive Design** - Works across devices and screen sizes
 - 🎨 **Intuitive Interface** - Follows game terminology and logical organization
 - ⚡ **Real-Time Calculations** - All derived values update automatically
