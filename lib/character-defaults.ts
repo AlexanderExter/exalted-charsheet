@@ -150,28 +150,6 @@ export const createCharacterTemplate = (name: string, type: ExaltType): Characte
   return character;
 };
 
-// Preset character templates for different Exalt types
-export const createSolarCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "solar");
-
-export const createDragonBloodCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "dragon-blood");
-
-export const createLunarCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "lunar");
-
-export const createSiderealCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "sidereal");
-
-export const createAbyssalCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "abyssal");
-
-export const createLiminalCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "liminal");
-
-export const createExigentCharacter = (name: string): Character =>
-  createCharacterTemplate(name, "exigent");
-
 // Character template selector
 const validExaltTypes: ExaltType[] = [
   "solar",
