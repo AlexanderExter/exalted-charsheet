@@ -1,3 +1,5 @@
+'use client';
+
 // Social Tab Component - Virtues, intimacies, and resolve management
 
 import React, { useCallback } from "react";

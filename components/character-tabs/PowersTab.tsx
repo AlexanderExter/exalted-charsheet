@@ -1,3 +1,5 @@
+'use client';
+
 // Powers Tab Component - Charms and Spells management
 
 import React, { useCallback } from "react";

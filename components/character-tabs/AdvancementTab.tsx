@@ -1,3 +1,5 @@
+'use client';
+
 // Advancement Tab Component - Milestones and character progression management
 
 import React, { useCallback, useState } from "react";

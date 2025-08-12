@@ -1,3 +1,5 @@
+'use client';
+
 // Combat Tab Component - Essence, health, static values, and combat mechanics
 
 import React from "react";
