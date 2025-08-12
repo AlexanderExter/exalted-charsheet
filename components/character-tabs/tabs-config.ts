@@ -52,8 +52,8 @@ export const tabs: TabConfig[] = [
     component: PowersTab,
   },
   {
-    id: "socials",
-    label: "Socials",
+    id: "social",
+    label: "Social",
     icon: Users,
     component: SocialTab,
   },

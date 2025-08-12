@@ -66,7 +66,7 @@ This is a Next.js 15 application using the App Router pattern for an Exalted: Es
 
 - `ExaltedCharacterManager` - Main application component handling character selection and management
 - `CharacterProvider` - Context provider wrapping character editing functionality
-- Tabbed interface with 7 main sections: Core Stats, Combat, Equipment, Powers, Socials, Advancement, Rulings
+- Tabbed interface with 7 main sections: Core Stats, Combat, Equipment, Powers, Social, Advancement, Rulings
 
 **Data Flow**:
 
