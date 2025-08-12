@@ -174,7 +174,7 @@ MIT License – see [LICENSE](LICENSE) for details.
 - **Onyx Path Publishing** – Exalted: Essence system
 - **React Team** – Framework
 - **Tailwind CSS** – Styling
-- **Exalted Community** – Feedback & testing
+- **Exalted Community** – Feedback and suggestions
 
 ---
 
