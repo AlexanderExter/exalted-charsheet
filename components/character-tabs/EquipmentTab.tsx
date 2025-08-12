@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // Equipment Tab Component - Armor, weapons, and equipment management
 

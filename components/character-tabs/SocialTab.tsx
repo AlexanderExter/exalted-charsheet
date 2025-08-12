@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // Social Tab Component - Virtues, intimacies, and resolve management
 
