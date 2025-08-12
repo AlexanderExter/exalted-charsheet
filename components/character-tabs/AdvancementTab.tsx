@@ -18,6 +18,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import type { AdvancementEntry, AdvancementStatus } from "@/lib/character-types";
 import { useCharacterContext } from "@/hooks/CharacterContext";
+import { SortableList } from "@/components/common/SortableList";
 
 export const AdvancementTab: React.FC = React.memo(() => {
   const { character, updateCharacter } = useCharacterContext();
@@ -277,19 +278,20 @@ export const AdvancementTab: React.FC = React.memo(() => {
             {(character?.advancement || []).length === 0 ? (
               <p className="text-gray-500 italic">No advancement entries yet.</p>
             ) : (
-              <div className="space-y-4">
-                {(character?.advancement || []).map(entry => (
-                  <div
-                    key={entry.id}
-                    className="p-4 bg-white rounded border border-gray-200 space-y-3"
-                  >
+              <SortableList
+                items={character?.advancement || []}
+                onReorder={items => updateCharacter({ advancement: items })}
+                renderItem={entry => (
+                  <>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
                         <Label htmlFor={`entry-item-${entry.id}`}>Advancement Item</Label>
                         <Input
                           id={`entry-item-${entry.id}`}
                           value={entry.item}
-                          onChange={e => updateAdvancementEntry(entry.id, "item", e.target.value)}
+                          onChange={e =>
+                            updateAdvancementEntry(entry.id, "item", e.target.value)
+                          }
                           placeholder="e.g., Increase Awareness to 3, Learn Flying Blade Technique"
                         />
                       </div>
@@ -343,9 +345,9 @@ export const AdvancementTab: React.FC = React.memo(() => {
                         Delete
                       </Button>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  </>
+                )}
+              />
             )}
           </CardContent>
         )}

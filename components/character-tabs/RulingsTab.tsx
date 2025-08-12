@@ -18,6 +18,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import type { Ruling } from "@/lib/character-types";
 import { useCharacterContext } from "@/hooks/CharacterContext";
+import { SortableList } from "@/components/common/SortableList";
 
 export const RulingsTab: React.FC = React.memo(() => {
   const { character, updateCharacter } = useCharacterContext();
@@ -72,12 +73,11 @@ export const RulingsTab: React.FC = React.memo(() => {
           {(character.rulings || []).length === 0 ? (
             <p className="text-gray-500 italic">No rulings recorded yet.</p>
           ) : (
-            <div className="space-y-4">
-              {(character.rulings || []).map(ruling => (
-                <div
-                  key={ruling.id}
-                  className="p-4 bg-white rounded border border-gray-200 space-y-3"
-                >
+            <SortableList
+              items={character.rulings || []}
+              onReorder={items => updateCharacter({ rulings: items })}
+              renderItem={ruling => (
+                <>
                   <div className="flex items-center gap-2">
                     <div className="flex-1">
                       <Label htmlFor={`title-${ruling.id}`}>Title</Label>
@@ -125,9 +125,9 @@ export const RulingsTab: React.FC = React.memo(() => {
                     />
                   </div>
                   <div className="text-xs text-gray-500">Created: {ruling.dateCreated}</div>
-                </div>
-              ))}
-            </div>
+                </>
+              )}
+            />
           )}
         </CardContent>
       </Card>

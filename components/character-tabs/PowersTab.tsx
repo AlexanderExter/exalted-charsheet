@@ -18,6 +18,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import type { Charm, Spell, SpellCircle } from "@/lib/character-types";
 import { useCharacterContext } from "@/hooks/CharacterContext";
+import { SortableList } from "@/components/common/SortableList";
 
 export const PowersTab: React.FC = React.memo(() => {
   const { character, updateCharacter } = useCharacterContext();
@@ -116,12 +117,11 @@ export const PowersTab: React.FC = React.memo(() => {
           {(character.charms || []).length === 0 ? (
             <p className="text-gray-500 italic">No charms yet.</p>
           ) : (
-            <div className="space-y-4">
-              {(character.charms || []).map(charm => (
-                <div
-                  key={charm.id}
-                  className="p-4 bg-white rounded border border-gray-200 space-y-3"
-                >
+            <SortableList
+              items={character.charms || []}
+              onReorder={items => updateCharacter({ charms: items })}
+              renderItem={charm => (
+                <>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
                       <Label htmlFor={`charm-name-${charm.id}`}>Name</Label>
@@ -149,7 +149,11 @@ export const PowersTab: React.FC = React.memo(() => {
                       <Select
                         value={charm.step?.toString() || "none"}
                         onValueChange={value =>
-                          updateCharm(charm.id, "step", value === "none" ? null : parseInt(value))
+                          updateCharm(
+                            charm.id,
+                            "step",
+                            value === "none" ? null : parseInt(value)
+                          )
                         }
                       >
                         <SelectTrigger>
@@ -195,9 +199,9 @@ export const PowersTab: React.FC = React.memo(() => {
                       Delete
                     </Button>
                   </div>
-                </div>
-              ))}
-            </div>
+                </>
+              )}
+            />
           )}
         </CardContent>
       </Card>
@@ -217,12 +221,11 @@ export const PowersTab: React.FC = React.memo(() => {
           {(character.spells || []).length === 0 ? (
             <p className="text-gray-500 italic">No spells yet.</p>
           ) : (
-            <div className="space-y-4">
-              {(character.spells || []).map(spell => (
-                <div
-                  key={spell.id}
-                  className="p-4 bg-white rounded border border-gray-200 space-y-3"
-                >
+            <SortableList
+              items={character.spells || []}
+              onReorder={items => updateCharacter({ spells: items })}
+              renderItem={spell => (
+                <>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
                       <Label htmlFor={`spell-name-${spell.id}`}>Name</Label>
@@ -314,9 +317,9 @@ export const PowersTab: React.FC = React.memo(() => {
                       Delete
                     </Button>
                   </div>
-                </div>
-              ))}
-            </div>
+                </>
+              )}
+            />
           )}
         </CardContent>
       </Card>
