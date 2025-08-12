@@ -63,12 +63,14 @@ export const WeaponEditor: React.FC<WeaponEditorProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
         <div>
-          <Label htmlFor={`weapon-defence-${weapon.id}`}>Defence</Label>
+          <Label htmlFor={`weapon-defense-${weapon.id}`}>Defense</Label>
           <Input
-            id={`weapon-defence-${weapon.id}`}
+            id={`weapon-defense-${weapon.id}`}
             type="number"
-            value={weapon.defence}
-            onChange={e => updateWeapon(weapon.id, "defence", Number.parseInt(e.target.value) || 0)}
+            value={weapon.defense}
+            onChange={e =>
+              updateWeapon(weapon.id, "defense", Number.parseInt(e.target.value) || 0)
+            }
           />
         </div>
         <div>

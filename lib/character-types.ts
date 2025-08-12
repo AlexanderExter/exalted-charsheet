@@ -100,7 +100,7 @@ export const WeaponSchema = z.object({
   name: z.string(),
   accuracy: z.number(),
   damage: z.number(),
-  defence: z.number(),
+  defense: z.number(),
   overwhelming: z.number(),
   range: WeaponRangeSchema,
   tags: z.array(z.string()),

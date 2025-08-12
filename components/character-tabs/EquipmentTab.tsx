@@ -62,7 +62,7 @@ export const EquipmentTab: React.FC = React.memo(() => {
       name: "",
       accuracy: 0,
       damage: 0,
-      defence: 0,
+      defense: 0,
       overwhelming: 0,
       range: "close",
       tags: [],
