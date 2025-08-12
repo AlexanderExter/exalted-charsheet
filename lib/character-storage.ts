@@ -1,5 +1,4 @@
 import { CharacterSchema, type Character } from "@/lib/character-types";
-import { createNewCharacter } from "@/lib/character-defaults";
 import { db, getAllCharacters } from "@/lib/db";
 import { waitForCharacterStoreSave } from "@/hooks/useCharacterStore";
 import superjson from "superjson";
@@ -49,20 +48,14 @@ export async function importCharacters(file: File): Promise<Character[]> {
   try {
     importedData = superjson.parse(text);
   } catch (err) {
-    logError("Failed to parse with superjson:", err);
-    try {
-      importedData = JSON.parse(text);
-    } catch (jsonErr) {
-      logError("Failed to parse with JSON:", jsonErr);
-      throw new Error("Unable to parse character data");
-    }
+    logError("Failed to parse character data:", err);
+    throw new Error("Unable to parse character data");
   }
-  const parsed: Character[] = Array.isArray(importedData)
-    ? (CharacterSchema.array().parse(importedData) as Character[])
-    : [CharacterSchema.parse(importedData) as Character];
+  const parsed = Array.isArray(importedData)
+    ? CharacterSchema.array().parse(importedData)
+    : [CharacterSchema.parse(importedData)];
 
-  const characters = parsed.map(char => ({
-    ...createNewCharacter(char.name ?? "Unnamed"),
+  const characters: Character[] = parsed.map(char => ({
     ...char,
     id: crypto.randomUUID(),
   }));
