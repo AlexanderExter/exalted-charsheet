@@ -40,7 +40,11 @@ export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence
           type="number"
           value={rating}
           onChange={e => {
-            const value = Math.max(1, Math.min(5, Number.parseInt(e.target.value) || 0));
+            let value = parseInt(e.target.value, 10);
+            if (isNaN(value)) {
+              value = rating;
+            }
+            value = Math.max(1, Math.min(5, value));
             onChange({ ...essence, rating: value, motes: motesByEssence[value] ?? 0 });
           }}
           className="w-20 text-center"
@@ -58,7 +62,11 @@ export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence
           type="number"
           value={commitments}
           onChange={e => {
-            const value = Math.max(0, Number.parseInt(e.target.value) || 0);
+            let value = parseInt(e.target.value, 10);
+            if (isNaN(value)) {
+              value = 0;
+            }
+            value = Math.max(0, value);
             update("commitments", value);
           }}
           className="w-20 text-center"
@@ -71,7 +79,11 @@ export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence
           type="number"
           value={spent}
           onChange={e => {
-            const value = Math.max(0, Number.parseInt(e.target.value) || 0);
+            let value = parseInt(e.target.value, 10);
+            if (isNaN(value)) {
+              value = 0;
+            }
+            value = Math.max(0, value);
             update("spent", value);
           }}
           className="w-20 text-center"
