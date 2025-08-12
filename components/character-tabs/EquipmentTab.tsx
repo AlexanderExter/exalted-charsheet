@@ -1,3 +1,5 @@
+'use client';
+
 // Equipment Tab Component - Armor, weapons, and equipment management
 
 import React, { useCallback } from "react";

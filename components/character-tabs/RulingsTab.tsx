@@ -1,3 +1,5 @@
+'use client';
+
 // Rulings Tab Component - Character-specific rulings and house rules
 
 import React, { useCallback } from "react";

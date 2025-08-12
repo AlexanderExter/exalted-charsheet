@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import { produce } from "immer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
