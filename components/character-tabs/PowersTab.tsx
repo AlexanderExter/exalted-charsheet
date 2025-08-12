@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // Powers Tab Component - Charms and Spells management
 

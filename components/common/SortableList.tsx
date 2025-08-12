@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React from 'react';
 import { DndContext, type DragEndEvent } from '@dnd-kit/core';

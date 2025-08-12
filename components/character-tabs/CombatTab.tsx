@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // Combat Tab Component - Essence, health, static values, and combat mechanics
 

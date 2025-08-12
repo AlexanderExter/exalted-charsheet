@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // Advancement Tab Component - Milestones and character progression management
 

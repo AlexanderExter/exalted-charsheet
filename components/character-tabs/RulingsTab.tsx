@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // Rulings Tab Component - Character-specific rulings and house rules
 

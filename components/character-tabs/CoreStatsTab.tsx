@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // Core Stats Tab Component - Essence, attributes, abilities, and dice pool calculator
 
