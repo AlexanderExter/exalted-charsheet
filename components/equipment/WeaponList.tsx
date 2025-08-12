@@ -6,13 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Weapon } from "@/lib/character-types";
 import { WeaponEditor } from "@/components/equipment/WeaponEditor";
-import { DndContext, type DragEndEvent } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { SortableList } from "@/components/common/SortableList";
 
 interface WeaponListProps {
   weapons: Weapon[];
@@ -22,25 +16,6 @@ interface WeaponListProps {
   reorderWeapons: (weapons: Weapon[]) => void;
 }
 
-const SortableWeaponItem: React.FC<{
-  weapon: Weapon;
-  updateWeapon: (id: string, field: keyof Weapon, value: Weapon[keyof Weapon]) => void;
-  deleteWeapon: (id: string) => void;
-}> = ({ weapon, updateWeapon, deleteWeapon }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-    id: weapon.id,
-  });
-  const style: React.CSSProperties = {
-    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-    transition,
-  };
-  return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <WeaponEditor weapon={weapon} updateWeapon={updateWeapon} deleteWeapon={deleteWeapon} />
-    </div>
-  );
-};
-
 export const WeaponList: React.FC<WeaponListProps> = ({
   weapons,
   addWeapon,
@@ -48,15 +23,6 @@ export const WeaponList: React.FC<WeaponListProps> = ({
   deleteWeapon,
   reorderWeapons,
 }) => {
-  const handleDragEnd = ({ active, over }: DragEndEvent) => {
-    if (!over || active.id === over.id) return;
-    const oldIndex = weapons.findIndex(w => w.id === active.id);
-    const newIndex = weapons.findIndex(w => w.id === over.id);
-    if (oldIndex !== -1 && newIndex !== -1) {
-      reorderWeapons(arrayMove(weapons, oldIndex, newIndex));
-    }
-  };
-
   return (
     <Card>
       <CardHeader>
@@ -72,20 +38,17 @@ export const WeaponList: React.FC<WeaponListProps> = ({
         {weapons.length === 0 ? (
           <p className="text-gray-500 italic">No weapons equipped.</p>
         ) : (
-          <DndContext onDragEnd={handleDragEnd}>
-            <SortableContext items={weapons.map(w => w.id)} strategy={verticalListSortingStrategy}>
-              <div className="space-y-4">
-                {weapons.map(w => (
-                  <SortableWeaponItem
-                    key={w.id}
-                    weapon={w}
-                    updateWeapon={updateWeapon}
-                    deleteWeapon={deleteWeapon}
-                  />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
+          <SortableList
+            items={weapons}
+            onReorder={reorderWeapons}
+            renderItem={w => (
+              <WeaponEditor
+                weapon={w}
+                updateWeapon={updateWeapon}
+                deleteWeapon={deleteWeapon}
+              />
+            )}
+          />
         )}
       </CardContent>
     </Card>
