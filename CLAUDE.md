@@ -27,11 +27,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run format` - Format code with Prettier
 - `npm run validate` - Full validation (type check + lint + build)
 
-### Testing
-
-- `npm test` - Run tests with Vitest
-- `npm run test:watch` - Run tests in watch mode
-
 ### Production
 
 - `npm run start` - Start production server
@@ -56,7 +51,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### CI/CD
 
 - `npm run ci:build` - Production build for CI
-- `npm run ci:test` - Run strict checks in CI
 - `npm run ci:lint` - Run strict linting in CI
 - `npm run ci:format` - Check formatting in CI
 
@@ -111,6 +105,3 @@ The character data model in `lib/character-types.ts` represents the complete Exa
 
 Built with shadcn/ui components based on Radix UI primitives, styled with Tailwind CSS 4. Uses Geist font family and includes toast notifications via Sonner.
 
-### Testing
-
-Uses Vitest with jsdom environment for component testing. Test files use `.test.ts` or `.test.tsx` extensions and are located in `__tests__` directories or alongside source files.

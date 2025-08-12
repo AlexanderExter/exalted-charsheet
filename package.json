@@ -47,8 +47,6 @@
     "check:strict": "npm run type-check:strict && npm run lint:strict",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css,mdx}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md,css,mdx}\"",
-    "test": "vitest run",
-    "test:watch": "vitest",
     "clean": "rimraf .next out node_modules/.cache dist",
     "clean:all": "rimraf .next out node_modules/.cache dist node_modules package-lock.json",
     "deps:update": "npm update && npm audit",
@@ -63,7 +61,6 @@
     "version": "npm run sync:version",
     "// CI/CD": "Scripts for continuous integration",
     "ci:build": "npm run build:production",
-    "ci:test": "npm run check:strict",
     "ci:lint": "npm run lint:strict",
     "ci:format": "npm run format:check"
   },
@@ -98,8 +95,6 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -109,14 +104,12 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.3",
     "eslint-config-prettier": "^10.1.8",
-    "jsdom": "^24.0.0",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.5",
     "typescript": "^5",
-    "vite-tsconfig-paths": "^5.1.2",
-    "vitest": "^3.2.4"
+    "vite-tsconfig-paths": "^5.1.2"
   },
   "browserslist": [
     "defaults",
