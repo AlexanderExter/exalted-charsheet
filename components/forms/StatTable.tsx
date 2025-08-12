@@ -49,9 +49,9 @@ export function StatTable<T extends string>({
         key: item.key,
         label: item.label,
         colorClass: item.colorClass || "text-gray-700",
-        stat: stats[item.key],
+        stat: stats[item.key] ?? { base: minBase, added: 0, bonus: 0 },
       })),
-    [config, stats]
+    [config, stats, minBase]
   );
 
   const columns = React.useMemo<ColumnDef<StatRow>[]>(
@@ -86,7 +86,7 @@ export function StatTable<T extends string>({
           </button>
         ),
         cell: ({ row }) => {
-          const stat = row.original.stat;
+          const stat = row.original.stat ?? { base: minBase, added: 0, bonus: 0 };
           return (
             <Input
               type="number"
@@ -117,7 +117,7 @@ export function StatTable<T extends string>({
           </button>
         ),
         cell: ({ row }) => {
-          const stat = row.original.stat;
+          const stat = row.original.stat ?? { base: minBase, added: 0, bonus: 0 };
           const maxAdded = Math.max(0, 5 - stat.base);
           return (
             <Input
@@ -149,7 +149,7 @@ export function StatTable<T extends string>({
           </button>
         ),
         cell: ({ row }) => {
-          const stat = row.original.stat;
+          const stat = row.original.stat ?? { base: minBase, added: 0, bonus: 0 };
           return (
             <Input
               type="number"
