@@ -13,7 +13,7 @@ interface EssencePanelProps {
   onChange: (essence: Essence) => void;
 }
 
-export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange }) => {
+export const EssencePanel: React.FC<EssencePanelProps> = React.memo(({ essence, onChange }) => {
   const animaValue = essence.anima || 0;
   const progressPercent = (animaValue / 10) * 100;
   const sliderColor =
@@ -107,7 +107,7 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange })
       </CardContent>
     </Card>
   );
-};
+});
 
 EssencePanel.displayName = "EssencePanel";
 

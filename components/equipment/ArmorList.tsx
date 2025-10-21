@@ -16,7 +16,7 @@ interface ArmorListProps {
   reorderArmor: (armor: ArmorPiece[]) => void;
 }
 
-export const ArmorList: React.FC<ArmorListProps> = ({
+export const ArmorList: React.FC<ArmorListProps> = React.memo(({
   armor,
   addArmor,
   updateArmor,
@@ -53,6 +53,6 @@ export const ArmorList: React.FC<ArmorListProps> = ({
       </CardContent>
     </Card>
   );
-};
+});
 
 ArmorList.displayName = "ArmorList";

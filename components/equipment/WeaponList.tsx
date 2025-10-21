@@ -16,7 +16,7 @@ interface WeaponListProps {
   reorderWeapons: (weapons: Weapon[]) => void;
 }
 
-export const WeaponList: React.FC<WeaponListProps> = ({
+export const WeaponList: React.FC<WeaponListProps> = React.memo(({
   weapons,
   addWeapon,
   updateWeapon,
@@ -53,6 +53,6 @@ export const WeaponList: React.FC<WeaponListProps> = ({
       </CardContent>
     </Card>
   );
-};
+});
 
 WeaponList.displayName = "WeaponList";

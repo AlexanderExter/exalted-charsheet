@@ -19,7 +19,7 @@ interface DramaticInjuriesListProps {
   deleteDramaticInjury: (id: string) => void;
 }
 
-export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = ({
+export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = React.memo(({
   injuries,
   addDramaticInjury,
   updateDramaticInjury,
@@ -81,6 +81,6 @@ export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = ({
       )}
     </div>
   );
-};
+});
 
 DramaticInjuriesList.displayName = "DramaticInjuriesList";
