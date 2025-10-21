@@ -1,13 +1,12 @@
 import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
 import type { Character, AttributeType, AbilityType } from "@/lib/character-types";
 import { calculateStatTotal } from "@/lib/exalted-utils";
-import { calculateDicePool as calculateDicePoolUtil } from "@/lib/exalted-utils/dice";
 import {
   useCharacterCalculations,
   type CharacterCalculations,
 } from "@/hooks/useCharacterCalculations";
 
-type DicePoolResult = ReturnType<typeof calculateDicePoolUtil>;
+type DicePoolResult = CharacterCalculations["dicePoolResult"];
 
 interface CharacterContextValue {
   character: Character;
@@ -50,33 +49,8 @@ export function CharacterProvider({
   );
 
   const calculateDicePool = useCallback((): DicePoolResult => {
-    const {
-      attribute,
-      ability,
-      targetNumber,
-      doublesThreshold,
-      extraDiceBonus = 0,
-      extraDiceNonBonus = 0,
-      extraSuccessBonus = 0,
-      extraSuccessNonBonus = 0,
-      isStunted,
-    } = character.dicePool;
-
-    const attributeTotal = calculateStatTotal(character.attributes[attribute]);
-    const abilityTotal = calculateStatTotal(character.abilities[ability]);
-
-    return calculateDicePoolUtil(
-      attributeTotal,
-      abilityTotal,
-      targetNumber,
-      doublesThreshold,
-      extraDiceBonus,
-      extraDiceNonBonus,
-      extraSuccessBonus,
-      extraSuccessNonBonus,
-      isStunted
-    );
-  }, [character]);
+    return calculations.dicePoolResult;
+  }, [calculations.dicePoolResult]);
 
   const value = useMemo(
     () => ({

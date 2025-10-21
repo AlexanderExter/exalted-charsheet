@@ -13,7 +13,6 @@ export const useAutoSave = <T>(
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const innerTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isMountedRef = useRef(true);
 
   useEffect(() => {
@@ -26,29 +25,22 @@ export const useAutoSave = <T>(
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    if (innerTimeoutRef.current) {
-      clearTimeout(innerTimeoutRef.current);
-    }
 
-    timeoutRef.current = setTimeout(() => {
+    timeoutRef.current = setTimeout(async () => {
       if (!isMountedRef.current) return;
 
       setIsSaving(true);
-      innerTimeoutRef.current = setTimeout(async () => {
-        if (!isMountedRef.current) return;
-        await waitForCharacterStoreSave();
-        if (!isMountedRef.current) return;
-        setIsSaving(false);
-        setLastSaved(new Date());
-      }, 500);
+      await waitForCharacterStoreSave();
+
+      if (!isMountedRef.current) return;
+
+      setIsSaving(false);
+      setLastSaved(new Date());
     }, delay);
 
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
-      }
-      if (innerTimeoutRef.current) {
-        clearTimeout(innerTimeoutRef.current);
       }
     };
   }, [data, delay]);

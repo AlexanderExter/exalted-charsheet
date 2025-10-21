@@ -4,33 +4,12 @@ import { waitForCharacterStoreSave } from "@/hooks/useCharacterStore";
 import superjson from "superjson";
 import { logError } from "@/lib/logger";
 
-export async function exportCharacter(character: Character): Promise<void> {
-  const dataStr = JSON.stringify(superjson.serialize(character), null, 2);
-  const dataBlob = new Blob([dataStr], { type: "application/json" });
+/**
+ * Triggers a browser download for a Blob with the specified filename
+ */
+function downloadBlob(blob: Blob, filename: string): void {
   const link = document.createElement("a");
-  const url = window.URL.createObjectURL(dataBlob);
-  link.href = url;
-  link.download = `${character.name
-    .replace(/[^a-z0-9]/gi, "_")
-    .toLowerCase()}_exalted_character.json`;
-  link.style.display = "none";
-  document.body.appendChild(link);
-  link.click();
-  setTimeout(() => {
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  }, 100);
-}
-
-export async function exportCharacters(
-  filename = "all_exalted_characters.json"
-): Promise<void> {
-  await waitForCharacterStoreSave();
-  const characters = await getAllCharacters();
-  const dataStr = JSON.stringify(superjson.serialize(characters), null, 2);
-  const dataBlob = new Blob([dataStr], { type: "application/json" });
-  const link = document.createElement("a");
-  const url = window.URL.createObjectURL(dataBlob);
+  const url = window.URL.createObjectURL(blob);
   link.href = url;
   link.download = filename;
   link.style.display = "none";
@@ -40,6 +19,25 @@ export async function exportCharacters(
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   }, 100);
+}
+
+export async function exportCharacter(character: Character): Promise<void> {
+  const dataStr = JSON.stringify(superjson.serialize(character), null, 2);
+  const dataBlob = new Blob([dataStr], { type: "application/json" });
+  const filename = `${character.name
+    .replace(/[^a-z0-9]/gi, "_")
+    .toLowerCase()}_exalted_character.json`;
+  downloadBlob(dataBlob, filename);
+}
+
+export async function exportCharacters(
+  filename = "all_exalted_characters.json"
+): Promise<void> {
+  await waitForCharacterStoreSave();
+  const characters = await getAllCharacters();
+  const dataStr = JSON.stringify(superjson.serialize(characters), null, 2);
+  const dataBlob = new Blob([dataStr], { type: "application/json" });
+  downloadBlob(dataBlob, filename);
 }
 
 export async function importCharacters(file: File): Promise<Character[]> {
