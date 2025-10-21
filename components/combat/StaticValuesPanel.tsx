@@ -15,7 +15,7 @@ interface StaticValuesPanelProps {
   calculations: CharacterCalculations;
 }
 
-export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
+export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(({
   character,
   updateCharacter,
   calculations,
@@ -243,6 +243,6 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
       </CardContent>
     </Card>
   );
-};
+});
 
 StaticValuesPanel.displayName = "StaticValuesPanel";

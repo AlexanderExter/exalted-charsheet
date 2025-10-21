@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 
-export const DicePoolSummary: React.FC = () => {
+export const DicePoolSummary: React.FC = React.memo(() => {
   const { character, calculateDicePool } = useCharacterContext();
   const dicePool = useMemo(() => calculateDicePool(), [calculateDicePool]);
 
@@ -37,6 +37,8 @@ export const DicePoolSummary: React.FC = () => {
       </div>
     </div>
   );
-};
+});
+
+DicePoolSummary.displayName = "DicePoolSummary";
 
 export default DicePoolSummary;
