@@ -7,9 +7,9 @@ export interface StatConfig<T extends string> {
 }
 
 export const attributeConfig: StatConfig<AttributeType>[] = [
-  { key: "fortitude", label: "Fortitude", colorClass: "text-green-600" },
-  { key: "finesse", label: "Finesse", colorClass: "text-blue-600" },
-  { key: "force", label: "Force", colorClass: "text-red-600" },
+  { key: "fortitude", label: "Fortitude", colorClass: "text-fortitude" },
+  { key: "finesse", label: "Finesse", colorClass: "text-finesse" },
+  { key: "force", label: "Force", colorClass: "text-force" },
 ];
 
 export const abilityConfig: StatConfig<AbilityType>[] = [

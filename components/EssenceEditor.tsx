@@ -93,12 +93,12 @@ export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence
       <Separator />
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <Label className="font-medium text-blue-600">Remain</Label>
-          <span className="font-bold text-blue-600">{remain}</span>
+          <Label className="font-medium text-info">Remain</Label>
+          <span className="font-bold text-info">{remain}</span>
         </div>
         <div className="flex items-center justify-between">
-          <Label className="font-medium text-green-600">Open</Label>
-          <span className="font-bold text-green-600">{open}</span>
+          <Label className="font-medium text-success">Open</Label>
+          <span className="font-bold text-success">{open}</span>
         </div>
       </div>
     </div>

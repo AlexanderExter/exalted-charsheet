@@ -129,7 +129,7 @@ export const PowersTab: React.FC = React.memo(() => {
             </div>
 
             <div className="flex items-center justify-between">
-              <div className="text-xs text-gray-500">Added: {charm.dateAdded}</div>
+              <div className="text-xs text-muted-foreground/80">Added: {charm.dateAdded}</div>
               <Button onClick={() => charmsEntity.remove(charm.id)} size="sm" variant="destructive">
                 <Trash2 className="w-4 h-4 mr-1" />
                 Delete
@@ -235,7 +235,7 @@ export const PowersTab: React.FC = React.memo(() => {
             </div>
 
             <div className="flex items-center justify-between">
-              <div className="text-xs text-gray-500">Added: {spell.dateAdded}</div>
+              <div className="text-xs text-muted-foreground/80">Added: {spell.dateAdded}</div>
               <Button onClick={() => spellsEntity.remove(spell.id)} size="sm" variant="destructive">
                 <Trash2 className="w-4 h-4 mr-1" />
                 Delete

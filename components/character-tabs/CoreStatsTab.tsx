@@ -25,12 +25,12 @@ export const CoreStatsTab: React.FC = React.memo(() => {
 
   const abilityTotalColor =
     globalAbilityAttribute === "fortitude"
-      ? "text-green-600"
+      ? "text-success"
       : globalAbilityAttribute === "finesse"
-        ? "text-blue-600"
+        ? "text-info"
         : globalAbilityAttribute === "force"
-          ? "text-red-600"
-          : "text-gray-700";
+          ? "text-destructive"
+          : "text-foreground/80";
 
   return (
     <div className="space-y-6">
@@ -80,8 +80,8 @@ export const CoreStatsTab: React.FC = React.memo(() => {
                     onClick={() => setGlobalAbilityAttribute("fortitude")}
                     className={
                       globalAbilityAttribute === "fortitude"
-                        ? "bg-green-600 hover:bg-green-700"
-                        : "text-green-600 border-green-600 hover:bg-green-50"
+                        ? "bg-success hover:bg-success"
+                        : "text-success border-success hover:bg-success/10"
                     }
                   >
                     Fortitude
@@ -92,8 +92,8 @@ export const CoreStatsTab: React.FC = React.memo(() => {
                     onClick={() => setGlobalAbilityAttribute("finesse")}
                     className={
                       globalAbilityAttribute === "finesse"
-                        ? "bg-blue-600 hover:bg-blue-700"
-                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                        ? "bg-info hover:bg-info"
+                        : "text-info border-info hover:bg-info/10"
                     }
                   >
                     Finesse
@@ -104,8 +104,8 @@ export const CoreStatsTab: React.FC = React.memo(() => {
                     onClick={() => setGlobalAbilityAttribute("force")}
                     className={
                       globalAbilityAttribute === "force"
-                        ? "bg-red-600 hover:bg-red-700"
-                        : "text-red-600 border-red-600 hover:bg-red-50"
+                        ? "bg-destructive hover:bg-destructive"
+                        : "text-destructive border-destructive hover:bg-destructive/10"
                     }
                   >
                     Force

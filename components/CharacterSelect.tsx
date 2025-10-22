@@ -140,14 +140,14 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
                 {filteredCharacters.map(character => (
                   <div
                     key={character.id}
-                    className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md hover:border-gray-300 transition-all cursor-pointer group"
+                    className="flex items-center justify-between p-4 bg-white rounded-lg border border-border hover:shadow-md hover:border-border transition-all cursor-pointer group"
                     onClick={() => onSelectCharacter(character.id)}
                   >
                     <div className="flex items-center gap-3">
-                      <User className="w-5 h-5 text-gray-600" />
+                      <User className="w-5 h-5 text-muted-foreground" />
                       <div>
                         <div className="font-medium">{character.name}</div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-muted-foreground">
                           Essence {character.essence?.rating || 1}
                         </div>
                       </div>

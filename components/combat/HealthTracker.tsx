@@ -152,7 +152,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
           Health Track
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Label className="text-sm font-medium text-gray-600">Exalt Type:</Label>
+              <Label className="text-sm font-medium text-muted-foreground">Exalt Type:</Label>
               <Select
                 value={character?.health?.exaltType || "lunar"}
                 onValueChange={(value: ExaltType) =>
@@ -183,7 +183,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
           {/* Health Levels Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <Label className="text-sm font-medium text-gray-700">Zero Penalty</Label>
+              <Label className="text-sm font-medium text-foreground/80">Zero Penalty</Label>
               <Input
                 type="number"
                 value={values.zero}
@@ -191,11 +191,11 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 className="text-center"
                 min={0}
               />
-              {errors.zero && <p className="text-xs text-red-500 mt-1">{errors.zero}</p>}
+              {errors.zero && <p className="text-xs text-destructive mt-1">{errors.zero}</p>}
             </div>
 
             <div>
-              <Label className="text-sm font-medium text-gray-700">-1 Penalty</Label>
+              <Label className="text-sm font-medium text-foreground/80">-1 Penalty</Label>
               <Input
                 type="number"
                 value={values.minusOne}
@@ -203,11 +203,11 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 className="text-center"
                 min={0}
               />
-              {errors.minusOne && <p className="text-xs text-red-500 mt-1">{errors.minusOne}</p>}
+              {errors.minusOne && <p className="text-xs text-destructive mt-1">{errors.minusOne}</p>}
             </div>
 
             <div>
-              <Label className="text-sm font-medium text-gray-700">-2 Penalty</Label>
+              <Label className="text-sm font-medium text-foreground/80">-2 Penalty</Label>
               <Input
                 type="number"
                 value={values.minusTwo}
@@ -215,11 +215,11 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 className="text-center"
                 min={0}
               />
-              {errors.minusTwo && <p className="text-xs text-red-500 mt-1">{errors.minusTwo}</p>}
+              {errors.minusTwo && <p className="text-xs text-destructive mt-1">{errors.minusTwo}</p>}
             </div>
 
             <div>
-              <Label className="text-sm font-medium text-gray-700">Incapacitated</Label>
+              <Label className="text-sm font-medium text-foreground/80">Incapacitated</Label>
               <Input
                 type="number"
                 value={values.incap}
@@ -227,13 +227,13 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 className="text-center"
                 min={0}
               />
-              {errors.incap && <p className="text-xs text-red-500 mt-1">{errors.incap}</p>}
+              {errors.incap && <p className="text-xs text-destructive mt-1">{errors.incap}</p>}
             </div>
           </div>
 
           {/* Ox-Body Levels */}
           <div className="mt-4">
-            <Label className="text-sm font-medium text-gray-700">
+            <Label className="text-sm font-medium text-foreground/80">
               Ox-Body Levels (adds health levels)
             </Label>
             <Input
@@ -244,24 +244,24 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
               min={0}
             />
             {errors.oxBodyLevels && (
-              <p className="text-xs text-red-500 mt-1">{errors.oxBodyLevels}</p>
+              <p className="text-xs text-destructive mt-1">{errors.oxBodyLevels}</p>
             )}
-            <div className="mt-3 p-2 bg-gray-50 rounded">
+            <div className="mt-3 p-2 bg-muted/50 rounded">
               <div className="grid grid-cols-4 gap-2 text-xs">
                 <div className="text-center">
-                  <div className="font-medium text-green-600">0 Penalty</div>
+                  <div className="font-medium text-success">0 Penalty</div>
                   <div className="text-lg font-bold">{calculations.healthLevels.zero}</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-yellow-600">-1 Penalty</div>
+                  <div className="font-medium text-warning">-1 Penalty</div>
                   <div className="text-lg font-bold">{calculations.healthLevels.minusOne}</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-orange-600">-2 Penalty</div>
+                  <div className="font-medium text-warning">-2 Penalty</div>
                   <div className="text-lg font-bold">{calculations.healthLevels.minusTwo}</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-red-600">Incapacitated</div>
+                  <div className="font-medium text-destructive">Incapacitated</div>
                   <div className="text-lg font-bold">{calculations.healthLevels.incap}</div>
                 </div>
               </div>
@@ -269,9 +269,9 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
 
             {/* Incapacitation Rules */}
             {calculations.healthPenalty === -4 && (
-              <div className="mt-3 border-t pt-3 bg-red-50 p-2 rounded">
-                <div className="text-xs font-medium text-red-700 mb-1">Incapacitation Rules:</div>
-                <div className="text-xs text-red-600 space-y-1">
+              <div className="mt-3 border-t pt-3 bg-destructive/10 p-2 rounded">
+                <div className="text-xs font-medium text-destructive mb-1">Incapacitation Rules:</div>
+                <div className="text-xs text-destructive space-y-1">
                   <p>
                     Incapacitated characters have their Power reduced to 0 and cannot Build Power or
                     flurry. Allies can recover them by Building their Power to 10, which resets the
@@ -302,7 +302,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
           {/* Damage Tracking */}
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label className="text-sm font-medium text-gray-700">Bashing Damage</Label>
+              <Label className="text-sm font-medium text-foreground/80">Bashing Damage</Label>
               <Input
                 type="number"
                 value={values.bashingDamage}
@@ -317,12 +317,12 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 )}
               />
               {errors.bashingDamage && (
-                <p className="text-xs text-red-500 mt-1">{errors.bashingDamage}</p>
+                <p className="text-xs text-destructive mt-1">{errors.bashingDamage}</p>
               )}
             </div>
 
             <div>
-              <Label className="text-sm font-medium text-gray-700">Lethal Damage</Label>
+              <Label className="text-sm font-medium text-foreground/80">Lethal Damage</Label>
               <Input
                 type="number"
                 value={values.lethalDamage}
@@ -337,12 +337,12 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 )}
               />
               {errors.lethalDamage && (
-                <p className="text-xs text-red-500 mt-1">{errors.lethalDamage}</p>
+                <p className="text-xs text-destructive mt-1">{errors.lethalDamage}</p>
               )}
             </div>
 
             <div>
-              <Label className="text-sm font-medium text-gray-700">Aggravated Damage</Label>
+              <Label className="text-sm font-medium text-foreground/80">Aggravated Damage</Label>
               <Input
                 type="number"
                 value={values.aggravatedDamage}
@@ -357,7 +357,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 )}
               />
               {errors.aggravatedDamage && (
-                <p className="text-xs text-red-500 mt-1">{errors.aggravatedDamage}</p>
+                <p className="text-xs text-destructive mt-1">{errors.aggravatedDamage}</p>
               )}
             </div>
           </div>

@@ -24,7 +24,7 @@ export const AbilitySelector: React.FC = () => {
       name="ability"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="block text-sm font-medium text-gray-600 mb-1">Ability</FormLabel>
+          <FormLabel className="block text-sm font-medium text-muted-foreground mb-1">Ability</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} value={field.value}>
               <SelectTrigger>

@@ -32,23 +32,23 @@ export class TabErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <Card className="border-red-300 bg-red-50">
+        <Card className="border-destructive/30 bg-destructive/10">
           <CardHeader>
-            <CardTitle className="text-red-700">Error in {this.props.tabName} Tab</CardTitle>
+            <CardTitle className="text-destructive">Error in {this.props.tabName} Tab</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-foreground/80">
               Something went wrong while rendering this tab. The error has been logged.
             </p>
             {this.state.error && (
-              <div className="bg-white p-3 rounded border border-red-200">
-                <p className="text-xs font-mono text-red-600">{this.state.error.message}</p>
+              <div className="bg-white p-3 rounded border border-destructive/20">
+                <p className="text-xs font-mono text-destructive">{this.state.error.message}</p>
               </div>
             )}
             <Button
               onClick={() => this.setState({ hasError: false, error: null })}
               variant="outline"
-              className="border-red-300 text-red-700 hover:bg-red-100"
+              className="border-destructive/30 text-destructive hover:bg-destructive/10"
             >
               Try Again
             </Button>

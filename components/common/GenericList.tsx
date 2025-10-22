@@ -40,7 +40,7 @@ export function GenericList<T extends { id: string }>({
       </CardHeader>
       <CardContent>
         {items.length === 0 ? (
-          <p className="text-gray-500 italic">{emptyMessage}</p>
+          <p className="text-muted-foreground/80 italic">{emptyMessage}</p>
         ) : (
           <SortableList items={items} onReorder={onReorder} renderItem={renderItem} />
         )}
