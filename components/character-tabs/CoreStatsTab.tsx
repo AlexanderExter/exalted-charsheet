@@ -23,25 +23,10 @@ export const CoreStatsTab: React.FC = React.memo(() => {
     setGlobalAbilityAttribute,
   } = useCharacterContext();
 
-  // Validate character data
-  React.useEffect(() => {
-    console.log("[CoreStatsTab] Rendering with character:", {
-      id: character?.id,
-      hasAttributes: !!character?.attributes,
-      hasAbilities: !!character?.abilities,
-      hasEssence: !!character?.essence,
-      attributesType: typeof character?.attributes,
-      abilitiesType: typeof character?.abilities,
-    });
-
-    if (!character) {
-      console.error("[CoreStatsTab] Character is null/undefined!");
-    } else if (!character.attributes) {
-      console.error("[CoreStatsTab] character.attributes is missing!", character);
-    } else if (!character.abilities) {
-      console.error("[CoreStatsTab] character.abilities is missing!", character);
-    }
-  }, [character]);
+  // Memoize default essence to prevent creating new object on every render
+  // This was causing infinite render loop (54 renders before crash)
+  const defaultEssence = React.useMemo(() => createDefaultEssence(), []);
+  const essence = character.essence || defaultEssence;
 
   const abilityTotalColor =
     globalAbilityAttribute === "fortitude"
@@ -55,7 +40,7 @@ export const CoreStatsTab: React.FC = React.memo(() => {
   return (
     <div className="space-y-6">
       <EssencePanel
-        essence={character.essence || createDefaultEssence()}
+        essence={essence}
         onChange={essence => updateCharacter({ essence })}
       />
 
@@ -69,14 +54,11 @@ export const CoreStatsTab: React.FC = React.memo(() => {
             <StatTable
               config={attributeConfig}
               stats={character.attributes}
-              onChange={(key, stat) => {
-                console.log("[CoreStatsTab] Updating attribute:", key, stat);
-                const newAttributes = { ...character.attributes, [key]: stat };
-                console.log("[CoreStatsTab] New attributes object:", newAttributes);
+              onChange={(key, stat) =>
                 updateCharacter({
-                  attributes: newAttributes,
-                });
-              }}
+                  attributes: { ...character.attributes, [key]: stat },
+                })
+              }
               getTotal={key => calculateStatTotal(character.attributes[key])}
               minBase={1}
             />
