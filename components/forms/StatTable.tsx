@@ -44,13 +44,18 @@ export function StatTable<T extends string>({
   }
 
   const data = React.useMemo<StatRow[]>(
-    () =>
-      config.map(item => ({
+    () => {
+      if (!stats) {
+        console.warn("[StatTable] Stats is undefined or null");
+        return [];
+      }
+      return config.map(item => ({
         key: item.key,
         label: item.label,
         colorClass: item.colorClass || "text-gray-700",
         stat: stats[item.key] ?? { base: minBase, added: 0, bonus: 0 },
-      })),
+      }));
+    },
     [config, stats, minBase]
   );
 
@@ -87,10 +92,11 @@ export function StatTable<T extends string>({
         ),
         cell: ({ row }) => {
           const stat = row.original.stat ?? { base: minBase, added: 0, bonus: 0 };
+          const baseValue = typeof stat.base === "number" ? stat.base : minBase;
           return (
             <Input
               type="number"
-              value={stat.base}
+              value={baseValue}
               onChange={e => {
                 const value = Math.max(
                   minBase,
@@ -118,11 +124,13 @@ export function StatTable<T extends string>({
         ),
         cell: ({ row }) => {
           const stat = row.original.stat ?? { base: minBase, added: 0, bonus: 0 };
-          const maxAdded = Math.max(0, 5 - stat.base);
+          const baseValue = typeof stat.base === "number" ? stat.base : minBase;
+          const addedValue = typeof stat.added === "number" ? stat.added : 0;
+          const maxAdded = Math.max(0, 5 - baseValue);
           return (
             <Input
               type="number"
-              value={stat.added}
+              value={addedValue}
               onChange={e => {
                 const value = Math.min(
                   maxAdded,
@@ -150,10 +158,11 @@ export function StatTable<T extends string>({
         ),
         cell: ({ row }) => {
           const stat = row.original.stat ?? { base: minBase, added: 0, bonus: 0 };
+          const bonusValue = typeof stat.bonus === "number" ? stat.bonus : 0;
           return (
             <Input
               type="number"
-              value={stat.bonus}
+              value={bonusValue}
               onChange={e => {
                 const value = Math.max(0, Number.parseInt(e.target.value) || 0);
                 onChange(row.original.key, { ...stat, bonus: value });
