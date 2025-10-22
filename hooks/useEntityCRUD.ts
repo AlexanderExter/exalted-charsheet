@@ -26,7 +26,7 @@ export function useEntityCRUD<T extends EntityWithId>(
   createDefault: () => T
 ): UseEntityCRUDReturn<T> {
   // Get current items array (safely handle undefined)
-  const items = (character[entityKey] as T[] | undefined) ?? [];
+  const items = (character[entityKey] as unknown as T[] | undefined) ?? [];
 
   const add = useCallback(() => {
     const newItem = createDefault() as T;
