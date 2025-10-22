@@ -29,7 +29,7 @@ export function useEntityCRUD<T extends EntityWithId>(
   const items = (character[entityKey] as T[] | undefined) ?? [];
 
   const add = useCallback(() => {
-    const newItem = createDefault();
+    const newItem = createDefault() as T;
     updateCharacter({
       [entityKey]: [...items, newItem],
     } as Partial<Character>);
@@ -87,7 +87,7 @@ export function useNestedEntityCRUD<T extends EntityWithId>(
   const items = (parent?.[nestedKey] as T[] | undefined) ?? [];
 
   const add = useCallback(() => {
-    const newItem = createDefault();
+    const newItem = createDefault() as T;
     updateCharacter({
       [parentKey]: {
         ...parent,
