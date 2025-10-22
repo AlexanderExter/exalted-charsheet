@@ -79,31 +79,28 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
     incap: HealthLevelsSchema.shape.incap,
   };
 
-  const handleBaselineChange = (
-    field: keyof typeof baselineSchemas
-  ) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setValues(prev => ({ ...prev, [field]: val }));
-    const result = baselineSchemas[field].safeParse(Number(val));
-    if (result.success) {
-      setErrors(prev => ({ ...prev, [field]: "" }));
-      updateCharacter({
-        health: {
-          ...character.health,
-          baseline: { ...character.health?.baseline, [field]: result.data },
-        },
-      });
-    } else {
-      setErrors(prev => ({
-        ...prev,
-        [field]: result.error.issues[0]?.message || "Invalid value",
-      }));
-    }
-  };
+  const handleBaselineChange =
+    (field: keyof typeof baselineSchemas) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      setValues(prev => ({ ...prev, [field]: val }));
+      const result = baselineSchemas[field].safeParse(Number(val));
+      if (result.success) {
+        setErrors(prev => ({ ...prev, [field]: "" }));
+        updateCharacter({
+          health: {
+            ...character.health,
+            baseline: { ...character.health?.baseline, [field]: result.data },
+          },
+        });
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          [field]: result.error.issues[0]?.message || "Invalid value",
+        }));
+      }
+    };
 
-  const handleOxBodyChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleOxBodyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setValues(prev => ({ ...prev, oxBodyLevels: val }));
     const result = HealthSchema.shape.oxBodyLevels.safeParse(Number(val));
@@ -120,37 +117,33 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
     }
   };
 
-  const handleDamageChange = (
-    field: "bashingDamage" | "lethalDamage" | "aggravatedDamage"
-  ) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setValues(prev => ({ ...prev, [field]: val }));
-    const total = getTotalHealthLevels();
-    const otherDamage =
-      field === "bashingDamage"
-        ? (character?.health?.lethalDamage || 0) +
-          (character?.health?.aggravatedDamage || 0)
-        : field === "lethalDamage"
-        ? (character?.health?.bashingDamage || 0) +
-          (character?.health?.aggravatedDamage || 0)
-        : (character?.health?.bashingDamage || 0) +
-          (character?.health?.lethalDamage || 0);
-    const maxAllowed = Math.max(0, total - otherDamage);
-    const schema = z.number().int().min(0).max(maxAllowed);
-    const result = schema.safeParse(Number(val));
-    if (result.success) {
-      setErrors(prev => ({ ...prev, [field]: "" }));
-      updateCharacter({
-        health: { ...character.health, [field]: result.data },
-      });
-    } else {
-      setErrors(prev => ({
-        ...prev,
-        [field]:
-          result.error.issues[0]?.message || `Must be between 0 and ${maxAllowed}`,
-      }));
-    }
-  };
+  const handleDamageChange =
+    (field: "bashingDamage" | "lethalDamage" | "aggravatedDamage") =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      setValues(prev => ({ ...prev, [field]: val }));
+      const total = getTotalHealthLevels();
+      const otherDamage =
+        field === "bashingDamage"
+          ? (character?.health?.lethalDamage || 0) + (character?.health?.aggravatedDamage || 0)
+          : field === "lethalDamage"
+            ? (character?.health?.bashingDamage || 0) + (character?.health?.aggravatedDamage || 0)
+            : (character?.health?.bashingDamage || 0) + (character?.health?.lethalDamage || 0);
+      const maxAllowed = Math.max(0, total - otherDamage);
+      const schema = z.number().int().min(0).max(maxAllowed);
+      const result = schema.safeParse(Number(val));
+      if (result.success) {
+        setErrors(prev => ({ ...prev, [field]: "" }));
+        updateCharacter({
+          health: { ...character.health, [field]: result.data },
+        });
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          [field]: result.error.issues[0]?.message || `Must be between 0 and ${maxAllowed}`,
+        }));
+      }
+    };
 
   return (
     <Card>
@@ -198,9 +191,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 className="text-center"
                 min={0}
               />
-              {errors.zero && (
-                <p className="text-xs text-red-500 mt-1">{errors.zero}</p>
-              )}
+              {errors.zero && <p className="text-xs text-red-500 mt-1">{errors.zero}</p>}
             </div>
 
             <div>
@@ -212,9 +203,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 className="text-center"
                 min={0}
               />
-              {errors.minusOne && (
-                <p className="text-xs text-red-500 mt-1">{errors.minusOne}</p>
-              )}
+              {errors.minusOne && <p className="text-xs text-red-500 mt-1">{errors.minusOne}</p>}
             </div>
 
             <div>
@@ -226,9 +215,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 className="text-center"
                 min={0}
               />
-              {errors.minusTwo && (
-                <p className="text-xs text-red-500 mt-1">{errors.minusTwo}</p>
-              )}
+              {errors.minusTwo && <p className="text-xs text-red-500 mt-1">{errors.minusTwo}</p>}
             </div>
 
             <div>
@@ -240,9 +227,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 className="text-center"
                 min={0}
               />
-              {errors.incap && (
-                <p className="text-xs text-red-500 mt-1">{errors.incap}</p>
-              )}
+              {errors.incap && <p className="text-xs text-red-500 mt-1">{errors.incap}</p>}
             </div>
           </div>
 
@@ -285,19 +270,17 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
             {/* Incapacitation Rules */}
             {calculations.healthPenalty === -4 && (
               <div className="mt-3 border-t pt-3 bg-red-50 p-2 rounded">
-                <div className="text-xs font-medium text-red-700 mb-1">
-                  Incapacitation Rules:
-                </div>
+                <div className="text-xs font-medium text-red-700 mb-1">Incapacitation Rules:</div>
                 <div className="text-xs text-red-600 space-y-1">
                   <p>
-                    Incapacitated characters have their Power reduced to 0 and
-                    cannot Build Power or flurry. Allies can recover them by
-                    Building their Power to 10, which resets the track to 0.
+                    Incapacitated characters have their Power reduced to 0 and cannot Build Power or
+                    flurry. Allies can recover them by Building their Power to 10, which resets the
+                    track to 0.
                   </p>
                   <p>
-                    A player may ignore incapacitation by accepting a dramatic
-                    injury to an Attribute or Primary Merit, applying a -1 die
-                    penalty or losing access to that trait.
+                    A player may ignore incapacitation by accepting a dramatic injury to an
+                    Attribute or Primary Merit, applying a -1 die penalty or losing access to that
+                    trait.
                   </p>
                   <p>
                     See
@@ -326,14 +309,12 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 onChange={handleDamageChange("bashingDamage")}
                 className="text-center"
                 min={0}
-                max={
-                  Math.max(
-                    0,
-                    getTotalHealthLevels() -
-                      ((character?.health?.lethalDamage || 0) +
-                        (character?.health?.aggravatedDamage || 0))
-                  )
-                }
+                max={Math.max(
+                  0,
+                  getTotalHealthLevels() -
+                    ((character?.health?.lethalDamage || 0) +
+                      (character?.health?.aggravatedDamage || 0))
+                )}
               />
               {errors.bashingDamage && (
                 <p className="text-xs text-red-500 mt-1">{errors.bashingDamage}</p>
@@ -348,14 +329,12 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 onChange={handleDamageChange("lethalDamage")}
                 className="text-center"
                 min={0}
-                max={
-                  Math.max(
-                    0,
-                    getTotalHealthLevels() -
-                      ((character?.health?.bashingDamage || 0) +
-                        (character?.health?.aggravatedDamage || 0))
-                  )
-                }
+                max={Math.max(
+                  0,
+                  getTotalHealthLevels() -
+                    ((character?.health?.bashingDamage || 0) +
+                      (character?.health?.aggravatedDamage || 0))
+                )}
               />
               {errors.lethalDamage && (
                 <p className="text-xs text-red-500 mt-1">{errors.lethalDamage}</p>
@@ -370,14 +349,12 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 onChange={handleDamageChange("aggravatedDamage")}
                 className="text-center"
                 min={0}
-                max={
-                  Math.max(
-                    0,
-                    getTotalHealthLevels() -
-                      ((character?.health?.bashingDamage || 0) +
-                        (character?.health?.lethalDamage || 0))
-                  )
-                }
+                max={Math.max(
+                  0,
+                  getTotalHealthLevels() -
+                    ((character?.health?.bashingDamage || 0) +
+                      (character?.health?.lethalDamage || 0))
+                )}
               />
               {errors.aggravatedDamage && (
                 <p className="text-xs text-red-500 mt-1">{errors.aggravatedDamage}</p>

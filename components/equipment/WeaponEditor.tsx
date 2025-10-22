@@ -68,9 +68,7 @@ export const WeaponEditor: React.FC<WeaponEditorProps> = ({
             id={`weapon-defense-${weapon.id}`}
             type="number"
             value={weapon.defense}
-            onChange={e =>
-              updateWeapon(weapon.id, "defense", Number.parseInt(e.target.value) || 0)
-            }
+            onChange={e => updateWeapon(weapon.id, "defense", Number.parseInt(e.target.value) || 0)}
           />
         </div>
         <div>

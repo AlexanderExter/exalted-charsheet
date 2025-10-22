@@ -289,9 +289,7 @@ export const AdvancementTab: React.FC = React.memo(() => {
                         <Input
                           id={`entry-item-${entry.id}`}
                           value={entry.item}
-                          onChange={e =>
-                            updateAdvancementEntry(entry.id, "item", e.target.value)
-                          }
+                          onChange={e => updateAdvancementEntry(entry.id, "item", e.target.value)}
                           placeholder="e.g., Increase Awareness to 3, Learn Flying Blade Technique"
                         />
                       </div>

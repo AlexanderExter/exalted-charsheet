@@ -20,14 +20,14 @@ type FormFieldContextValue = {
   name: string;
 };
 
-const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue
-);
+const FormFieldContext = React.createContext<FormFieldContextValue>({} as FormFieldContextValue);
 
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
->({ ...props }: ControllerProps<TFieldValues, TName>) => {
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
+  ...props
+}: ControllerProps<TFieldValues, TName>) => {
   return (
     <FormFieldContext.Provider value={{ name: props.name }}>
       <Controller {...props} />
@@ -50,12 +50,11 @@ const useFormField = () => {
   };
 };
 
-const FormItem = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("space-y-2", className)} {...props} />
-));
+const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn("space-y-2", className)} {...props} />
+  )
+);
 FormItem.displayName = "FormItem";
 
 const FormLabel = React.forwardRef<
@@ -100,25 +99,11 @@ const FormMessage = React.forwardRef<
   const body = children ?? error?.message;
   if (!body) return null;
   return (
-    <p
-      ref={ref}
-      id={formMessageId}
-      className={cn("text-xs text-red-500", className)}
-      {...props}
-    >
+    <p ref={ref} id={formMessageId} className={cn("text-xs text-red-500", className)} {...props}>
       {body}
     </p>
   );
 });
 FormMessage.displayName = "FormMessage";
 
-export {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-};
-
+export { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage };

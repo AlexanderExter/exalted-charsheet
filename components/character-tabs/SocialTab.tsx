@@ -23,6 +23,7 @@ import type {
   BackgroundLevel,
 } from "@/lib/character-types";
 import { useCharacterContext } from "@/hooks/CharacterContext";
+import { useNestedEntityCRUD } from "@/hooks/useEntityCRUD";
 import { DEFAULT_MODIFIER_MAX, DEFAULT_MODIFIER_MIN } from "@/lib/character-defaults";
 
 const virtueOptions: Array<NonNullable<VirtueType>> = [
@@ -38,7 +39,8 @@ const virtueOptions: Array<NonNullable<VirtueType>> = [
 export const SocialTab: React.FC = React.memo(() => {
   const { character, updateCharacter, calculations } = useCharacterContext();
   const resolve = calculations.resolve;
-  // Virtue management functions
+
+  // Virtue management
   const setVirtue = useCallback(
     (type: "major" | "minor", virtue: VirtueType) => {
       updateCharacter({
@@ -54,91 +56,31 @@ export const SocialTab: React.FC = React.memo(() => {
     [character, updateCharacter]
   );
 
-  // Intimacy management functions
-  const addIntimacy = useCallback(() => {
-    const newIntimacy: Intimacy = {
+  // Intimacies CRUD
+  const intimaciesEntity = useNestedEntityCRUD<Intimacy>(
+    character,
+    updateCharacter,
+    "social",
+    "intimacies",
+    () => ({
       id: crypto.randomUUID(),
       description: "",
       intensity: "minor",
-    };
-
-    updateCharacter({
-      social: {
-        ...character.social,
-        intimacies: [...(character.social?.intimacies || []), newIntimacy],
-      },
-    });
-  }, [character, updateCharacter]);
-
-  const updateIntimacy = useCallback(
-    (id: string, field: keyof Intimacy, value: Intimacy[keyof Intimacy]) => {
-      updateCharacter({
-        social: {
-          ...character.social,
-          intimacies: (character.social?.intimacies || []).map(intimacy =>
-            intimacy.id === id ? { ...intimacy, [field]: value } : intimacy
-          ),
-        },
-      });
-    },
-    [character, updateCharacter]
+    })
   );
 
-  const deleteIntimacy = useCallback(
-    (id: string) => {
-      updateCharacter({
-        social: {
-          ...character.social,
-          intimacies: (character.social?.intimacies || []).filter(intimacy => intimacy.id !== id),
-        },
-      });
-    },
-    [character, updateCharacter]
-  );
-
-  // Background management functions
-  const addBackground = useCallback(() => {
-    const newBackground: Background = {
+  // Backgrounds CRUD
+  const backgroundsEntity = useNestedEntityCRUD<Background>(
+    character,
+    updateCharacter,
+    "social",
+    "backgrounds",
+    () => ({
       id: crypto.randomUUID(),
       type: "artifact",
       level: "tertiary",
       description: "",
-    };
-
-    updateCharacter({
-      social: {
-        ...character.social,
-        backgrounds: [...(character.social?.backgrounds || []), newBackground],
-      },
-    });
-  }, [character, updateCharacter]);
-
-  const updateBackground = useCallback(
-    (id: string, field: keyof Background, value: Background[keyof Background]) => {
-      updateCharacter({
-        social: {
-          ...character.social,
-          backgrounds: (character.social?.backgrounds || []).map(background =>
-            background.id === id ? { ...background, [field]: value } : background
-          ),
-        },
-      });
-    },
-    [character, updateCharacter]
-  );
-
-  const deleteBackground = useCallback(
-    (id: string) => {
-      updateCharacter({
-        social: {
-          ...character.social,
-          backgrounds: (character.social?.backgrounds || []).filter(
-            background => background.id !== id
-          ),
-        },
-      });
-    },
-    [character, updateCharacter]
+    })
   );
 
   return (
@@ -264,29 +206,31 @@ export const SocialTab: React.FC = React.memo(() => {
               Intimacies represent emotional connections and core beliefs that motivate your
               character.
             </p>
-            <Button onClick={addIntimacy} size="sm" variant="outline">
+            <Button onClick={intimaciesEntity.add} size="sm" variant="outline">
               <Plus className="w-4 h-4 mr-1" />
               Add Intimacy
             </Button>
           </div>
 
-          {(character?.social?.intimacies || []).length === 0 ? (
+          {intimaciesEntity.items.length === 0 ? (
             <p className="text-gray-500 italic text-sm">No intimacies yet.</p>
           ) : (
             <div className="space-y-2">
-              {(character?.social?.intimacies || []).map(intimacy => (
+              {intimaciesEntity.items.map(intimacy => (
                 <div key={intimacy.id} className="flex items-center gap-2">
                   <Input
                     type="text"
                     value={intimacy.description}
-                    onChange={e => updateIntimacy(intimacy.id, "description", e.target.value)}
+                    onChange={e =>
+                      intimaciesEntity.update(intimacy.id, "description", e.target.value)
+                    }
                     className="flex-1"
                     placeholder="Intimacy description..."
                   />
                   <Select
                     value={intimacy.intensity}
                     onValueChange={(value: "minor" | "major") =>
-                      updateIntimacy(intimacy.id, "intensity", value)
+                      intimaciesEntity.update(intimacy.id, "intensity", value)
                     }
                   >
                     <SelectTrigger className="w-24">
@@ -298,7 +242,7 @@ export const SocialTab: React.FC = React.memo(() => {
                     </SelectContent>
                   </Select>
                   <Button
-                    onClick={() => deleteIntimacy(intimacy.id)}
+                    onClick={() => intimaciesEntity.remove(intimacy.id)}
                     size="sm"
                     variant="destructive"
                   >
@@ -322,22 +266,22 @@ export const SocialTab: React.FC = React.memo(() => {
               Backgrounds represent resources, allies, and supernatural assets available to your
               character.
             </p>
-            <Button onClick={addBackground} size="sm" variant="outline">
+            <Button onClick={backgroundsEntity.add} size="sm" variant="outline">
               <Plus className="w-4 h-4 mr-1" />
               Add Background
             </Button>
           </div>
 
-          {(character?.social?.backgrounds || []).length === 0 ? (
+          {backgroundsEntity.items.length === 0 ? (
             <p className="text-gray-500 italic text-sm">No backgrounds yet.</p>
           ) : (
             <div className="space-y-2">
-              {(character?.social?.backgrounds || []).map(background => (
+              {backgroundsEntity.items.map(background => (
                 <div key={background.id} className="flex items-center gap-2">
                   <Select
                     value={background.type}
                     onValueChange={(value: BackgroundType) =>
-                      updateBackground(background.id, "type", value)
+                      backgroundsEntity.update(background.id, "type", value)
                     }
                   >
                     <SelectTrigger className="w-32">
@@ -352,7 +296,7 @@ export const SocialTab: React.FC = React.memo(() => {
                   <Select
                     value={background.level}
                     onValueChange={(value: BackgroundLevel) =>
-                      updateBackground(background.id, "level", value)
+                      backgroundsEntity.update(background.id, "level", value)
                     }
                   >
                     <SelectTrigger className="w-28">
@@ -367,12 +311,14 @@ export const SocialTab: React.FC = React.memo(() => {
                   <Input
                     type="text"
                     value={background.description}
-                    onChange={e => updateBackground(background.id, "description", e.target.value)}
+                    onChange={e =>
+                      backgroundsEntity.update(background.id, "description", e.target.value)
+                    }
                     className="flex-1"
                     placeholder="Background description..."
                   />
                   <Button
-                    onClick={() => deleteBackground(background.id)}
+                    onClick={() => backgroundsEntity.remove(background.id)}
                     size="sm"
                     variant="destructive"
                   >

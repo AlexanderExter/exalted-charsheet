@@ -2,13 +2,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  FormControl,
-} from "@/components/ui/form";
+import { FormField, FormItem, FormLabel, FormMessage, FormControl } from "@/components/ui/form";
 import { useFormContext } from "react-hook-form";
 import { calculateStatTotal } from "@/lib/exalted-utils";
 import { useCharacterContext } from "@/hooks/CharacterContext";
@@ -45,9 +39,7 @@ export const AttributeSelector: React.FC = () => {
       name="attribute"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="block text-sm font-medium text-gray-600 mb-1">
-            Attribute
-          </FormLabel>
+          <FormLabel className="block text-sm font-medium text-gray-600 mb-1">Attribute</FormLabel>
           <FormControl>
             <div className="flex gap-2">
               {attributes.map(attr => (

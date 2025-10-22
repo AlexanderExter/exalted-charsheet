@@ -1,12 +1,14 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabErrorBoundary } from "@/components/common/TabErrorBoundary";
 import tabs from "@/components/character-tabs/tabsConfig";
 
 interface CharacterTabsProps {
   activeTab: string;
   onTabChange: (value: string) => void;
 }
+
 export function CharacterTabs({ activeTab, onTabChange }: CharacterTabsProps) {
   return (
     <Tabs value={activeTab} onValueChange={onTabChange}>
@@ -26,7 +28,9 @@ export function CharacterTabs({ activeTab, onTabChange }: CharacterTabsProps) {
         const TabComponent = tab.component;
         return (
           <TabsContent key={tab.id} value={tab.id} className="space-y-6">
-            <TabComponent />
+            <TabErrorBoundary tabName={tab.label}>
+              <TabComponent />
+            </TabErrorBoundary>
           </TabsContent>
         );
       })}

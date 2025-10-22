@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": false,
     "strict": true,
     "noEmit": true,
@@ -23,28 +19,12 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@hookform/resolvers/zod": [
-        "types/hookform-zod-module"
-      ],
-      "@hookform/resolvers/zod/dist/types": [
-        "types/hookform-zod"
-      ]
+      "@/*": ["./*"],
+      "@hookform/resolvers/zod": ["types/hookform-zod-module"],
+      "@hookform/resolvers/zod/dist/types": ["types/hookform-zod"]
     },
     "allowJs": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "**/__tests__"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "**/*.test.ts", "**/*.test.tsx", "**/__tests__"]
 }

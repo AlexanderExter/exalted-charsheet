@@ -67,9 +67,7 @@ export function StatTable<T extends string>({
           </button>
         ),
         cell: ({ row }) => (
-          <span
-            className={`font-medium text-sm capitalize ${row.original.colorClass}`}
-          >
+          <span className={`font-medium text-sm capitalize ${row.original.colorClass}`}>
             {row.getValue<string>("label")}
           </span>
         ),
@@ -124,10 +122,7 @@ export function StatTable<T extends string>({
               type="number"
               value={stat.added}
               onChange={e => {
-                const value = Math.min(
-                  maxAdded,
-                  Math.max(0, Number.parseInt(e.target.value) || 0)
-                );
+                const value = Math.min(maxAdded, Math.max(0, Number.parseInt(e.target.value) || 0));
                 onChange(row.original.key, { ...stat, added: value });
               }}
               className="w-16 text-center text-sm"
@@ -217,21 +212,14 @@ export function StatTable<T extends string>({
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
-                <th
-                  key={header.id}
-                  className="py-2 px-3 text-sm"
-                >
+                <th key={header.id} className="py-2 px-3 text-sm">
                   {header.isPlaceholder ? null : (
                     <div
                       className={header.column.getCanSort() ? "cursor-pointer select-none" : ""}
                       onClick={header.column.getToggleSortingHandler()}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
-                      {
-                        { asc: " ▲", desc: " ▼" }[
-                          header.column.getIsSorted() as string
-                        ] ?? null
-                      }
+                      {{ asc: " ▲", desc: " ▼" }[header.column.getIsSorted() as string] ?? null}
                     </div>
                   )}
                 </th>

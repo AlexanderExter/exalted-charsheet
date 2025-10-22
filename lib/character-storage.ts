@@ -30,9 +30,7 @@ export async function exportCharacter(character: Character): Promise<void> {
   downloadBlob(dataBlob, filename);
 }
 
-export async function exportCharacters(
-  filename = "all_exalted_characters.json"
-): Promise<void> {
+export async function exportCharacters(filename = "all_exalted_characters.json"): Promise<void> {
   await waitForCharacterStoreSave();
   const characters = await getAllCharacters();
   const dataStr = JSON.stringify(superjson.serialize(characters), null, 2);

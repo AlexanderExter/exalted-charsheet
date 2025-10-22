@@ -20,7 +20,7 @@ export default function SiteHeader() {
           size="icon"
           className="md:hidden"
           aria-label="Toggle navigation menu"
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={() => setIsOpen(prev => !prev)}
         >
           <Menu className="h-6 w-6" />
         </Button>
