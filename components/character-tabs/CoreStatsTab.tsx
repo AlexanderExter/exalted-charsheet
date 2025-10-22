@@ -2,7 +2,7 @@
 
 // Core Stats Tab Component - Essence, attributes, abilities, and dice pool calculator
 
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,8 @@ import { DicePoolEditor } from "@/components/forms/DicePoolEditor";
 import { EssencePanel } from "@/components/character-tabs/common/EssencePanel";
 import { createDefaultEssence } from "@/lib/character-defaults";
 import { useCharacterContext } from "@/hooks/CharacterContext";
+import type { AttributeType, AbilityType, StatBlock, Essence } from "@/lib/character-types";
+
 export const CoreStatsTab: React.FC = React.memo(() => {
   const {
     character,
@@ -22,6 +24,35 @@ export const CoreStatsTab: React.FC = React.memo(() => {
     globalAbilityAttribute,
     setGlobalAbilityAttribute,
   } = useCharacterContext();
+
+  // Memoize onChange callbacks to prevent StatTable column recalculation
+  const handleAttributeChange = useCallback(
+    (key: AttributeType, stat: StatBlock) => {
+      updateCharacter({
+        attributes: { ...character.attributes, [key]: stat },
+      });
+    },
+    [character.attributes, updateCharacter]
+  );
+
+  const handleAbilityChange = useCallback(
+    (key: AbilityType, stat: StatBlock) => {
+      updateCharacter({
+        abilities: { ...character.abilities, [key]: stat },
+      });
+    },
+    [character.abilities, updateCharacter]
+  );
+
+  const getAttributeTotal = useCallback(
+    (key: AttributeType) => calculateStatTotal(character.attributes[key]),
+    [character.attributes]
+  );
+
+  const handleEssenceChange = useCallback(
+    (essence: Essence) => updateCharacter({ essence }),
+    [updateCharacter]
+  );
 
   const abilityTotalColor =
     globalAbilityAttribute === "fortitude"
@@ -36,7 +67,7 @@ export const CoreStatsTab: React.FC = React.memo(() => {
     <div className="space-y-6">
       <EssencePanel
         essence={character.essence || createDefaultEssence()}
-        onChange={essence => updateCharacter({ essence })}
+        onChange={handleEssenceChange}
       />
 
       {/* Attributes and Abilities */}
@@ -49,12 +80,8 @@ export const CoreStatsTab: React.FC = React.memo(() => {
             <StatTable
               config={attributeConfig}
               stats={character.attributes}
-              onChange={(key, stat) =>
-                updateCharacter({
-                  attributes: { ...character.attributes, [key]: stat },
-                })
-              }
-              getTotal={key => calculateStatTotal(character.attributes[key])}
+              onChange={handleAttributeChange}
+              getTotal={getAttributeTotal}
               minBase={1}
             />
           </CardContent>
@@ -118,11 +145,7 @@ export const CoreStatsTab: React.FC = React.memo(() => {
             <StatTable
               config={abilityConfig}
               stats={character.abilities}
-              onChange={(key, stat) =>
-                updateCharacter({
-                  abilities: { ...character.abilities, [key]: stat },
-                })
-              }
+              onChange={handleAbilityChange}
               getTotal={calculateAbilityTotal}
               minBase={0}
               scrollable

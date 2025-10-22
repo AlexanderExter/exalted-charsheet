@@ -62,13 +62,25 @@ export const useCharacterCalculations = (character: Character | null): Character
     return getHighestAttributeValue(character.attributes);
   }, [character?.attributes]);
 
-  return {
-    ...combatCalcs,
-    ...healthCalcs,
-    ...socialCalcs,
-    highestAttribute,
-    getAttributeTotal,
-    getAbilityTotal,
-    dicePoolResult,
-  };
+  // Memoize the entire calculations object to prevent unnecessary re-renders
+  return useMemo(
+    () => ({
+      ...combatCalcs,
+      ...healthCalcs,
+      ...socialCalcs,
+      highestAttribute,
+      getAttributeTotal,
+      getAbilityTotal,
+      dicePoolResult,
+    }),
+    [
+      combatCalcs,
+      healthCalcs,
+      socialCalcs,
+      highestAttribute,
+      getAttributeTotal,
+      getAbilityTotal,
+      dicePoolResult,
+    ]
+  );
 };
