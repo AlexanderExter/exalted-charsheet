@@ -2,7 +2,7 @@
 
 // Core Stats Tab Component - Essence, attributes, abilities, and dice pool calculator
 
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -25,28 +25,30 @@ export const CoreStatsTab: React.FC = React.memo(() => {
     setGlobalAbilityAttribute,
   } = useCharacterContext();
 
-  // Memoize onChange callbacks to prevent StatTable column recalculation
-  const handleAttributeChange = useCallback(
-    (key: AttributeType, stat: StatBlock) => {
-      updateCharacter({
-        attributes: { ...character.attributes, [key]: stat },
-      });
-    },
-    [character.attributes, updateCharacter]
-  );
+  // Use ref to track latest character without causing re-renders
+  const characterRef = useRef(character);
+  useEffect(() => {
+    characterRef.current = character;
+  });
 
-  const handleAbilityChange = useCallback(
-    (key: AbilityType, stat: StatBlock) => {
-      updateCharacter({
-        abilities: { ...character.abilities, [key]: stat },
-      });
-    },
-    [character.abilities, updateCharacter]
-  );
+  // Memoize onChange callbacks to prevent StatTable column recalculation
+  // These callbacks access character via ref to avoid recreating on every character update
+  // This prevents infinite re-render loops while ensuring callbacks always use latest data
+  const handleAttributeChange = useCallback((key: AttributeType, stat: StatBlock) => {
+    updateCharacter({
+      attributes: { ...characterRef.current.attributes, [key]: stat },
+    });
+  }, [updateCharacter]);
+
+  const handleAbilityChange = useCallback((key: AbilityType, stat: StatBlock) => {
+    updateCharacter({
+      abilities: { ...characterRef.current.abilities, [key]: stat },
+    });
+  }, [updateCharacter]);
 
   const getAttributeTotal = useCallback(
-    (key: AttributeType) => calculateStatTotal(character.attributes[key]),
-    [character.attributes]
+    (key: AttributeType) => calculateStatTotal(characterRef.current.attributes[key]),
+    []
   );
 
   const handleEssenceChange = useCallback(

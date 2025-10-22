@@ -4,7 +4,7 @@ export { useHealthCalculations, type HealthCalculations } from "./useHealthCalcu
 export { useSocialCalculations, type SocialCalculations } from "./useSocialCalculations";
 export { useDicePoolCalculation } from "./useDicePoolCalculation";
 
-import { useMemo } from "react";
+import { useMemo, useCallback, useRef, useEffect } from "react";
 import type { Character, AttributeType, AbilityType } from "@/lib/character-types";
 import { calculateStatTotal, getHighestAttributeValue } from "@/lib/exalted-utils";
 import { useCombatCalculations, type CombatCalculations } from "./useCombatCalculations";
@@ -36,26 +36,25 @@ export const useCharacterCalculations = (character: Character | null): Character
   const socialCalcs = useSocialCalculations(character);
   const dicePoolResult = useDicePoolCalculation(character);
 
-  // Helper functions
-  const getAttributeTotal = useMemo(
-    () =>
-      (attributeKey: AttributeType): number => {
-        if (!character) return 0;
-        const attribute = character.attributes[attributeKey];
-        return attribute ? calculateStatTotal(attribute) : 0;
-      },
-    [character?.attributes]
-  );
+  // Use ref to track latest character without causing helper functions to recreate
+  const characterRef = useRef(character);
+  useEffect(() => {
+    characterRef.current = character;
+  });
 
-  const getAbilityTotal = useMemo(
-    () =>
-      (abilityKey: AbilityType): number => {
-        if (!character) return 0;
-        const ability = character.abilities[abilityKey];
-        return ability ? calculateStatTotal(ability) : 0;
-      },
-    [character?.abilities]
-  );
+  // Helper functions - use useCallback with stable refs
+  // Access character via ref to avoid recreating on every character update
+  const getAttributeTotal = useCallback((attributeKey: AttributeType): number => {
+    if (!characterRef.current) return 0;
+    const attribute = characterRef.current.attributes[attributeKey];
+    return attribute ? calculateStatTotal(attribute) : 0;
+  }, []);
+
+  const getAbilityTotal = useCallback((abilityKey: AbilityType): number => {
+    if (!characterRef.current) return 0;
+    const ability = characterRef.current.abilities[abilityKey];
+    return ability ? calculateStatTotal(ability) : 0;
+  }, []);
 
   const highestAttribute = useMemo(() => {
     if (!character) return 1;
