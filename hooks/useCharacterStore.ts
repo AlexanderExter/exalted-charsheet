@@ -41,13 +41,26 @@ export const useCharacterStore = create<CharacterState>()(
       },
       updateCurrentCharacter: updates => {
         const id = get().currentCharacterId;
-        if (!id) return;
-        set(state => {
-          const char = state.characters.find(c => c.id === id);
-          if (!char) return;
-          Object.assign(char, updates);
-          state.currentCharacter = char;
-        });
+        if (!id) {
+          console.warn("[CharacterStore] No current character ID");
+          return;
+        }
+
+        try {
+          set(state => {
+            const char = state.characters.find(c => c.id === id);
+            if (!char) {
+              console.warn("[CharacterStore] Character not found:", id);
+              return;
+            }
+            Object.assign(char, updates);
+            state.currentCharacter = char;
+          });
+        } catch (error) {
+          console.error("[CharacterStore] Error in updateCurrentCharacter:", error);
+          console.error("[CharacterStore] Updates:", updates);
+          throw error; // Re-throw to surface the issue
+        }
       },
       deleteCharacter: id => {
         let newCurrentId: string | null = null;
@@ -129,6 +142,11 @@ useCharacterStore.subscribe(
       .catch(error => {
         // Log error but don't break the promise chain
         console.error("[CharacterStore] Failed to save character data:", error);
+        console.error("[CharacterStore] Error details:", {
+          type: error?.constructor?.name,
+          message: error?.message,
+          stack: error?.stack
+        });
       });
   }
 );
