@@ -101,10 +101,10 @@ const ExaltedCharacterManager = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
+      <header className="bg-card border-b border-border px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-800">Exalted: Essence Character Manager</h1>
-          <div className="text-sm text-gray-600">
+          <h1 className="text-xl font-bold text-foreground">Exalted: Essence Character Manager</h1>
+          <div className="text-sm text-muted-foreground">
             <span>
               Managing: <strong>{currentCharacter.name}</strong>
             </span>

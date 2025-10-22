@@ -52,29 +52,29 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       }
 
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-background p-4">
           <Card className="w-full max-w-md">
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
-                <AlertTriangle className="h-12 w-12 text-red-500" />
+                <AlertTriangle className="h-12 w-12 text-destructive" />
               </div>
-              <CardTitle className="text-red-600">Something went wrong</CardTitle>
+              <CardTitle className="text-destructive">Something went wrong</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-gray-600 text-center">
+              <p className="text-muted-foreground text-center">
                 An unexpected error occurred while rendering this component.
               </p>
 
               {process.env.NODE_ENV === "development" && this.state.error && (
-                <details className="bg-gray-100 p-3 rounded text-sm">
-                  <summary className="cursor-pointer font-medium text-gray-700 mb-2">
+                <details className="bg-muted p-3 rounded text-sm">
+                  <summary className="cursor-pointer font-medium text-foreground mb-2">
                     Error Details (Development)
                   </summary>
-                  <pre className="whitespace-pre-wrap text-xs text-red-600">
+                  <pre className="whitespace-pre-wrap text-xs text-destructive">
                     {this.state.error.message}
                   </pre>
                   {this.state.errorInfo && (
-                    <pre className="whitespace-pre-wrap text-xs text-gray-600 mt-2">
+                    <pre className="whitespace-pre-wrap text-xs text-muted-foreground mt-2">
                       {this.state.errorInfo.componentStack}
                     </pre>
                   )}

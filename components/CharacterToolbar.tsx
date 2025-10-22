@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { Download, Upload, User, RefreshCw, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { Character } from "@/lib/character-types";
 
 interface CharacterToolbarProps {
@@ -41,28 +41,26 @@ export function CharacterToolbar({
           <h1 className="text-2xl font-bold">{character.name}</h1>
         </div>
         <div className="flex items-center gap-2">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex items-center gap-2 text-sm text-gray-600 cursor-help">
-                  {isSaving ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 animate-spin" />
-                      Saving...
-                    </>
-                  ) : lastSaved ? (
-                    <>
-                      <Save className="w-4 h-4" />
-                      Saved {lastSaved.toLocaleTimeString()}
-                    </>
-                  ) : null}
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Characters are saved automatically in your browser&apos;s local storage.</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground cursor-help">
+                {isSaving ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : lastSaved ? (
+                  <>
+                    <Save className="w-4 h-4" />
+                    Saved {lastSaved.toLocaleTimeString()}
+                  </>
+                ) : null}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Characters are saved automatically in your browser&apos;s local storage.</p>
+            </TooltipContent>
+          </Tooltip>
 
           <Button variant="outline" size="sm" onClick={() => onExport(character)}>
             <Download className="w-4 h-4 mr-1" />
