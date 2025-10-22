@@ -1,16 +1,16 @@
 "use client";
 
-import React from 'react';
-import { DndContext, type DragEndEvent } from '@dnd-kit/core';
+import React from "react";
+import { DndContext, type DragEndEvent } from "@dnd-kit/core";
 import {
   SortableContext,
   arrayMove,
   useSortable,
   verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { GripVertical } from 'lucide-react';
-import clsx from 'clsx';
-import { CSS } from '@dnd-kit/utilities';
+} from "@dnd-kit/sortable";
+import { GripVertical } from "lucide-react";
+import clsx from "clsx";
+import { CSS } from "@dnd-kit/utilities";
 
 interface SortableListProps<T extends { id: string }> {
   items: T[];
@@ -45,9 +45,9 @@ const SortableItem: React.FC<SortableItemProps> = ({ id, children }) => {
       ref={setNodeRef}
       style={style}
       className={clsx(
-        'group relative rounded border border-gray-200 bg-white transition-colors',
-        'hover:bg-gray-50',
-        isDragging && 'z-50 shadow-lg'
+        "group relative rounded border border-gray-200 bg-white transition-colors",
+        "hover:bg-gray-50",
+        isDragging && "z-50 shadow-lg"
       )}
     >
       <button
@@ -81,7 +81,7 @@ export const SortableList = <T extends { id: string }>({
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <SortableContext items={items.map(i => i.id)} strategy={verticalListSortingStrategy}>
-        <div className={clsx('space-y-4', className)}>
+        <div className={clsx("space-y-4", className)}>
           {items.map(item => (
             <SortableItem key={item.id} id={item.id}>
               {renderItem(item)}
@@ -93,4 +93,4 @@ export const SortableList = <T extends { id: string }>({
   );
 };
 
-SortableList.displayName = 'SortableList';
+SortableList.displayName = "SortableList";

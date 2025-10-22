@@ -104,4 +104,3 @@ The character data model in `lib/character-types.ts` represents the complete Exa
 ### UI Framework
 
 Built with shadcn/ui components based on Radix UI primitives, styled with Tailwind CSS 4. Uses Geist font family and includes toast notifications via Sonner.
-

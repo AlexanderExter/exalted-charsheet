@@ -26,13 +26,8 @@ export default function SiteFooter() {
       } catch (error) {
         logError(error);
         toast.error("Failed to load footer content.");
-        setAboutContent(
-          "# About\n\nInformation about this application could not be loaded."
-        );
-        setLegalContent(
-          "# Legal\n\nLegal information could not be loaded."
-        );
-
+        setAboutContent("# About\n\nInformation about this application could not be loaded.");
+        setLegalContent("# Legal\n\nLegal information could not be loaded.");
       }
     };
 
@@ -57,11 +52,7 @@ export default function SiteFooter() {
                   </a>
                 </Button>
                 <Button asChild size="sm">
-                  <a
-                    href="https://discord.gg/exalted"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href="https://discord.gg/exalted" target="_blank" rel="noopener noreferrer">
                     Official Discord
                   </a>
                 </Button>
@@ -84,7 +75,9 @@ export default function SiteFooter() {
               </div>
             </div>
           </div>
-          <p className="mt-6">&copy; {new Date().getFullYear()} Exalted Community. All rights reserved.</p>
+          <p className="mt-6">
+            &copy; {new Date().getFullYear()} Exalted Community. All rights reserved.
+          </p>
         </div>
       </footer>
 

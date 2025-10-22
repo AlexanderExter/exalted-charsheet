@@ -56,9 +56,7 @@ export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({ ar
             Tag
           </button>
         ),
-        cell: ({ row }) => (
-          <span className="font-medium text-gray-700">{row.getValue("tag")}</span>
-        ),
+        cell: ({ row }) => <span className="font-medium text-gray-700">{row.getValue("tag")}</span>,
       },
       {
         accessorKey: "items",
@@ -70,9 +68,7 @@ export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({ ar
             Used On
           </button>
         ),
-        cell: ({ row }) => (
-          <span className="text-xs text-gray-500">{row.getValue("items")}</span>
-        ),
+        cell: ({ row }) => <span className="text-xs text-gray-500">{row.getValue("items")}</span>,
       },
     ],
     []
@@ -116,15 +112,14 @@ export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({ ar
                         <th key={header.id} className="py-2 px-3 text-left text-sm">
                           {header.isPlaceholder ? null : (
                             <div
-                              className={header.column.getCanSort() ? "cursor-pointer select-none" : ""}
+                              className={
+                                header.column.getCanSort() ? "cursor-pointer select-none" : ""
+                              }
                               onClick={header.column.getToggleSortingHandler()}
                             >
                               {flexRender(header.column.columnDef.header, header.getContext())}
-                              {
-                                { asc: " ▲", desc: " ▼" }[
-                                  header.column.getIsSorted() as string
-                                ] ?? null
-                              }
+                              {{ asc: " ▲", desc: " ▼" }[header.column.getIsSorted() as string] ??
+                                null}
                             </div>
                           )}
                         </th>

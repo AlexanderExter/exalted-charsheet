@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import CharacterSelect from "@/components/CharacterSelect";
 import CharacterToolbar from "@/components/CharacterToolbar";
 import CharacterTabs from "@/components/CharacterTabs";
 import { CharacterProvider } from "@/hooks/CharacterContext";
 import { useAutoSave } from "@/hooks/useAutoSave";
-import { useCharacterManagement } from "@/hooks/useCharacterManagement";
+import { useCharacterStore } from "@/hooks/useCharacterStore";
 import type { Character } from "@/lib/character-types";
 import { importCharacters, exportCharacter } from "@/lib/character-storage";
 import { toast } from "sonner";
@@ -16,20 +16,43 @@ const ExaltedCharacterManager = () => {
   const {
     characters,
     currentCharacter,
-    showCharacterSelect,
-    setShowCharacterSelect,
-    createCharacter,
-    selectCharacter,
-    updateCharacter,
+    addCharacter,
+    updateCurrentCharacter,
     deleteCharacter,
+    setCurrentCharacter,
     loadCharacters,
-  } = useCharacterManagement();
+  } = useCharacterStore();
 
+  const [showCharacterSelect, setShowCharacterSelect] = useState(!currentCharacter);
   const [activeTab, setActiveTab] = useState("core");
 
   const fileInputRef = useRef<HTMLInputElement>(null!);
 
   const { isSaving, lastSaved } = useAutoSave(characters);
+
+  const createCharacter = useCallback(
+    (name: string) => {
+      if (!name.trim()) return;
+      addCharacter(name.trim());
+      setShowCharacterSelect(false);
+    },
+    [addCharacter]
+  );
+
+  const selectCharacter = useCallback(
+    (id: string) => {
+      setCurrentCharacter(id);
+      setShowCharacterSelect(false);
+    },
+    [setCurrentCharacter]
+  );
+
+  const updateCharacter = useCallback(
+    (updates: Partial<Character>) => {
+      updateCurrentCharacter(updates);
+    },
+    [updateCurrentCharacter]
+  );
 
   const handleExport = async (character: Character) => {
     try {

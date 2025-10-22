@@ -280,4 +280,3 @@ export type AnimaLevel = z.infer<typeof AnimaLevelSchema>;
 export type CharacterUpdate = Partial<Character>;
 export type AttributeUpdate = Partial<Attributes>;
 export type AbilityUpdate = Partial<Abilities>;
-

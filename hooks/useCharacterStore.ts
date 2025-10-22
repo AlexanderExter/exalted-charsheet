@@ -129,8 +129,3 @@ useCharacterStore.subscribe(
 );
 
 export const waitForCharacterStoreSave = () => lastSavePromise;
-
-export const subscribeToCharacterStore = <T>(
-  selector: (state: CharacterState) => T,
-  listener: (state: T, prev: T) => void
-) => useCharacterStore.subscribe(selector, listener);
