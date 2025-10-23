@@ -2,7 +2,6 @@
 
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
 import isEqual from "fast-deep-equal";
 import { createNewCharacter } from "@/lib/character-defaults";
 import { CharacterSchema, type Character } from "@/lib/character-types";
@@ -26,65 +25,65 @@ interface CharacterState {
 }
 
 export const useCharacterStore = create<CharacterState>()(
-  subscribeWithSelector(
-    immer((set, get) => ({
-      characters: [],
-      currentCharacterId: null,
-      currentCharacter: null,
-      addCharacter: name => {
-        const char = createNewCharacter(name);
-        set(state => {
-          state.characters.push(char);
-          state.currentCharacterId = char.id;
-          state.currentCharacter = char;
-        });
-      },
-      updateCurrentCharacter: updates => {
-        const id = get().currentCharacterId;
-        if (!id) return;
-        set(state => {
-          const char = state.characters.find(c => c.id === id);
-          if (!char) return;
-          Object.assign(char, updates);
-          state.currentCharacter = char;
-        });
-      },
-      deleteCharacter: id => {
-        let newCurrentId: string | null = null;
-        set(state => {
-          state.characters = state.characters.filter(c => c.id !== id);
-          if (id === state.currentCharacterId) {
-            newCurrentId = state.characters[0]?.id ?? null;
-            state.currentCharacterId = newCurrentId;
-            state.currentCharacter = state.characters[0] ?? null;
-          } else {
-            newCurrentId = state.currentCharacterId;
-            state.currentCharacter =
-              state.characters.find(c => c.id === state.currentCharacterId) ?? null;
-          }
-        });
-      },
-      setCurrentCharacter: id => {
-        set(state => {
-          state.currentCharacterId = id;
-          state.currentCharacter = state.characters.find(c => c.id === id) ?? null;
-        });
-      },
-      loadCharacters: async () => {
-        const [charsFromDB, currentId] = await Promise.all([
-          getAllCharacters(),
-          getCurrentCharacterId(),
-        ]);
-        const parsed = CharacterSchema.array().parse(charsFromDB) as Character[];
-        const currentChar = parsed.find(c => c.id === currentId) ?? parsed[0] ?? null;
-        set(state => {
-          state.characters = parsed;
-          state.currentCharacterId = currentChar?.id ?? null;
-          state.currentCharacter = currentChar;
-        });
-      },
-    }))
-  )
+  subscribeWithSelector((set, get) => ({
+    characters: [],
+    currentCharacterId: null,
+    currentCharacter: null,
+    addCharacter: name => {
+      const char = createNewCharacter(name);
+      set(state => ({
+        characters: [...state.characters, char],
+        currentCharacterId: char.id,
+        currentCharacter: char,
+      }));
+    },
+    updateCurrentCharacter: updates => {
+      const id = get().currentCharacterId;
+      if (!id) return;
+      set(state => {
+        const updatedCharacters = state.characters.map(c =>
+          c.id === id ? { ...c, ...updates } : c
+        );
+        const updatedChar = updatedCharacters.find(c => c.id === id) ?? null;
+        return {
+          characters: updatedCharacters,
+          currentCharacter: updatedChar,
+        };
+      });
+    },
+    deleteCharacter: id => {
+      set(state => {
+        const filteredCharacters = state.characters.filter(c => c.id !== id);
+        const newCurrentId =
+          id === state.currentCharacterId ? filteredCharacters[0]?.id ?? null : state.currentCharacterId;
+        const newCurrentChar = filteredCharacters.find(c => c.id === newCurrentId) ?? null;
+        return {
+          characters: filteredCharacters,
+          currentCharacterId: newCurrentId,
+          currentCharacter: newCurrentChar,
+        };
+      });
+    },
+    setCurrentCharacter: id => {
+      set(state => ({
+        currentCharacterId: id,
+        currentCharacter: state.characters.find(c => c.id === id) ?? null,
+      }));
+    },
+    loadCharacters: async () => {
+      const [charsFromDB, currentId] = await Promise.all([
+        getAllCharacters(),
+        getCurrentCharacterId(),
+      ]);
+      const parsed = CharacterSchema.array().parse(charsFromDB) as Character[];
+      const currentChar = parsed.find(c => c.id === currentId) ?? parsed[0] ?? null;
+      set({
+        characters: parsed,
+        currentCharacterId: currentChar?.id ?? null,
+        currentCharacter: currentChar,
+      });
+    },
+  }))
 );
 
 void useCharacterStore.getState().loadCharacters();

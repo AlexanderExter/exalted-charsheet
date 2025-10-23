@@ -21,7 +21,6 @@ import {
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations";
 import { DramaticInjuriesList } from "@/components/combat/DramaticInjuriesList";
 import { z } from "zod";
-import type { Draft } from "immer";
 
 interface HealthTrackerProps {
   character: Character;
@@ -32,7 +31,7 @@ interface HealthTrackerProps {
   updateDramaticInjury: <K extends keyof DramaticInjury>(
     id: string,
     field: K,
-    value: Draft<DramaticInjury>[K]
+    value: DramaticInjury[K]
   ) => void;
   deleteDramaticInjury: (id: string) => void;
 }
