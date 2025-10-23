@@ -11,7 +11,7 @@ interface EssenceEditorProps {
   onChange: (essence: Essence) => void;
 }
 
-export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence, onChange }) => {
+export const EssenceEditor: React.FC<EssenceEditorProps> = ({ essence, onChange }) => {
   const update = (field: keyof Essence, value: number) => {
     onChange({ ...essence, [field]: value });
   };
@@ -103,7 +103,7 @@ export const EssenceEditor: React.FC<EssenceEditorProps> = React.memo(({ essence
       </div>
     </div>
   );
-});
+};
 
 EssenceEditor.displayName = "EssenceEditor";
 

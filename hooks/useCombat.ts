@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import type { Character, DramaticInjury } from "@/lib/character-types";
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations";
 
@@ -9,21 +8,21 @@ interface UseCombatProps {
 }
 
 export function useCombat({ character, updateCharacter, calculations }: UseCombatProps) {
-  const getHighestAttribute = useCallback(() => {
+  const getHighestAttribute = () => {
     if (!character?.attributes) return 0;
     return calculations.highestAttribute;
-  }, [character?.attributes, calculations.highestAttribute]);
+  };
 
-  const getTotalHealthLevels = useCallback(() => {
+  const getTotalHealthLevels = () => {
     return (
       calculations.healthLevels.zero +
       calculations.healthLevels.minusOne +
       calculations.healthLevels.minusTwo +
       calculations.healthLevels.incap
     );
-  }, [calculations.healthLevels]);
+  };
 
-  const addDramaticInjury = useCallback(() => {
+  const addDramaticInjury = () => {
     if (!character) return;
 
     const newInjury: DramaticInjury = {
@@ -38,37 +37,35 @@ export function useCombat({ character, updateCharacter, calculations }: UseComba
         dramaticInjuries: [...character.health.dramaticInjuries, newInjury],
       },
     });
-  }, [character, updateCharacter]);
+  };
 
-  const updateDramaticInjury = useCallback(
-    <K extends keyof DramaticInjury>(id: string, field: K, value: DramaticInjury[K]) => {
-      if (!character) return;
+  const updateDramaticInjury = <K extends keyof DramaticInjury>(
+    id: string,
+    field: K,
+    value: DramaticInjury[K]
+  ) => {
+    if (!character) return;
 
-      updateCharacter({
-        health: {
-          ...character.health,
-          dramaticInjuries: character.health.dramaticInjuries.map(inj =>
-            inj.id === id ? { ...inj, [field]: value } : inj
-          ),
-        },
-      });
-    },
-    [character, updateCharacter]
-  );
+    updateCharacter({
+      health: {
+        ...character.health,
+        dramaticInjuries: character.health.dramaticInjuries.map(inj =>
+          inj.id === id ? { ...inj, [field]: value } : inj
+        ),
+      },
+    });
+  };
 
-  const deleteDramaticInjury = useCallback(
-    (id: string) => {
-      if (!character) return;
+  const deleteDramaticInjury = (id: string) => {
+    if (!character) return;
 
-      updateCharacter({
-        health: {
-          ...character.health,
-          dramaticInjuries: character.health.dramaticInjuries.filter(injury => injury.id !== id),
-        },
-      });
-    },
-    [character, updateCharacter]
-  );
+    updateCharacter({
+      health: {
+        ...character.health,
+        dramaticInjuries: character.health.dramaticInjuries.filter(injury => injury.id !== id),
+      },
+    });
+  };
 
   return {
     getHighestAttribute,

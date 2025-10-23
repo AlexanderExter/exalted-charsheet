@@ -2,7 +2,7 @@
 
 // Rulings Tab Component - Character-specific rulings and house rules
 
-import React, { useCallback } from "react";
+import React from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,8 +22,9 @@ import { SortableList } from "@/components/common/SortableList";
 
 export const RulingsTab: React.FC = () => {
   const { character, updateCharacter } = useCharacterContext();
+
   // Ruling management functions
-  const addRuling = useCallback(() => {
+  const addRuling = () => {
     const newRuling: Ruling = {
       id: crypto.randomUUID(),
       title: "New Ruling",
@@ -35,27 +36,21 @@ export const RulingsTab: React.FC = () => {
     updateCharacter({
       rulings: [...(character.rulings || []), newRuling],
     });
-  }, [character, updateCharacter]);
+  };
 
-  const updateRuling = useCallback(
-    (id: string, field: keyof Ruling, value: string) => {
-      updateCharacter({
-        rulings: (character.rulings || []).map(ruling =>
-          ruling.id === id ? { ...ruling, [field]: value } : ruling
-        ),
-      });
-    },
-    [character, updateCharacter]
-  );
+  const updateRuling = (id: string, field: keyof Ruling, value: string) => {
+    updateCharacter({
+      rulings: (character.rulings || []).map(ruling =>
+        ruling.id === id ? { ...ruling, [field]: value } : ruling
+      ),
+    });
+  };
 
-  const deleteRuling = useCallback(
-    (id: string) => {
-      updateCharacter({
-        rulings: (character.rulings || []).filter(ruling => ruling.id !== id),
-      });
-    },
-    [character, updateCharacter]
-  );
+  const deleteRuling = (id: string) => {
+    updateCharacter({
+      rulings: (character.rulings || []).filter(ruling => ruling.id !== id),
+    });
+  };
 
   return (
     <div className="space-y-6">

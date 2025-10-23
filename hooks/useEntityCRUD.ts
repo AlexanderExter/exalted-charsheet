@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import type { Character } from "@/lib/character-types";
 
 interface EntityWithId {
@@ -28,39 +27,30 @@ export function useEntityCRUD<T extends EntityWithId>(
   // Get current items array (safely handle undefined)
   const items = (character[entityKey] as unknown as T[] | undefined) ?? [];
 
-  const add = useCallback(() => {
+  const add = () => {
     const newItem = createDefault() as T;
     updateCharacter({
       [entityKey]: [...items, newItem],
     } as Partial<Character>);
-  }, [character, updateCharacter, entityKey, createDefault, items]);
+  };
 
-  const update = useCallback(
-    (id: string, field: keyof T, value: T[keyof T]) => {
-      updateCharacter({
-        [entityKey]: items.map(item => (item.id === id ? { ...item, [field]: value } : item)),
-      } as Partial<Character>);
-    },
-    [character, updateCharacter, entityKey, items]
-  );
+  const update = (id: string, field: keyof T, value: T[keyof T]) => {
+    updateCharacter({
+      [entityKey]: items.map(item => (item.id === id ? { ...item, [field]: value } : item)),
+    } as Partial<Character>);
+  };
 
-  const remove = useCallback(
-    (id: string) => {
-      updateCharacter({
-        [entityKey]: items.filter(item => item.id !== id),
-      } as Partial<Character>);
-    },
-    [character, updateCharacter, entityKey, items]
-  );
+  const remove = (id: string) => {
+    updateCharacter({
+      [entityKey]: items.filter(item => item.id !== id),
+    } as Partial<Character>);
+  };
 
-  const reorder = useCallback(
-    (newItems: T[]) => {
-      updateCharacter({
-        [entityKey]: newItems,
-      } as Partial<Character>);
-    },
-    [updateCharacter, entityKey]
-  );
+  const reorder = (newItems: T[]) => {
+    updateCharacter({
+      [entityKey]: newItems,
+    } as Partial<Character>);
+  };
 
   return {
     items,
@@ -86,7 +76,7 @@ export function useNestedEntityCRUD<T extends EntityWithId>(
   const parent = character[parentKey] as any;
   const items = (parent?.[nestedKey] as T[] | undefined) ?? [];
 
-  const add = useCallback(() => {
+  const add = () => {
     const newItem = createDefault() as T;
     updateCharacter({
       [parentKey]: {
@@ -94,43 +84,34 @@ export function useNestedEntityCRUD<T extends EntityWithId>(
         [nestedKey]: [...items, newItem],
       },
     } as Partial<Character>);
-  }, [character, updateCharacter, parentKey, nestedKey, parent, createDefault, items]);
+  };
 
-  const update = useCallback(
-    (id: string, field: keyof T, value: T[keyof T]) => {
-      updateCharacter({
-        [parentKey]: {
-          ...parent,
-          [nestedKey]: items.map(item => (item.id === id ? { ...item, [field]: value } : item)),
-        },
-      } as Partial<Character>);
-    },
-    [character, updateCharacter, parentKey, nestedKey, parent, items]
-  );
+  const update = (id: string, field: keyof T, value: T[keyof T]) => {
+    updateCharacter({
+      [parentKey]: {
+        ...parent,
+        [nestedKey]: items.map(item => (item.id === id ? { ...item, [field]: value } : item)),
+      },
+    } as Partial<Character>);
+  };
 
-  const remove = useCallback(
-    (id: string) => {
-      updateCharacter({
-        [parentKey]: {
-          ...parent,
-          [nestedKey]: items.filter(item => item.id !== id),
-        },
-      } as Partial<Character>);
-    },
-    [character, updateCharacter, parentKey, nestedKey, parent, items]
-  );
+  const remove = (id: string) => {
+    updateCharacter({
+      [parentKey]: {
+        ...parent,
+        [nestedKey]: items.filter(item => item.id !== id),
+      },
+    } as Partial<Character>);
+  };
 
-  const reorder = useCallback(
-    (newItems: T[]) => {
-      updateCharacter({
-        [parentKey]: {
-          ...parent,
-          [nestedKey]: newItems,
-        },
-      } as Partial<Character>);
-    },
-    [updateCharacter, parentKey, nestedKey, parent]
-  );
+  const reorder = (newItems: T[]) => {
+    updateCharacter({
+      [parentKey]: {
+        ...parent,
+        [nestedKey]: newItems,
+      },
+    } as Partial<Character>);
+  };
 
   return {
     items,

@@ -48,6 +48,3 @@ export function GenericList<T extends { id: string }>({
     </Card>
   );
 }
-
-// Memoized version for performance
-export const GenericListMemo = React.memo(GenericList) as typeof GenericList;

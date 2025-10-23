@@ -2,7 +2,7 @@
 
 // Advancement Tab Component - Milestones and character progression management
 
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { Plus, Trash2, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,7 +25,7 @@ export const AdvancementTab: React.FC = () => {
   const [showAdvancementLog, setShowAdvancementLog] = useState(false);
 
   // Advancement entry management functions
-  const addAdvancementEntry = useCallback(() => {
+  const addAdvancementEntry = () => {
     const newEntry: AdvancementEntry = {
       id: crypto.randomUUID(),
       item: "",
@@ -37,31 +37,25 @@ export const AdvancementTab: React.FC = () => {
     updateCharacter({
       advancement: [...(character.advancement || []), newEntry],
     });
-  }, [character, updateCharacter]);
+  };
 
-  const updateAdvancementEntry = useCallback(
-    (
-      id: string,
-      field: keyof AdvancementEntry,
-      value: AdvancementEntry[keyof AdvancementEntry]
-    ) => {
-      updateCharacter({
-        advancement: (character.advancement || []).map(entry =>
-          entry.id === id ? { ...entry, [field]: value } : entry
-        ),
-      });
-    },
-    [character, updateCharacter]
-  );
+  const updateAdvancementEntry = (
+    id: string,
+    field: keyof AdvancementEntry,
+    value: AdvancementEntry[keyof AdvancementEntry]
+  ) => {
+    updateCharacter({
+      advancement: (character.advancement || []).map(entry =>
+        entry.id === id ? { ...entry, [field]: value } : entry
+      ),
+    });
+  };
 
-  const deleteAdvancementEntry = useCallback(
-    (id: string) => {
-      updateCharacter({
-        advancement: (character.advancement || []).filter(entry => entry.id !== id),
-      });
-    },
-    [character, updateCharacter]
-  );
+  const deleteAdvancementEntry = (id: string) => {
+    updateCharacter({
+      advancement: (character.advancement || []).filter(entry => entry.id !== id),
+    });
+  };
 
   // Milestone calculation helpers
   const getSpentCount = (status: AdvancementStatus) => {

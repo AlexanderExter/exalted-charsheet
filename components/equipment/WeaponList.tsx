@@ -3,7 +3,7 @@
 import React from "react";
 import type { Weapon } from "@/lib/character-types";
 import { WeaponEditor } from "@/components/equipment/WeaponEditor";
-import { GenericListMemo } from "@/components/common/GenericList";
+import { GenericList } from "@/components/common/GenericList";
 
 interface WeaponListProps {
   weapons: Weapon[];
@@ -13,23 +13,27 @@ interface WeaponListProps {
   reorderWeapons: (weapons: Weapon[]) => void;
 }
 
-export const WeaponList: React.FC<WeaponListProps> = React.memo(
-  ({ weapons, addWeapon, updateWeapon, deleteWeapon, reorderWeapons }) => {
-    return (
-      <GenericListMemo
-        title="Weapons"
-        items={weapons}
-        emptyMessage="No weapons equipped."
-        addButtonText="Add Weapon"
-        buttonColor="bg-red-600 hover:bg-red-700"
-        onAdd={addWeapon}
-        onReorder={reorderWeapons}
-        renderItem={w => (
-          <WeaponEditor weapon={w} updateWeapon={updateWeapon} deleteWeapon={deleteWeapon} />
-        )}
-      />
-    );
-  }
-);
+export const WeaponList: React.FC<WeaponListProps> = ({
+  weapons,
+  addWeapon,
+  updateWeapon,
+  deleteWeapon,
+  reorderWeapons,
+}) => {
+  return (
+    <GenericList
+      title="Weapons"
+      items={weapons}
+      emptyMessage="No weapons equipped."
+      addButtonText="Add Weapon"
+      buttonColor="bg-red-600 hover:bg-red-700"
+      onAdd={addWeapon}
+      onReorder={reorderWeapons}
+      renderItem={w => (
+        <WeaponEditor weapon={w} updateWeapon={updateWeapon} deleteWeapon={deleteWeapon} />
+      )}
+    />
+  );
+};
 
 WeaponList.displayName = "WeaponList";
