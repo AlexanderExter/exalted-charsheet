@@ -2,9 +2,9 @@
 
 [![Version](https://img.shields.io/badge/version-0.0.6-orange.svg)](https://github.com/AlexanderExter/exalted-charsheet/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![React](https://img.shields.io/badge/React-19.1.0-blue.svg)](https://reactjs.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-15.4.3-black.svg)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19.2.0-blue.svg)](https://react.dev/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.0-black.svg)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
 
 > **🎲 A comprehensive digital character sheet manager for the Exalted: Essence tabletop RPG system**
 
@@ -64,8 +64,8 @@
 
 **Prerequisites:**
 
-- Node.js 18+
-- npm or yarn
+- Node.js 20.9+ (required for Next.js 16)
+- npm 9+ or yarn
 
 ---
 
@@ -117,14 +117,17 @@ access, and versioned migrations beyond localStorage limits.
 
 ## 🛠️ Technical Stack
 
-- **Frontend**: React 19 + TypeScript
-- **Framework**: Next.js 15 (App Router)
-- **UI**: shadcn/ui, Radix UI
-- **Build**: Turbopack (dev), Next.js (prod)
-- **Styling**: Tailwind CSS 4, CSS variables
+- **Frontend**: React 19.2 + TypeScript 5.x
+- **Framework**: Next.js 16 (App Router)
+- **Build**: Turbopack (default bundler)
+- **UI**: shadcn/ui, Radix UI primitives
+- **Forms**: React Hook Form v7 + @hookform/resolvers v5 (Zod)
+- **Drag & Drop**: @dnd-kit v10
+- **Styling**: Tailwind CSS 4 with CSS variables
 - **Icons**: Lucide React
-- **Storage**: Dexie (IndexedDB) for character data
-- **Deployment**: Static export
+- **State**: Zustand v5 with Immer middleware
+- **Storage**: Dexie v4 (IndexedDB wrapper)
+- **Deployment**: Static export (GitHub Pages, Vercel, etc.)
 
 ---
 

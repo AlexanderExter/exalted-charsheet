@@ -59,9 +59,9 @@ This app implements core **Exalted: Essence** mechanics, including:
 
 **Current limitations:**
 
-- LocalStorage size constraints
-- Basic markdown rendering
-- Limited mobile optimization
+- IndexedDB quota limits (browser-dependent)
+- Basic markdown rendering (headers, paragraphs, lists)
+- Mobile optimization ongoing
 
 ---
 

@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
+import { useEffect, useState, lazy, Suspense } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +12,9 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { logError } from "@/lib/logger";
+
+// Dynamic import - only loads when modals are opened
+const ReactMarkdown = lazy(() => import("react-markdown"));
 
 export default function SiteFooter() {
   const [showAboutModal, setShowAboutModal] = useState(false);
@@ -102,7 +104,9 @@ export default function SiteFooter() {
             <DialogTitle>About</DialogTitle>
           </DialogHeader>
           <div className="prose prose-sm max-w-none text-foreground">
-            <ReactMarkdown>{aboutContent}</ReactMarkdown>
+            <Suspense fallback={<div className="text-center py-8 text-muted-foreground">Loading...</div>}>
+              <ReactMarkdown>{aboutContent}</ReactMarkdown>
+            </Suspense>
           </div>
           <DialogFooter>
             <Button onClick={() => setShowAboutModal(false)} className="w-full sm:w-auto">
@@ -118,7 +122,9 @@ export default function SiteFooter() {
             <DialogTitle>Legal Information</DialogTitle>
           </DialogHeader>
           <div className="prose prose-sm max-w-none text-foreground">
-            <ReactMarkdown>{legalContent}</ReactMarkdown>
+            <Suspense fallback={<div className="text-center py-8 text-muted-foreground">Loading...</div>}>
+              <ReactMarkdown>{legalContent}</ReactMarkdown>
+            </Suspense>
           </div>
           <DialogFooter>
             <Button onClick={() => setShowLegalModal(false)} className="w-full sm:w-auto">

@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- ⬆️ **Major Dependency Updates** - Updated all dependencies to latest stable versions
+  - Next.js 15.5.6 → 16.0.0 (Turbopack now default bundler)
+  - React 19.1.0 → 19.2.0
+  - @hookform/resolvers 3.x → 5.x (type inference from Zod schemas)
+  - @dnd-kit/sortable 7.x → 10.x
+  - react-markdown 9.x → 10.x
+  - All supporting dependencies updated to latest stable
+
+### Removed
+
+- ❌ **Backwards Compatibility Cleanup** - Removed technical debt
+  - Removed custom type definitions for @hookform/resolvers (v5 exports proper types)
+  - Removed deprecated npm scripts (`export`, `build:production`)
+  - Removed Next.js experimental.esmExternals flag
+  - Cleaned up .gitignore duplicates and unused framework entries
+
+### Fixed
+
+- 🔧 **ESLint Configuration** - Updated for Next.js 16 flat config format
+- 🐛 **TypeScript Configuration** - Enabled skipLibCheck for better performance
+- 📚 **Documentation** - Updated all version badges, technical stack, and prerequisites
+
 ## [0.0.6] - 2025-08-11
 
 ### Added
