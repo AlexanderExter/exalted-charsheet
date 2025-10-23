@@ -6,10 +6,6 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // Disable server-side features for static export
-  experimental: {
-    esmExternals: true,
-  },
 };
 
 export default nextConfig;
