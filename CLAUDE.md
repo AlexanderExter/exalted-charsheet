@@ -13,10 +13,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Building
 
-- `npm run build` - Standard Next.js build
-- `npm run build:production` - Production build with NODE_ENV=production
+- `npm run build` - Next.js production build (automatically includes static export)
 - `npm run build:analyze` - Build with bundle analyzer
-- `npm run export` - Build and export static files
 
 ### Code Quality
 
@@ -46,7 +44,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `npm run postinstall` - Show setup message after install
 - `npm run validate` - Run linting/type check and build
-- `npm run validate:strict` - Run strict checks and production build
+- `npm run validate:strict` - Run strict checks and build
 
 ### CI/CD
 
@@ -56,7 +54,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-This is a Next.js 15 application using the App Router pattern for an Exalted: Essence character sheet manager.
+This is a Next.js 16 application using the App Router pattern with Turbopack for an Exalted: Essence character sheet manager.
 
 ### Core Architecture Patterns
 
