@@ -13,7 +13,7 @@ import { DicePoolEditor } from "@/components/forms/DicePoolEditor";
 import { EssencePanel } from "@/components/character-tabs/common/EssencePanel";
 import { createDefaultEssence } from "@/lib/character-defaults";
 import { useCharacterContext } from "@/hooks/CharacterContext";
-export const CoreStatsTab: React.FC = React.memo(() => {
+export const CoreStatsTab: React.FC = () => {
   const {
     character,
     updateCharacter,
@@ -136,8 +136,6 @@ export const CoreStatsTab: React.FC = React.memo(() => {
       <DicePoolEditor />
     </div>
   );
-});
-
-CoreStatsTab.displayName = "CoreStatsTab";
+};
 
 export default CoreStatsTab;

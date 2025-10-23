@@ -20,7 +20,7 @@ import { useCharacterContext } from "@/hooks/CharacterContext";
 import { useEntityCRUD } from "@/hooks/useEntityCRUD";
 import { GenericListMemo } from "@/components/common/GenericList";
 
-export const PowersTab: React.FC = React.memo(() => {
+export const PowersTab: React.FC = () => {
   const { character, updateCharacter } = useCharacterContext();
 
   // Charms CRUD
@@ -246,6 +246,5 @@ export const PowersTab: React.FC = React.memo(() => {
       />
     </div>
   );
-});
+};
 
-PowersTab.displayName = "PowersTab";

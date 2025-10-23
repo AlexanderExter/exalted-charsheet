@@ -45,6 +45,10 @@
     "check:strict": "npm run type-check:strict && npm run lint:strict",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css,mdx}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md,css,mdx}\"",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "clean": "rimraf .next out node_modules/.cache dist",
     "clean:all": "rimraf .next out node_modules/.cache dist node_modules package-lock.json",
     "deps:update": "npm update && npm audit",
@@ -91,13 +95,17 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@ducanh2912/next-pwa": "^10.2.9",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^24.9.1",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
+    "@vitejs/plugin-react": "^5.0.4",
     "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "^16.0.0",
@@ -105,10 +113,12 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.0",
     "globals": "^16.4.0",
+    "happy-dom": "^20.0.8",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.1"
   },
   "browserslist": [
     "defaults",
