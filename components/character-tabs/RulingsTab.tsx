@@ -71,7 +71,7 @@ export const RulingsTab: React.FC = React.memo(() => {
         </CardHeader>
         <CardContent>
           {(character.rulings || []).length === 0 ? (
-            <p className="text-gray-500 italic">No rulings recorded yet.</p>
+            <p className="text-muted-foreground/80 italic">No rulings recorded yet.</p>
           ) : (
             <SortableList
               items={character.rulings || []}
@@ -124,7 +124,7 @@ export const RulingsTab: React.FC = React.memo(() => {
                       rows={3}
                     />
                   </div>
-                  <div className="text-xs text-gray-500">Created: {ruling.dateCreated}</div>
+                  <div className="text-xs text-muted-foreground/80">Created: {ruling.dateCreated}</div>
                 </>
               )}
             />

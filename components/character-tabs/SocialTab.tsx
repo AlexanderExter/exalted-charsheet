@@ -86,7 +86,7 @@ export const SocialTab: React.FC = React.memo(() => {
   return (
     <div className="space-y-6">
       {/* Social Influence Reference */}
-      <div className="bg-blue-50 rounded-lg p-4 text-xs text-blue-700">
+      <div className="bg-info/10 rounded-lg p-4 text-xs text-info">
         <div className="font-semibold mb-1">Social Influence Steps:</div>
         <div>Step 1: The player declares her intention for the influence.</div>
         <div>
@@ -111,15 +111,15 @@ export const SocialTab: React.FC = React.memo(() => {
         <CardContent>
           <div className="space-y-2">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">{resolve}</div>
-              <div className="text-sm font-medium text-gray-700">Resolve</div>
+              <div className="text-2xl font-bold text-info">{resolve}</div>
+              <div className="text-sm font-medium text-foreground/80">Resolve</div>
             </div>
-            <div className="text-xs text-gray-500 text-center">
+            <div className="text-xs text-muted-foreground/80 text-center">
               <div>2 + Integrity bonuses</div>
               <div>Integrity 1+ = +1, Integrity 3+ = +2</div>
             </div>
             <div className="flex items-center justify-center gap-1">
-              <Label className="text-xs text-gray-600">Mod:</Label>
+              <Label className="text-xs text-muted-foreground">Mod:</Label>
               <Input
                 type="number"
                 value={character?.staticValues?.resolveModifier || 0}
@@ -148,10 +148,10 @@ export const SocialTab: React.FC = React.memo(() => {
             <CardTitle>Intimacies</CardTitle>
             {/* Virtues Header */}
             <div className="flex items-center gap-3">
-              <Label className="text-sm font-medium text-gray-600">Virtues:</Label>
+              <Label className="text-sm font-medium text-muted-foreground">Virtues:</Label>
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1">
-                  <Label className="text-xs text-purple-600">Major:</Label>
+                  <Label className="text-xs text-info">Major:</Label>
                   <Select
                     value={character?.social?.virtues?.major || "none"}
                     onValueChange={(value: string) =>
@@ -174,7 +174,7 @@ export const SocialTab: React.FC = React.memo(() => {
                   </Select>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Label className="text-xs text-blue-600">Minor:</Label>
+                  <Label className="text-xs text-info">Minor:</Label>
                   <Select
                     value={character?.social?.virtues?.minor || "none"}
                     onValueChange={(value: string) =>
@@ -202,7 +202,7 @@ export const SocialTab: React.FC = React.memo(() => {
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               Intimacies represent emotional connections and core beliefs that motivate your
               character.
             </p>
@@ -213,7 +213,7 @@ export const SocialTab: React.FC = React.memo(() => {
           </div>
 
           {intimaciesEntity.items.length === 0 ? (
-            <p className="text-gray-500 italic text-sm">No intimacies yet.</p>
+            <p className="text-muted-foreground/80 italic text-sm">No intimacies yet.</p>
           ) : (
             <div className="space-y-2">
               {intimaciesEntity.items.map(intimacy => (
@@ -262,7 +262,7 @@ export const SocialTab: React.FC = React.memo(() => {
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               Backgrounds represent resources, allies, and supernatural assets available to your
               character.
             </p>
@@ -273,7 +273,7 @@ export const SocialTab: React.FC = React.memo(() => {
           </div>
 
           {backgroundsEntity.items.length === 0 ? (
-            <p className="text-gray-500 italic text-sm">No backgrounds yet.</p>
+            <p className="text-muted-foreground/80 italic text-sm">No backgrounds yet.</p>
           ) : (
             <div className="space-y-2">
               {backgroundsEntity.items.map(background => (

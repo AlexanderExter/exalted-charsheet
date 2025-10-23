@@ -12,7 +12,7 @@ export const ModifierInputs: React.FC = () => {
 
   return (
     <div>
-      <h3 className="font-semibold text-gray-700 mb-3">Modifiers</h3>
+      <h3 className="font-semibold text-foreground/80 mb-3">Modifiers</h3>
       <div className="space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <FormField
@@ -20,7 +20,7 @@ export const ModifierInputs: React.FC = () => {
             name="targetNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block text-sm font-medium text-gray-600 mb-1">
+                <FormLabel className="block text-sm font-medium text-muted-foreground mb-1">
                   Target Number
                 </FormLabel>
                 <FormControl>
@@ -42,7 +42,7 @@ export const ModifierInputs: React.FC = () => {
             name="doublesThreshold"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block text-sm font-medium text-gray-600 mb-1">
+                <FormLabel className="block text-sm font-medium text-muted-foreground mb-1">
                   Doubles Threshold
                 </FormLabel>
                 <FormControl>
@@ -67,7 +67,7 @@ export const ModifierInputs: React.FC = () => {
             name="extraDiceBonus"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block text-sm font-medium text-gray-600 mb-1">
+                <FormLabel className="block text-sm font-medium text-muted-foreground mb-1">
                   Extra Dice (Bonus)
                 </FormLabel>
                 <FormControl>
@@ -80,7 +80,7 @@ export const ModifierInputs: React.FC = () => {
                     onChange={e => field.onChange(Number(e.target.value))}
                   />
                 </FormControl>
-                <div className="text-xs text-gray-500 mt-1">Max: 10</div>
+                <div className="text-xs text-muted-foreground/80 mt-1">Max: 10</div>
                 <FormMessage />
               </FormItem>
             )}
@@ -90,7 +90,7 @@ export const ModifierInputs: React.FC = () => {
             name="extraDiceNonBonus"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block text-sm font-medium text-gray-600 mb-1">
+                <FormLabel className="block text-sm font-medium text-muted-foreground mb-1">
                   Extra Dice (Non-Bonus)
                 </FormLabel>
                 <FormControl>
@@ -114,7 +114,7 @@ export const ModifierInputs: React.FC = () => {
             name="extraSuccessBonus"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block text-sm font-medium text-gray-600 mb-1">
+                <FormLabel className="block text-sm font-medium text-muted-foreground mb-1">
                   Extra Success (Bonus)
                 </FormLabel>
                 <FormControl>
@@ -127,7 +127,7 @@ export const ModifierInputs: React.FC = () => {
                     onChange={e => field.onChange(Number(e.target.value))}
                   />
                 </FormControl>
-                <div className="text-xs text-gray-500 mt-1">Max: {DEFAULT_MODIFIER_MAX}</div>
+                <div className="text-xs text-muted-foreground/80 mt-1">Max: {DEFAULT_MODIFIER_MAX}</div>
                 <FormMessage />
               </FormItem>
             )}
@@ -137,7 +137,7 @@ export const ModifierInputs: React.FC = () => {
             name="extraSuccessNonBonus"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block text-sm font-medium text-gray-600 mb-1">
+                <FormLabel className="block text-sm font-medium text-muted-foreground mb-1">
                   Extra Success (Non-Bonus)
                 </FormLabel>
                 <FormControl>
@@ -165,10 +165,10 @@ export const ModifierInputs: React.FC = () => {
                   type="checkbox"
                   checked={field.value}
                   onChange={e => field.onChange(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-info bg-muted border-border rounded focus:ring-info"
                 />
               </FormControl>
-              <FormLabel className="text-sm font-medium text-gray-700">
+              <FormLabel className="text-sm font-medium text-foreground/80">
                 Stunt (+2 dice, non-capped)
               </FormLabel>
               <FormMessage />

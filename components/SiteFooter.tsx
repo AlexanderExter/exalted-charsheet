@@ -4,6 +4,13 @@ import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { logError } from "@/lib/logger";
 
@@ -61,17 +68,25 @@ export default function SiteFooter() {
             <div>
               <h3 className="font-semibold mb-2">About</h3>
               <div className="flex justify-center">
-                <button onClick={() => setShowAboutModal(true)} className="hover:underline">
+                <Button
+                  variant="link"
+                  onClick={() => setShowAboutModal(true)}
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   About
-                </button>
+                </Button>
               </div>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Legal</h3>
               <div className="flex justify-center">
-                <button onClick={() => setShowLegalModal(true)} className="hover:underline">
+                <Button
+                  variant="link"
+                  onClick={() => setShowLegalModal(true)}
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Legal
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -81,47 +96,37 @@ export default function SiteFooter() {
         </div>
       </footer>
 
-      {showAboutModal && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-4xl max-h-[80vh] overflow-y-auto m-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">About</h2>
-              <Button variant="outline" size="sm" onClick={() => setShowAboutModal(false)}>
-                ×
-              </Button>
-            </div>
-            <div className="prose prose-sm max-w-none text-gray-700">
-              <ReactMarkdown>{aboutContent}</ReactMarkdown>
-            </div>
-            <div className="mt-6 pt-4 border-t">
-              <Button onClick={() => setShowAboutModal(false)} className="w-full">
-                Close
-              </Button>
-            </div>
+      <Dialog open={showAboutModal} onOpenChange={setShowAboutModal}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>About</DialogTitle>
+          </DialogHeader>
+          <div className="prose prose-sm max-w-none text-foreground">
+            <ReactMarkdown>{aboutContent}</ReactMarkdown>
           </div>
-        </div>
-      )}
+          <DialogFooter>
+            <Button onClick={() => setShowAboutModal(false)} className="w-full sm:w-auto">
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-      {showLegalModal && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-4xl max-h-[80vh] overflow-y-auto m-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Legal Information</h2>
-              <Button variant="outline" size="sm" onClick={() => setShowLegalModal(false)}>
-                ×
-              </Button>
-            </div>
-            <div className="prose prose-sm max-w-none text-gray-700">
-              <ReactMarkdown>{legalContent}</ReactMarkdown>
-            </div>
-            <div className="mt-6 pt-4 border-t">
-              <Button onClick={() => setShowLegalModal(false)} className="w-full">
-                Close
-              </Button>
-            </div>
+      <Dialog open={showLegalModal} onOpenChange={setShowLegalModal}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Legal Information</DialogTitle>
+          </DialogHeader>
+          <div className="prose prose-sm max-w-none text-foreground">
+            <ReactMarkdown>{legalContent}</ReactMarkdown>
           </div>
-        </div>
-      )}
+          <DialogFooter>
+            <Button onClick={() => setShowLegalModal(false)} className="w-full sm:w-auto">
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

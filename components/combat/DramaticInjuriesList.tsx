@@ -24,7 +24,7 @@ export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = React.m
     return (
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <Label className="text-sm font-medium text-gray-700">Dramatic Injuries</Label>
+          <Label className="text-sm font-medium text-foreground/80">Dramatic Injuries</Label>
           <Button onClick={addDramaticInjury} size="sm" variant="outline">
             <Plus className="w-4 h-4 mr-1" />
             Add Injury
@@ -32,7 +32,7 @@ export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = React.m
         </div>
 
         {injuries.length === 0 ? (
-          <p className="text-gray-500 italic text-sm">No dramatic injuries.</p>
+          <p className="text-muted-foreground/80 italic text-sm">No dramatic injuries.</p>
         ) : (
           <div className="space-y-2">
             {injuries.map(injury => (
@@ -40,8 +40,8 @@ export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = React.m
                 key={injury.id}
                 className={`flex items-center gap-2 p-2 rounded ${
                   injury.isHealed
-                    ? "bg-green-50 border border-green-200"
-                    : "bg-red-50 border border-red-200"
+                    ? "bg-success/10 border border-success/20"
+                    : "bg-destructive/10 border border-destructive/20"
                 }`}
               >
                 <Input
@@ -49,7 +49,7 @@ export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = React.m
                   onChange={e => updateDramaticInjury(injury.id, "description", e.target.value)}
                   placeholder="Injury description..."
                   className={`flex-1 ${
-                    injury.isHealed ? "text-green-700 bg-green-50" : "text-red-700 bg-red-50"
+                    injury.isHealed ? "text-success bg-success/10" : "text-destructive bg-destructive/10"
                   }`}
                 />
                 <Button
@@ -58,8 +58,8 @@ export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = React.m
                   variant={injury.isHealed ? "default" : "outline"}
                   className={
                     injury.isHealed
-                      ? "bg-green-600 hover:bg-green-700"
-                      : "text-red-600 border-red-300 hover:bg-red-50"
+                      ? "bg-success hover:bg-success"
+                      : "text-destructive border-destructive/30 hover:bg-destructive/10"
                   }
                 >
                   {injury.isHealed ? "Healed" : "Heal"}

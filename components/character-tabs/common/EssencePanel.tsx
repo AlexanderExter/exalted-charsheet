@@ -43,11 +43,11 @@ export const EssencePanel: React.FC<EssencePanelProps> = React.memo(({ essence, 
               <div className="space-y-2">
                 <div className="relative h-6">
                   {[
-                    { label: "Dim", value: 1, color: "text-gray-600" },
-                    { label: "Glowing", value: 3, color: "text-yellow-600" },
-                    { label: "Burning", value: 5, color: "text-amber-600" },
-                    { label: "Bonfire", value: 7, color: "text-orange-600" },
-                    { label: "Iconic", value: 10, color: "text-purple-600" },
+                    { label: "Dim", value: 1, color: "text-muted-foreground" },
+                    { label: "Glowing", value: 3, color: "text-warning" },
+                    { label: "Burning", value: 5, color: "text-warning" },
+                    { label: "Bonfire", value: 7, color: "text-warning" },
+                    { label: "Iconic", value: 10, color: "text-info" },
                   ].map(({ label, value, color }) => {
                     const positionClass = value === 10 ? "-translate-x-full" : "-translate-x-1/2";
                     return (
@@ -74,10 +74,10 @@ export const EssencePanel: React.FC<EssencePanelProps> = React.memo(({ essence, 
                     background: `linear-gradient(to right, ${sliderColor} 0%, ${sliderColor} ${progressPercent}%, #e5e7eb ${progressPercent}%, #e5e7eb 100%)`,
                   }}
                 />
-                <div className="mt-2 h-6 flex justify-between text-xs text-gray-600">
+                <div className="mt-2 h-6 flex justify-between text-xs text-muted-foreground">
                   {Array.from({ length: 11 }, (_, i) => (
                     <div key={i} className="relative w-0">
-                      <div className="w-px h-2 bg-gray-400" />
+                      <div className="w-px h-2 bg-muted-foreground/70" />
                       <span className="absolute top-2 left-1/2 -translate-x-1/2">{i}</span>
                     </div>
                   ))}

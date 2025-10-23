@@ -29,14 +29,14 @@ export const CombatRolls: React.FC<CombatRollsProps> = ({
         <div className="grid md:grid-cols-2 gap-6">
           {/* Join Battle */}
           <div className="space-y-3">
-            <h3 className="font-semibold text-gray-700">Join Battle</h3>
+            <h3 className="font-semibold text-foreground/80">Join Battle</h3>
             <div className="p-3 bg-white rounded border">
-              <div className="text-sm text-gray-600 mb-3">
+              <div className="text-sm text-muted-foreground mb-3">
                 Best Attribute + Best of Close/Ranged Combat + Modifiers
               </div>
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                  <Label className="text-xs text-gray-600">Extra Dice</Label>
+                  <Label className="text-xs text-muted-foreground">Extra Dice</Label>
                   <Input
                     type="number"
                     value={character?.combat?.joinBattleDiceBonus || 0}
@@ -53,10 +53,10 @@ export const CombatRolls: React.FC<CombatRollsProps> = ({
                     min={-10}
                     max={10}
                   />
-                  <div className="text-xs text-gray-400">±10 cap</div>
+                  <div className="text-xs text-muted-foreground/70">±10 cap</div>
                 </div>
                 <div>
-                  <Label className="text-xs text-gray-600">Extra Success</Label>
+                  <Label className="text-xs text-muted-foreground">Extra Success</Label>
                   <Input
                     type="number"
                     value={character?.combat?.joinBattleSuccessBonus || 0}
@@ -73,11 +73,11 @@ export const CombatRolls: React.FC<CombatRollsProps> = ({
                     min={DEFAULT_MODIFIER_MIN}
                     max={DEFAULT_MODIFIER_MAX}
                   />
-                  <div className="text-xs text-gray-400">±5 cap</div>
+                  <div className="text-xs text-muted-foreground/70">±5 cap</div>
                 </div>
               </div>
-              <div className="text-center p-2 bg-blue-100 rounded">
-                <div className="text-lg font-bold text-blue-800">
+              <div className="text-center p-2 bg-info/20 rounded">
+                <div className="text-lg font-bold text-info">
                   Roll{" "}
                   {getHighestAttribute() +
                     Math.max(
@@ -95,16 +95,16 @@ export const CombatRolls: React.FC<CombatRollsProps> = ({
                     }${character?.combat?.joinBattleSuccessBonus} success in`}
                   , TN 7 Double 10s
                 </div>
-                <div className="text-sm text-blue-600">Join Battle</div>
+                <div className="text-sm text-info">Join Battle</div>
               </div>
             </div>
           </div>
 
           {/* Power Tracker */}
           <div className="space-y-3">
-            <h3 className="font-semibold text-gray-700">Power Tracker</h3>
+            <h3 className="font-semibold text-foreground/80">Power Tracker</h3>
             <div className="p-3 bg-white rounded border space-y-3">
-              <div className="text-sm text-gray-600 mb-2">Track power gained from attacks</div>
+              <div className="text-sm text-muted-foreground mb-2">Track power gained from attacks</div>
               <div className="flex items-center justify-center gap-4">
                 <Button
                   onClick={() =>
@@ -119,8 +119,8 @@ export const CombatRolls: React.FC<CombatRollsProps> = ({
                 >
                   -1
                 </Button>
-                <div className="w-16 h-12 flex items-center justify-center border rounded bg-gray-50">
-                  <span className="text-xl font-bold text-gray-700">
+                <div className="w-16 h-12 flex items-center justify-center border rounded bg-muted/50">
+                  <span className="text-xl font-bold text-foreground/80">
                     {character?.combat?.power || 0}
                   </span>
                 </div>

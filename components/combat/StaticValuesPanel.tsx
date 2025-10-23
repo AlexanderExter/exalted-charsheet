@@ -29,14 +29,14 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
               {/* Defense */}
               <div className="space-y-2">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-red-600">{calculations.defense}</div>
-                  <div className="text-sm font-medium text-gray-700">Defense</div>
+                  <div className="text-2xl font-bold text-destructive">{calculations.defense}</div>
+                  <div className="text-sm font-medium text-foreground/80">Defense</div>
                 </div>
-                <div className="text-xs text-gray-500 text-center">
+                <div className="text-xs text-muted-foreground/80 text-center">
                   <div>Max of Evasion/Parry</div>
                 </div>
                 <div className="flex items-center justify-center gap-1">
-                  <Label className="text-xs text-gray-600">Mod:</Label>
+                  <Label className="text-xs text-muted-foreground">Mod:</Label>
                   <Input
                     type="number"
                     value={character?.staticValues?.defenseModifier || 0}
@@ -61,14 +61,14 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
               {/* Evasion */}
               <div className="space-y-2">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">{calculations.evasion}</div>
-                  <div className="text-sm font-medium text-gray-700">Evasion</div>
+                  <div className="text-2xl font-bold text-success">{calculations.evasion}</div>
+                  <div className="text-sm font-medium text-foreground/80">Evasion</div>
                 </div>
-                <div className="text-xs text-gray-500 text-center">
+                <div className="text-xs text-muted-foreground/80 text-center">
                   <div>⌈(Athletics + Max Attr) / 2⌉</div>
                 </div>
                 <div className="flex items-center justify-center gap-1">
-                  <Label className="text-xs text-gray-600">Mod:</Label>
+                  <Label className="text-xs text-muted-foreground">Mod:</Label>
                   <Input
                     type="number"
                     value={character?.staticValues?.evasionModifier || 0}
@@ -93,14 +93,14 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
               {/* Parry */}
               <div className="space-y-2">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-orange-600">{calculations.parry}</div>
-                  <div className="text-sm font-medium text-gray-700">Parry</div>
+                  <div className="text-2xl font-bold text-warning">{calculations.parry}</div>
+                  <div className="text-sm font-medium text-foreground/80">Parry</div>
                 </div>
-                <div className="text-xs text-gray-500 text-center">
+                <div className="text-xs text-muted-foreground/80 text-center">
                   <div>⌈(Close Combat + Max Attr) / 2⌉</div>
                 </div>
                 <div className="flex items-center justify-center gap-1">
-                  <Label className="text-xs text-gray-600">Mod:</Label>
+                  <Label className="text-xs text-muted-foreground">Mod:</Label>
                   <Input
                     type="number"
                     value={character?.staticValues?.parryModifier || 0}
@@ -128,15 +128,15 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
               {/* Resolve */}
               <div className="space-y-2">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">{calculations.resolve}</div>
-                  <div className="text-sm font-medium text-gray-700">Resolve</div>
+                  <div className="text-2xl font-bold text-info">{calculations.resolve}</div>
+                  <div className="text-sm font-medium text-foreground/80">Resolve</div>
                 </div>
-                <div className="text-xs text-gray-500 text-center">
+                <div className="text-xs text-muted-foreground/80 text-center">
                   <div>2 + Integrity bonuses</div>
                   <div>Integrity 1+ = +1, Integrity 3+ = +2</div>
                 </div>
                 <div className="flex items-center justify-center gap-1">
-                  <Label className="text-xs text-gray-600">Mod:</Label>
+                  <Label className="text-xs text-muted-foreground">Mod:</Label>
                   <Input
                     type="number"
                     value={character?.staticValues?.resolveModifier || 0}
@@ -161,10 +161,10 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
               {/* Soak */}
               <div className="space-y-2">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-yellow-600">{calculations.soak}</div>
-                  <div className="text-sm font-medium text-gray-700">Soak</div>
+                  <div className="text-2xl font-bold text-warning">{calculations.soak}</div>
+                  <div className="text-sm font-medium text-foreground/80">Soak</div>
                 </div>
-                <div className="text-xs text-gray-500 text-center">
+                <div className="text-xs text-muted-foreground/80 text-center">
                   <div>1 + Physique + Armor</div>
                   <div>
                     Armor: +
@@ -175,7 +175,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
                   </div>
                 </div>
                 <div className="flex items-center justify-center gap-1">
-                  <Label className="text-xs text-gray-600">Mod:</Label>
+                  <Label className="text-xs text-muted-foreground">Mod:</Label>
                   <Input
                     type="number"
                     value={character?.staticValues?.soakModifier || 0}
@@ -200,10 +200,10 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
               {/* Hardness */}
               <div className="space-y-2">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">{calculations.hardness}</div>
-                  <div className="text-sm font-medium text-gray-700">Hardness</div>
+                  <div className="text-2xl font-bold text-info">{calculations.hardness}</div>
+                  <div className="text-sm font-medium text-foreground/80">Hardness</div>
                 </div>
-                <div className="text-xs text-gray-500 text-center">
+                <div className="text-xs text-muted-foreground/80 text-center">
                   <div>Essence + 2 + Armor</div>
                   <div>
                     Armor: +
@@ -214,7 +214,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
                   </div>
                 </div>
                 <div className="flex items-center justify-center gap-1">
-                  <Label className="text-xs text-gray-600">Mod:</Label>
+                  <Label className="text-xs text-muted-foreground">Mod:</Label>
                   <Input
                     type="number"
                     value={character?.staticValues?.hardnessModifier || 0}

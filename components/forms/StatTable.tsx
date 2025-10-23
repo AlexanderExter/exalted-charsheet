@@ -34,7 +34,7 @@ export function StatTable<T extends string>({
   scrollable = false,
 }: StatTableProps<T>) {
   const wrapperClass = scrollable ? "max-h-96 overflow-y-auto" : "overflow-x-auto";
-  const theadClass = scrollable ? "sticky top-0 bg-gray-100" : "bg-gray-100";
+  const theadClass = scrollable ? "sticky top-0 bg-muted" : "bg-muted";
 
   interface StatRow {
     key: T;
@@ -48,7 +48,7 @@ export function StatTable<T extends string>({
       config.map(item => ({
         key: item.key,
         label: item.label,
-        colorClass: item.colorClass || "text-gray-700",
+        colorClass: item.colorClass || "text-foreground",
         stat: stats[item.key] ?? { base: minBase, added: 0, bonus: 0 },
       })),
     [config, stats, minBase]
@@ -229,7 +229,7 @@ export function StatTable<T extends string>({
         </thead>
         <tbody>
           {table.getRowModel().rows.map(row => (
-            <tr key={row.id} className="border-b border-gray-200">
+            <tr key={row.id} className="border-b border-border">
               {row.getVisibleCells().map(cell => (
                 <td key={cell.id} className="py-2 px-3 text-center text-sm">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -239,7 +239,7 @@ export function StatTable<T extends string>({
           ))}
         </tbody>
       </table>
-      <div className="mt-2 text-xs text-gray-400 italic">Base + Added cannot exceed 5</div>
+      <div className="mt-2 text-xs text-muted-foreground italic">Base + Added cannot exceed 5</div>
     </div>
   );
 }

@@ -56,7 +56,7 @@ export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({ ar
             Tag
           </button>
         ),
-        cell: ({ row }) => <span className="font-medium text-gray-700">{row.getValue("tag")}</span>,
+        cell: ({ row }) => <span className="font-medium text-foreground/80">{row.getValue("tag")}</span>,
       },
       {
         accessorKey: "items",
@@ -68,7 +68,7 @@ export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({ ar
             Used On
           </button>
         ),
-        cell: ({ row }) => <span className="text-xs text-gray-500">{row.getValue("items")}</span>,
+        cell: ({ row }) => <span className="text-xs text-muted-foreground/80">{row.getValue("items")}</span>,
       },
     ],
     []
@@ -105,7 +105,7 @@ export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({ ar
             />
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-100">
+                <thead className="bg-muted">
                   {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
                       {headerGroup.headers.map(header => (
@@ -129,7 +129,7 @@ export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({ ar
                 </thead>
                 <tbody>
                   {table.getRowModel().rows.map(row => (
-                    <tr key={row.id} className="border-b border-gray-200">
+                    <tr key={row.id} className="border-b border-border">
                       {row.getVisibleCells().map(cell => (
                         <td key={cell.id} className="py-2 px-3 text-left text-sm">
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -142,7 +142,7 @@ export const EquipmentTagReference: React.FC<EquipmentTagReferenceProps> = ({ ar
             </div>
           </div>
         ) : (
-          <p className="text-gray-500 italic">No equipment tags to reference.</p>
+          <p className="text-muted-foreground/80 italic">No equipment tags to reference.</p>
         )}
       </CardContent>
     </Card>

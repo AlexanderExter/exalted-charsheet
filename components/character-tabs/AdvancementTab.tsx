@@ -88,10 +88,10 @@ export const AdvancementTab: React.FC = React.memo(() => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Personal Milestones */}
             <div className="space-y-3">
-              <Label className="text-sm font-medium text-blue-700">Personal Milestones</Label>
+              <Label className="text-sm font-medium text-info">Personal Milestones</Label>
               <div className="space-y-2">
                 <div>
-                  <Label htmlFor="personal-accrued" className="text-xs text-gray-600">
+                  <Label htmlFor="personal-accrued" className="text-xs text-muted-foreground">
                     Accrued
                   </Label>
                   <Input
@@ -104,17 +104,17 @@ export const AdvancementTab: React.FC = React.memo(() => {
                         milestones: { ...character.milestones, personal: value },
                       });
                     }}
-                    className={`text-center ${(character?.milestones?.personal || 0) < 0 ? "text-red-600 border-red-300" : ""}`}
+                    className={`text-center ${(character?.milestones?.personal || 0) < 0 ? "text-destructive border-destructive/30" : ""}`}
                   />
                 </div>
                 <div className="text-center">
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-muted-foreground">
                     Spent:{" "}
-                    <span className="font-bold text-blue-600">
+                    <span className="font-bold text-info">
                       {getSpentCount("Paid with Personal")}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-muted-foreground">
                     Remaining:{" "}
                     <span className="font-bold">
                       {getRemainingCount("personal", "Paid with Personal")}
@@ -126,10 +126,10 @@ export const AdvancementTab: React.FC = React.memo(() => {
 
             {/* Exalt Milestones */}
             <div className="space-y-3">
-              <Label className="text-sm font-medium text-purple-700">Exalt Milestones</Label>
+              <Label className="text-sm font-medium text-info">Exalt Milestones</Label>
               <div className="space-y-2">
                 <div>
-                  <Label htmlFor="exalt-accrued" className="text-xs text-gray-600">
+                  <Label htmlFor="exalt-accrued" className="text-xs text-muted-foreground">
                     Accrued
                   </Label>
                   <Input
@@ -142,17 +142,17 @@ export const AdvancementTab: React.FC = React.memo(() => {
                         milestones: { ...character.milestones, exalt: value },
                       });
                     }}
-                    className={`text-center ${(character?.milestones?.exalt || 0) < 0 ? "text-red-600 border-red-300" : ""}`}
+                    className={`text-center ${(character?.milestones?.exalt || 0) < 0 ? "text-destructive border-destructive/30" : ""}`}
                   />
                 </div>
                 <div className="text-center">
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-muted-foreground">
                     Spent:{" "}
-                    <span className="font-bold text-purple-600">
+                    <span className="font-bold text-info">
                       {getSpentCount("Paid with Exalt")}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-muted-foreground">
                     Remaining:{" "}
                     <span className="font-bold">
                       {getRemainingCount("exalt", "Paid with Exalt")}
@@ -164,10 +164,10 @@ export const AdvancementTab: React.FC = React.memo(() => {
 
             {/* Minor Milestones */}
             <div className="space-y-3">
-              <Label className="text-sm font-medium text-green-700">Minor Milestones</Label>
+              <Label className="text-sm font-medium text-success">Minor Milestones</Label>
               <div className="space-y-2">
                 <div>
-                  <Label htmlFor="minor-accrued" className="text-xs text-gray-600">
+                  <Label htmlFor="minor-accrued" className="text-xs text-muted-foreground">
                     Accrued
                   </Label>
                   <Input
@@ -180,17 +180,17 @@ export const AdvancementTab: React.FC = React.memo(() => {
                         milestones: { ...character.milestones, minor: value },
                       });
                     }}
-                    className={`text-center ${(character?.milestones?.minor || 0) < 0 ? "text-red-600 border-red-300" : ""}`}
+                    className={`text-center ${(character?.milestones?.minor || 0) < 0 ? "text-destructive border-destructive/30" : ""}`}
                   />
                 </div>
                 <div className="text-center">
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-muted-foreground">
                     Spent:{" "}
-                    <span className="font-bold text-green-600">
+                    <span className="font-bold text-success">
                       {getSpentCount("Paid with Minor")}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-muted-foreground">
                     Remaining:{" "}
                     <span className="font-bold">
                       {getRemainingCount("minor", "Paid with Minor")}
@@ -202,10 +202,10 @@ export const AdvancementTab: React.FC = React.memo(() => {
 
             {/* Major Milestones */}
             <div className="space-y-3">
-              <Label className="text-sm font-medium text-red-700">Major Milestones</Label>
+              <Label className="text-sm font-medium text-destructive">Major Milestones</Label>
               <div className="space-y-2">
                 <div>
-                  <Label htmlFor="major-accrued" className="text-xs text-gray-600">
+                  <Label htmlFor="major-accrued" className="text-xs text-muted-foreground">
                     Accrued
                   </Label>
                   <Input
@@ -218,17 +218,17 @@ export const AdvancementTab: React.FC = React.memo(() => {
                         milestones: { ...character.milestones, major: value },
                       });
                     }}
-                    className={`text-center ${(character?.milestones?.major || 0) < 0 ? "text-red-600 border-red-300" : ""}`}
+                    className={`text-center ${(character?.milestones?.major || 0) < 0 ? "text-destructive border-destructive/30" : ""}`}
                   />
                 </div>
                 <div className="text-center">
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-muted-foreground">
                     Spent:{" "}
-                    <span className="font-bold text-red-600">
+                    <span className="font-bold text-destructive">
                       {getSpentCount("Paid with Major")}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-muted-foreground">
                     Remaining:{" "}
                     <span className="font-bold">
                       {getRemainingCount("major", "Paid with Major")}
@@ -239,8 +239,8 @@ export const AdvancementTab: React.FC = React.memo(() => {
             </div>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <div className="flex items-center justify-between text-sm text-gray-600">
+          <div className="mt-4 pt-4 border-t border-border">
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>Planned Advancements:</span>
               <span className="font-bold text-lg">{getSpentCount("Planned")}</span>
             </div>
@@ -254,7 +254,7 @@ export const AdvancementTab: React.FC = React.memo(() => {
           <CardTitle className="flex items-center justify-between">
             <button
               onClick={() => setShowAdvancementLog(!showAdvancementLog)}
-              className="flex items-center gap-2 text-xl font-bold text-gray-800 hover:text-gray-900"
+              className="flex items-center gap-2 text-xl font-bold text-foreground/80 hover:text-foreground"
             >
               {showAdvancementLog ? (
                 <ChevronDown className="w-5 h-5" />
@@ -266,7 +266,7 @@ export const AdvancementTab: React.FC = React.memo(() => {
             <Button
               onClick={addAdvancementEntry}
               size="sm"
-              className="bg-yellow-600 hover:bg-yellow-700"
+              className="bg-warning hover:bg-warning"
             >
               <Plus className="w-4 h-4 mr-1" />
               Add Entry
@@ -276,7 +276,7 @@ export const AdvancementTab: React.FC = React.memo(() => {
         {showAdvancementLog && (
           <CardContent>
             {(character?.advancement || []).length === 0 ? (
-              <p className="text-gray-500 italic">No advancement entries yet.</p>
+              <p className="text-muted-foreground/80 italic">No advancement entries yet.</p>
             ) : (
               <SortableList
                 items={character?.advancement || []}
@@ -333,7 +333,7 @@ export const AdvancementTab: React.FC = React.memo(() => {
                     )}
 
                     <div className="flex items-center justify-between">
-                      <div className="text-xs text-gray-500">Added: {entry.timestamp}</div>
+                      <div className="text-xs text-muted-foreground/80">Added: {entry.timestamp}</div>
                       <Button
                         onClick={() => deleteAdvancementEntry(entry.id)}
                         size="sm"

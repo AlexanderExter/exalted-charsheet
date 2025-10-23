@@ -39,7 +39,7 @@ export const AttributeSelector: React.FC = () => {
       name="attribute"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="block text-sm font-medium text-gray-600 mb-1">Attribute</FormLabel>
+          <FormLabel className="block text-sm font-medium text-muted-foreground mb-1">Attribute</FormLabel>
           <FormControl>
             <div className="flex gap-2">
               {attributes.map(attr => (

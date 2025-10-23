@@ -43,7 +43,7 @@ export const DicePoolEditor: React.FC = React.memo(() => {
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-semibold text-gray-700 mb-3">Pool Assembly</h3>
+                <h3 className="font-semibold text-foreground/80 mb-3">Pool Assembly</h3>
                 <div className="space-y-3">
                   <AttributeSelector />
                   <AbilitySelector />

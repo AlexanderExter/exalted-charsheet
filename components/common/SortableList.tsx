@@ -45,8 +45,8 @@ const SortableItem: React.FC<SortableItemProps> = ({ id, children }) => {
       ref={setNodeRef}
       style={style}
       className={clsx(
-        "group relative rounded border border-gray-200 bg-white transition-colors",
-        "hover:bg-gray-50",
+        "group relative rounded border border-border bg-card transition-colors",
+        "hover:bg-muted",
         isDragging && "z-50 shadow-lg"
       )}
     >
@@ -54,7 +54,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ id, children }) => {
         ref={setActivatorNodeRef}
         {...attributes}
         {...listeners}
-        className="absolute left-2 top-2 cursor-grab text-gray-400 hover:text-gray-600"
+        className="absolute left-2 top-2 cursor-grab text-muted-foreground hover:text-foreground"
       >
         <GripVertical className="h-4 w-4" />
       </button>
