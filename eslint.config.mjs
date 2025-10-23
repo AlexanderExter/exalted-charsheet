@@ -23,14 +23,16 @@ const eslintConfig = [
 
   // Base configs
   js.configs.recommended,
-  nextPlugin.flatConfig.coreWebVitals,
+  nextPlugin.configs["core-web-vitals"],
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat["jsx-runtime"],
-  reactHooks.configs["recommended-latest"],
 
   // Enhanced configuration for all files
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
+    plugins: {
+      "react-hooks": reactHooks,
+    },
     languageOptions: {
       globals: {
         ...globals.browser,

@@ -20,7 +20,7 @@ import type { Ruling } from "@/lib/character-types";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 import { SortableList } from "@/components/common/SortableList";
 
-export const RulingsTab: React.FC = React.memo(() => {
+export const RulingsTab: React.FC = () => {
   const { character, updateCharacter } = useCharacterContext();
   // Ruling management functions
   const addRuling = useCallback(() => {
@@ -133,6 +133,5 @@ export const RulingsTab: React.FC = React.memo(() => {
       </Card>
     </div>
   );
-});
+};
 
-RulingsTab.displayName = "RulingsTab";

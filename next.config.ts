@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import withPWA from "@ducanh2912/next-pwa";
 
 const nextConfig: NextConfig = {
   output: "export",
@@ -6,10 +7,11 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // Disable server-side features for static export
-  experimental: {
-    esmExternals: true,
-  },
+  turbopack: {}, // Allow PWA plugin webpack config to coexist with Turbopack
 };
 
-export default nextConfig;
+export default withPWA({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+})(nextConfig);

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ErrorBoundaryWrapper } from "@/components/ErrorBoundary";
 import SiteFooter from "@/components/SiteFooter";
@@ -10,6 +10,19 @@ export const metadata: Metadata = {
   title: "Exalted: Essence Character Manager",
   description:
     "A comprehensive digital character sheet manager for the Exalted: Essence tabletop RPG system",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Exalted Manager",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#000000",
 };
 
 export default function RootLayout({

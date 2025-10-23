@@ -10,11 +10,12 @@ import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCharacterContext } from "@/hooks/CharacterContext";
-import { dicePoolFormSchema, type DicePoolFormValues } from "@/lib/form-schemas";
+import { dicePoolFormSchema } from "@/lib/form-schemas";
 
-export const DicePoolEditor: React.FC = React.memo(() => {
+export const DicePoolEditor: React.FC = () => {
   const { character, updateCharacter } = useCharacterContext();
-  const form = useForm<DicePoolFormValues>({
+  // Type inference from zodResolver (v5 best practice)
+  const form = useForm({
     resolver: zodResolver(dicePoolFormSchema),
     defaultValues: character.dicePool,
     mode: "onChange",
@@ -57,8 +58,6 @@ export const DicePoolEditor: React.FC = React.memo(() => {
       </form>
     </Form>
   );
-});
-
-DicePoolEditor.displayName = "DicePoolEditor";
+};
 
 export default DicePoolEditor;

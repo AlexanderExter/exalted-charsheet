@@ -9,7 +9,7 @@ import { ArmorList } from "@/components/equipment/ArmorList";
 import { WeaponList } from "@/components/equipment/WeaponList";
 import { EquipmentTagReference } from "@/components/equipment/EquipmentTagReference";
 
-export const EquipmentTab: React.FC = React.memo(() => {
+export const EquipmentTab: React.FC = () => {
   const { character, updateCharacter } = useCharacterContext();
 
   const addArmor = useCallback(() => {
@@ -122,6 +122,5 @@ export const EquipmentTab: React.FC = React.memo(() => {
       <EquipmentTagReference armor={character.armor || []} weapons={character.weapons || []} />
     </div>
   );
-});
+};
 
-EquipmentTab.displayName = "EquipmentTab";

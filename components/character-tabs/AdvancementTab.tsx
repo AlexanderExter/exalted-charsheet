@@ -20,7 +20,7 @@ import type { AdvancementEntry, AdvancementStatus } from "@/lib/character-types"
 import { useCharacterContext } from "@/hooks/CharacterContext";
 import { SortableList } from "@/components/common/SortableList";
 
-export const AdvancementTab: React.FC = React.memo(() => {
+export const AdvancementTab: React.FC = () => {
   const { character, updateCharacter } = useCharacterContext();
   const [showAdvancementLog, setShowAdvancementLog] = useState(false);
 
@@ -352,6 +352,5 @@ export const AdvancementTab: React.FC = React.memo(() => {
       </Card>
     </div>
   );
-});
+};
 
-AdvancementTab.displayName = "AdvancementTab";

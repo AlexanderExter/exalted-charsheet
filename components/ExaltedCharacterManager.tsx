@@ -13,15 +13,14 @@ import { toast } from "sonner";
 import { logError } from "@/lib/logger";
 
 const ExaltedCharacterManager = () => {
-  const {
-    characters,
-    currentCharacter,
-    addCharacter,
-    updateCurrentCharacter,
-    deleteCharacter,
-    setCurrentCharacter,
-    loadCharacters,
-  } = useCharacterStore();
+  // Zustand selectors - only subscribe to what we need
+  const characters = useCharacterStore(state => state.characters);
+  const currentCharacter = useCharacterStore(state => state.currentCharacter);
+  const addCharacter = useCharacterStore(state => state.addCharacter);
+  const updateCurrentCharacter = useCharacterStore(state => state.updateCurrentCharacter);
+  const deleteCharacter = useCharacterStore(state => state.deleteCharacter);
+  const setCurrentCharacter = useCharacterStore(state => state.setCurrentCharacter);
+  const loadCharacters = useCharacterStore(state => state.loadCharacters);
 
   const [showCharacterSelect, setShowCharacterSelect] = useState(!currentCharacter);
   const [activeTab, setActiveTab] = useState("core");

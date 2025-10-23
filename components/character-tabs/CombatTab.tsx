@@ -11,7 +11,7 @@ import { EssencePanel } from "@/components/character-tabs/common/EssencePanel";
 import { createDefaultEssence } from "@/lib/character-defaults";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 
-export const CombatTab: React.FC = React.memo(() => {
+export const CombatTab: React.FC = () => {
   const { character, updateCharacter, calculations } = useCharacterContext();
 
   const {
@@ -52,6 +52,5 @@ export const CombatTab: React.FC = React.memo(() => {
       />
     </div>
   );
-});
+};
 
-CombatTab.displayName = "CombatTab";

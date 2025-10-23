@@ -36,7 +36,7 @@ const virtueOptions: Array<NonNullable<VirtueType>> = [
   "wonder",
 ];
 
-export const SocialTab: React.FC = React.memo(() => {
+export const SocialTab: React.FC = () => {
   const { character, updateCharacter, calculations } = useCharacterContext();
   const resolve = calculations.resolve;
 
@@ -332,6 +332,5 @@ export const SocialTab: React.FC = React.memo(() => {
       </Card>
     </div>
   );
-});
+};
 
-SocialTab.displayName = "SocialTab";

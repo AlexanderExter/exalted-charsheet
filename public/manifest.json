@@ -1,0 +1,27 @@
+{
+  "name": "Exalted: Essence Character Manager",
+  "short_name": "Exalted Manager",
+  "description": "A comprehensive digital character sheet manager for the Exalted: Essence tabletop RPG system",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["games", "utilities"],
+  "shortcuts": [
+    {
+      "name": "New Character",
+      "short_name": "New",
+      "description": "Create a new character",
+      "url": "/?action=new",
+      "icons": []
+    }
+  ]
+}
