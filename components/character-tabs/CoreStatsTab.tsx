@@ -40,7 +40,7 @@ export const CoreStatsTab: React.FC = () => {
       />
 
       {/* Attributes and Abilities */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Attributes</CardTitle>

@@ -28,7 +28,7 @@ export const WeaponEditor: React.FC<WeaponEditorProps> = ({
 }) => {
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <div>
           <Label htmlFor={`weapon-name-${weapon.id}`}>Name</Label>
           <Input
@@ -61,7 +61,7 @@ export const WeaponEditor: React.FC<WeaponEditorProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-4 gap-3">
         <div>
           <Label htmlFor={`weapon-defense-${weapon.id}`}>Defense</Label>
           <Input

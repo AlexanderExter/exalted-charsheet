@@ -180,7 +180,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
       <CardContent>
         <div className="space-y-4">
           {/* Health Levels Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             <div>
               <Label className="text-sm font-medium text-foreground/80">Zero Penalty</Label>
               <Input

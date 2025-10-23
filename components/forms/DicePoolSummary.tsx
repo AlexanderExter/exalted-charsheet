@@ -10,7 +10,7 @@ export const DicePoolSummary: React.FC = () => {
   return (
     <div className="mt-6 p-4 bg-info/10 rounded-lg">
       <h3 className="font-semibold text-info mb-2">Dice Pool Summary</h3>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-3">
+      <div className="grid grid-cols-4 gap-4 text-sm mb-3">
         <div>
           <div className="text-info font-medium">Base Pool</div>
           <div className="text-lg font-bold text-info">{dicePool.basePool}</div>

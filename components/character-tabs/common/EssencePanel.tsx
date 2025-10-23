@@ -33,7 +33,7 @@ export const EssencePanel: React.FC<EssencePanelProps> = ({ essence, onChange })
         <CardTitle>Essence</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-6">
           <EssenceEditor essence={essence} onChange={onChange} />
 
           <div className="space-y-4">

@@ -62,7 +62,7 @@ export const PowersTab: React.FC = () => {
         onReorder={charmsEntity.reorder}
         renderItem={(charm: Charm) => (
           <div className="space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <div>
                 <Label htmlFor={`charm-name-${charm.id}`}>Name</Label>
                 <Input
@@ -83,7 +83,7 @@ export const PowersTab: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <div>
                 <Label htmlFor={`charm-step-${charm.id}`}>Combat Step</Label>
                 <Select
@@ -150,7 +150,7 @@ export const PowersTab: React.FC = () => {
         onReorder={spellsEntity.reorder}
         renderItem={(spell: Spell) => (
           <div className="space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <div>
                 <Label htmlFor={`spell-name-${spell.id}`}>Name</Label>
                 <Input
@@ -189,7 +189,7 @@ export const PowersTab: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label htmlFor={`spell-step-${spell.id}`}>Combat Step</Label>
                 <Select

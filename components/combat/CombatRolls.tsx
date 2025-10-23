@@ -26,7 +26,7 @@ export const CombatRolls: React.FC<CombatRollsProps> = ({
         <CardTitle>Combat Rolls</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-6">
           {/* Join Battle */}
           <div className="space-y-3">
             <h3 className="font-semibold text-foreground/80">Join Battle</h3>

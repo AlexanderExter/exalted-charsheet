@@ -79,7 +79,7 @@ export const AdvancementTab: React.FC = () => {
           <CardTitle>Milestone Budget</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             {/* Personal Milestones */}
             <div className="space-y-3">
               <Label className="text-sm font-medium text-info">Personal Milestones</Label>
@@ -277,7 +277,7 @@ export const AdvancementTab: React.FC = () => {
                 onReorder={items => updateCharacter({ advancement: items })}
                 renderItem={entry => (
                   <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
                         <Label htmlFor={`entry-item-${entry.id}`}>Advancement Item</Label>
                         <Input
