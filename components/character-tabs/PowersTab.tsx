@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import type { Charm, Spell, SpellCircle } from "@/lib/character-types";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 import { useEntityCRUD } from "@/hooks/useEntityCRUD";
-import { GenericListMemo } from "@/components/common/GenericList";
+import { GenericList } from "@/components/common/GenericList";
 
 export const PowersTab: React.FC = () => {
   const { character, updateCharacter } = useCharacterContext();
@@ -52,7 +52,7 @@ export const PowersTab: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Charms */}
-      <GenericListMemo
+      <GenericList
         title="Charms"
         items={charmsEntity.items}
         emptyMessage="No charms yet."
@@ -60,9 +60,9 @@ export const PowersTab: React.FC = () => {
         buttonColor="bg-amber-600 hover:bg-amber-700"
         onAdd={charmsEntity.add}
         onReorder={charmsEntity.reorder}
-        renderItem={charm => (
+        renderItem={(charm: Charm) => (
           <div className="space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <div>
                 <Label htmlFor={`charm-name-${charm.id}`}>Name</Label>
                 <Input
@@ -83,7 +83,7 @@ export const PowersTab: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <div>
                 <Label htmlFor={`charm-step-${charm.id}`}>Combat Step</Label>
                 <Select
@@ -140,7 +140,7 @@ export const PowersTab: React.FC = () => {
       />
 
       {/* Spells */}
-      <GenericListMemo
+      <GenericList
         title="Spells"
         items={spellsEntity.items}
         emptyMessage="No spells yet."
@@ -148,9 +148,9 @@ export const PowersTab: React.FC = () => {
         buttonColor="bg-indigo-600 hover:bg-indigo-700"
         onAdd={spellsEntity.add}
         onReorder={spellsEntity.reorder}
-        renderItem={spell => (
+        renderItem={(spell: Spell) => (
           <div className="space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <div>
                 <Label htmlFor={`spell-name-${spell.id}`}>Name</Label>
                 <Input
@@ -189,7 +189,7 @@ export const PowersTab: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label htmlFor={`spell-step-${spell.id}`}>Combat Step</Label>
                 <Select

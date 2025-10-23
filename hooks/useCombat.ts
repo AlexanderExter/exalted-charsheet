@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-import { produce, type Draft } from "immer";
 import type { Character, DramaticInjury } from "@/lib/character-types";
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations";
 
@@ -10,21 +8,21 @@ interface UseCombatProps {
 }
 
 export function useCombat({ character, updateCharacter, calculations }: UseCombatProps) {
-  const getHighestAttribute = useCallback(() => {
+  const getHighestAttribute = () => {
     if (!character?.attributes) return 0;
     return calculations.highestAttribute;
-  }, [character?.attributes, calculations.highestAttribute]);
+  };
 
-  const getTotalHealthLevels = useCallback(() => {
+  const getTotalHealthLevels = () => {
     return (
       calculations.healthLevels.zero +
       calculations.healthLevels.minusOne +
       calculations.healthLevels.minusTwo +
       calculations.healthLevels.incap
     );
-  }, [calculations.healthLevels]);
+  };
 
-  const addDramaticInjury = useCallback(() => {
+  const addDramaticInjury = () => {
     if (!character) return;
 
     const newInjury: DramaticInjury = {
@@ -33,52 +31,41 @@ export function useCombat({ character, updateCharacter, calculations }: UseComba
       isHealed: false,
     };
 
-    const updatedHealth = produce(character.health, draft => {
-      draft.dramaticInjuries.push(newInjury);
+    updateCharacter({
+      health: {
+        ...character.health,
+        dramaticInjuries: [...character.health.dramaticInjuries, newInjury],
+      },
     });
+  };
+
+  const updateDramaticInjury = <K extends keyof DramaticInjury>(
+    id: string,
+    field: K,
+    value: DramaticInjury[K]
+  ) => {
+    if (!character) return;
 
     updateCharacter({
-      health: updatedHealth,
+      health: {
+        ...character.health,
+        dramaticInjuries: character.health.dramaticInjuries.map(inj =>
+          inj.id === id ? { ...inj, [field]: value } : inj
+        ),
+      },
     });
-  }, [character, updateCharacter]);
+  };
 
-  const updateDramaticInjury = useCallback(
-    <K extends keyof DramaticInjury>(id: string, field: K, value: Draft<DramaticInjury>[K]) => {
-      if (!character) return;
+  const deleteDramaticInjury = (id: string) => {
+    if (!character) return;
 
-      const updatedHealth = produce(character.health, draft => {
-        const injury = draft.dramaticInjuries.find(inj => inj.id === id) as
-          | Draft<DramaticInjury>
-          | undefined;
-        if (injury) {
-          injury[field] = value;
-        }
-      });
-
-      updateCharacter({
-        health: updatedHealth,
-      });
-    },
-    [character, updateCharacter]
-  );
-
-  const deleteDramaticInjury = useCallback(
-    (id: string) => {
-      if (!character) return;
-
-      const updatedHealth = produce(character.health, draft => {
-        const index = draft.dramaticInjuries.findIndex(injury => injury.id === id);
-        if (index !== -1) {
-          draft.dramaticInjuries.splice(index, 1);
-        }
-      });
-
-      updateCharacter({
-        health: updatedHealth,
-      });
-    },
-    [character, updateCharacter]
-  );
+    updateCharacter({
+      health: {
+        ...character.health,
+        dramaticInjuries: character.health.dramaticInjuries.filter(injury => injury.id !== id),
+      },
+    });
+  };
 
   return {
     getHighestAttribute,

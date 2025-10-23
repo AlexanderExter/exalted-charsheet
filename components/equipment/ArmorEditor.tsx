@@ -24,7 +24,7 @@ interface ArmorEditorProps {
 export const ArmorEditor: React.FC<ArmorEditorProps> = ({ armor, updateArmor, deleteArmor }) => {
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <div>
           <Label htmlFor={`armor-name-${armor.id}`}>Name</Label>
           <Input
@@ -61,7 +61,7 @@ export const ArmorEditor: React.FC<ArmorEditorProps> = ({ armor, updateArmor, de
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <div>
           <Label htmlFor={`armor-hardness-${armor.id}`}>Hardness</Label>
           <Input

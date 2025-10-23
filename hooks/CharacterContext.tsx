@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
+import React, { createContext, useContext, useState, useMemo } from "react";
 import type { Character, AttributeType, AbilityType } from "@/lib/character-types";
 import { calculateStatTotal } from "@/lib/exalted-utils";
 import {
@@ -37,39 +37,23 @@ export function CharacterProvider({
 
   const calculations = useCharacterCalculations(character);
 
-  const calculateAbilityTotal = useCallback(
-    (abilityKey: AbilityType) => {
-      const ability = character.abilities[abilityKey];
-      const abilityTotal = calculateStatTotal(ability);
-      if (globalAbilityAttribute === "none") return abilityTotal;
-      const attribute = character.attributes[globalAbilityAttribute];
-      return abilityTotal + calculateStatTotal(attribute);
-    },
-    [character, globalAbilityAttribute]
-  );
-
-  const calculateDicePool = useCallback((): DicePoolResult => {
-    return calculations.dicePoolResult;
-  }, [calculations.dicePoolResult]);
-
   const value = useMemo(
     () => ({
       character,
       updateCharacter,
       calculations,
-      calculateAbilityTotal,
-      calculateDicePool,
+      calculateAbilityTotal: (abilityKey: AbilityType) => {
+        const ability = character.abilities[abilityKey];
+        const abilityTotal = calculateStatTotal(ability);
+        if (globalAbilityAttribute === "none") return abilityTotal;
+        const attribute = character.attributes[globalAbilityAttribute];
+        return abilityTotal + calculateStatTotal(attribute);
+      },
+      calculateDicePool: () => calculations.dicePoolResult,
       globalAbilityAttribute,
       setGlobalAbilityAttribute,
     }),
-    [
-      character,
-      updateCharacter,
-      calculations,
-      calculateAbilityTotal,
-      calculateDicePool,
-      globalAbilityAttribute,
-    ]
+    [character, updateCharacter, calculations, globalAbilityAttribute]
   );
 
   return <CharacterContext.Provider value={value}>{children}</CharacterContext.Provider>;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState } from "react";
 import CharacterSelect from "@/components/CharacterSelect";
 import CharacterToolbar from "@/components/CharacterToolbar";
 import CharacterTabs from "@/components/CharacterTabs";
@@ -29,29 +29,20 @@ const ExaltedCharacterManager = () => {
 
   const { isSaving, lastSaved } = useAutoSave(characters);
 
-  const createCharacter = useCallback(
-    (name: string) => {
-      if (!name.trim()) return;
-      addCharacter(name.trim());
-      setShowCharacterSelect(false);
-    },
-    [addCharacter]
-  );
+  const createCharacter = (name: string) => {
+    if (!name.trim()) return;
+    addCharacter(name.trim());
+    setShowCharacterSelect(false);
+  };
 
-  const selectCharacter = useCallback(
-    (id: string) => {
-      setCurrentCharacter(id);
-      setShowCharacterSelect(false);
-    },
-    [setCurrentCharacter]
-  );
+  const selectCharacter = (id: string) => {
+    setCurrentCharacter(id);
+    setShowCharacterSelect(false);
+  };
 
-  const updateCharacter = useCallback(
-    (updates: Partial<Character>) => {
-      updateCurrentCharacter(updates);
-    },
-    [updateCurrentCharacter]
-  );
+  const updateCharacter = (updates: Partial<Character>) => {
+    updateCurrentCharacter(updates);
+  };
 
   const handleExport = async (character: Character) => {
     try {

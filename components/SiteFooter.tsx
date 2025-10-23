@@ -47,7 +47,7 @@ export default function SiteFooter() {
     <>
       <footer className="border-t bg-background mt-8">
         <div className="container mx-auto px-4 py-6 text-center text-sm text-muted-foreground">
-          <div className="grid gap-6 sm:grid-cols-3">
+          <div className="grid gap-6 grid-cols-3">
             <div>
               <h3 className="font-semibold mb-2">Resources</h3>
               <div className="flex justify-center gap-2">
@@ -109,7 +109,7 @@ export default function SiteFooter() {
             </Suspense>
           </div>
           <DialogFooter>
-            <Button onClick={() => setShowAboutModal(false)} className="w-full sm:w-auto">
+            <Button onClick={() => setShowAboutModal(false)} className="w-auto">
               Close
             </Button>
           </DialogFooter>
@@ -127,7 +127,7 @@ export default function SiteFooter() {
             </Suspense>
           </div>
           <DialogFooter>
-            <Button onClick={() => setShowLegalModal(false)} className="w-full sm:w-auto">
+            <Button onClick={() => setShowLegalModal(false)} className="w-auto">
               Close
             </Button>
           </DialogFooter>

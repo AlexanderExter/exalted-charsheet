@@ -21,7 +21,6 @@ import {
 import type { CharacterCalculations } from "@/hooks/useCharacterCalculations";
 import { DramaticInjuriesList } from "@/components/combat/DramaticInjuriesList";
 import { z } from "zod";
-import type { Draft } from "immer";
 
 interface HealthTrackerProps {
   character: Character;
@@ -32,7 +31,7 @@ interface HealthTrackerProps {
   updateDramaticInjury: <K extends keyof DramaticInjury>(
     id: string,
     field: K,
-    value: Draft<DramaticInjury>[K]
+    value: DramaticInjury[K]
   ) => void;
   deleteDramaticInjury: (id: string) => void;
 }
@@ -181,7 +180,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
       <CardContent>
         <div className="space-y-4">
           {/* Health Levels Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             <div>
               <Label className="text-sm font-medium text-foreground/80">Zero Penalty</Label>
               <Input

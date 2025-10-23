@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { DramaticInjury } from "@/lib/character-types";
-import type { Draft } from "immer";
 
 interface DramaticInjuriesListProps {
   injuries: DramaticInjury[];
@@ -14,14 +13,18 @@ interface DramaticInjuriesListProps {
   updateDramaticInjury: <K extends keyof DramaticInjury>(
     id: string,
     field: K,
-    value: Draft<DramaticInjury>[K]
+    value: DramaticInjury[K]
   ) => void;
   deleteDramaticInjury: (id: string) => void;
 }
 
-export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = React.memo(
-  ({ injuries, addDramaticInjury, updateDramaticInjury, deleteDramaticInjury }) => {
-    return (
+export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = ({
+  injuries,
+  addDramaticInjury,
+  updateDramaticInjury,
+  deleteDramaticInjury,
+}) => {
+  return (
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <Label className="text-sm font-medium text-foreground/80">Dramatic Injuries</Label>
@@ -77,7 +80,6 @@ export const DramaticInjuriesList: React.FC<DramaticInjuriesListProps> = React.m
         )}
       </div>
     );
-  }
-);
+};
 
 DramaticInjuriesList.displayName = "DramaticInjuriesList";

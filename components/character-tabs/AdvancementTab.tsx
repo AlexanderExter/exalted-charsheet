@@ -2,7 +2,7 @@
 
 // Advancement Tab Component - Milestones and character progression management
 
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { Plus, Trash2, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,7 +25,7 @@ export const AdvancementTab: React.FC = () => {
   const [showAdvancementLog, setShowAdvancementLog] = useState(false);
 
   // Advancement entry management functions
-  const addAdvancementEntry = useCallback(() => {
+  const addAdvancementEntry = () => {
     const newEntry: AdvancementEntry = {
       id: crypto.randomUUID(),
       item: "",
@@ -37,31 +37,25 @@ export const AdvancementTab: React.FC = () => {
     updateCharacter({
       advancement: [...(character.advancement || []), newEntry],
     });
-  }, [character, updateCharacter]);
+  };
 
-  const updateAdvancementEntry = useCallback(
-    (
-      id: string,
-      field: keyof AdvancementEntry,
-      value: AdvancementEntry[keyof AdvancementEntry]
-    ) => {
-      updateCharacter({
-        advancement: (character.advancement || []).map(entry =>
-          entry.id === id ? { ...entry, [field]: value } : entry
-        ),
-      });
-    },
-    [character, updateCharacter]
-  );
+  const updateAdvancementEntry = (
+    id: string,
+    field: keyof AdvancementEntry,
+    value: AdvancementEntry[keyof AdvancementEntry]
+  ) => {
+    updateCharacter({
+      advancement: (character.advancement || []).map(entry =>
+        entry.id === id ? { ...entry, [field]: value } : entry
+      ),
+    });
+  };
 
-  const deleteAdvancementEntry = useCallback(
-    (id: string) => {
-      updateCharacter({
-        advancement: (character.advancement || []).filter(entry => entry.id !== id),
-      });
-    },
-    [character, updateCharacter]
-  );
+  const deleteAdvancementEntry = (id: string) => {
+    updateCharacter({
+      advancement: (character.advancement || []).filter(entry => entry.id !== id),
+    });
+  };
 
   // Milestone calculation helpers
   const getSpentCount = (status: AdvancementStatus) => {
@@ -85,7 +79,7 @@ export const AdvancementTab: React.FC = () => {
           <CardTitle>Milestone Budget</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             {/* Personal Milestones */}
             <div className="space-y-3">
               <Label className="text-sm font-medium text-info">Personal Milestones</Label>
@@ -283,7 +277,7 @@ export const AdvancementTab: React.FC = () => {
                 onReorder={items => updateCharacter({ advancement: items })}
                 renderItem={entry => (
                   <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
                         <Label htmlFor={`entry-item-${entry.id}`}>Advancement Item</Label>
                         <Input

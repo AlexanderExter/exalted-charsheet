@@ -2,7 +2,7 @@
 
 // Social Tab Component - Virtues, intimacies, and resolve management
 
-import React, { useCallback } from "react";
+import React from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -41,20 +41,17 @@ export const SocialTab: React.FC = () => {
   const resolve = calculations.resolve;
 
   // Virtue management
-  const setVirtue = useCallback(
-    (type: "major" | "minor", virtue: VirtueType) => {
-      updateCharacter({
-        social: {
-          ...character.social,
-          virtues: {
-            ...character.social?.virtues,
-            [type]: virtue,
-          },
+  const setVirtue = (type: "major" | "minor", virtue: VirtueType) => {
+    updateCharacter({
+      social: {
+        ...character.social,
+        virtues: {
+          ...character.social?.virtues,
+          [type]: virtue,
         },
-      });
-    },
-    [character, updateCharacter]
-  );
+      },
+    });
+  };
 
   // Intimacies CRUD
   const intimaciesEntity = useNestedEntityCRUD<Intimacy>(

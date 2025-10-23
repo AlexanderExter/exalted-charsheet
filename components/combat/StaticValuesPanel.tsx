@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { produce } from "immer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -15,9 +14,12 @@ interface StaticValuesPanelProps {
   calculations: CharacterCalculations;
 }
 
-export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
-  ({ character, updateCharacter, calculations }) => {
-    return (
+export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = ({
+  character,
+  updateCharacter,
+  calculations,
+}) => {
+  return (
       <Card>
         <CardHeader>
           <CardTitle>Static Values</CardTitle>
@@ -46,9 +48,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
                         Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                       );
                       updateCharacter({
-                        staticValues: produce(character.staticValues, draft => {
-                          draft.defenseModifier = value;
-                        }),
+                        staticValues: { ...character.staticValues, defenseModifier: value },
                       });
                     }}
                     className="w-12 text-center text-xs"
@@ -78,9 +78,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
                         Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                       );
                       updateCharacter({
-                        staticValues: produce(character.staticValues, draft => {
-                          draft.evasionModifier = value;
-                        }),
+                        staticValues: { ...character.staticValues, evasionModifier: value },
                       });
                     }}
                     className="w-12 text-center text-xs"
@@ -110,9 +108,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
                         Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                       );
                       updateCharacter({
-                        staticValues: produce(character.staticValues, draft => {
-                          draft.parryModifier = value;
-                        }),
+                        staticValues: { ...character.staticValues, parryModifier: value },
                       });
                     }}
                     className="w-12 text-center text-xs"
@@ -146,9 +142,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
                         Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                       );
                       updateCharacter({
-                        staticValues: produce(character.staticValues, draft => {
-                          draft.resolveModifier = value;
-                        }),
+                        staticValues: { ...character.staticValues, resolveModifier: value },
                       });
                     }}
                     className="w-12 text-center text-xs"
@@ -185,9 +179,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
                         Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                       );
                       updateCharacter({
-                        staticValues: produce(character.staticValues, draft => {
-                          draft.soakModifier = value;
-                        }),
+                        staticValues: { ...character.staticValues, soakModifier: value },
                       });
                     }}
                     className="w-12 text-center text-xs"
@@ -224,9 +216,7 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
                         Math.min(DEFAULT_MODIFIER_MAX, Number.parseInt(e.target.value) || 0)
                       );
                       updateCharacter({
-                        staticValues: produce(character.staticValues, draft => {
-                          draft.hardnessModifier = value;
-                        }),
+                        staticValues: { ...character.staticValues, hardnessModifier: value },
                       });
                     }}
                     className="w-12 text-center text-xs"
@@ -240,7 +230,6 @@ export const StaticValuesPanel: React.FC<StaticValuesPanelProps> = React.memo(
         </CardContent>
       </Card>
     );
-  }
-);
+};
 
 StaticValuesPanel.displayName = "StaticValuesPanel";
