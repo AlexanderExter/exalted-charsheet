@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import CharacterSelect from "@/components/CharacterSelect";
 import SideCharacterSelect from "@/components/SideCharacterSelect";
 import SideCharacterEditor from "@/components/SideCharacterEditor";
@@ -20,6 +21,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 const ExaltedCharacterManager = () => {
+  const searchParams = useSearchParams();
+  const characterIdFromUrl = searchParams.get('character');
+
   // Zustand selectors - only subscribe to what we need
   const characters = useCharacterStore(state => state.characters);
   const currentCharacter = useCharacterStore(state => state.currentCharacter);
@@ -32,6 +36,17 @@ const ExaltedCharacterManager = () => {
   const [showCharacterSelect, setShowCharacterSelect] = useState(!currentCharacter);
   const [activeTab, setActiveTab] = useState("core");
   const [selectionView, setSelectionView] = useState<"characters" | "side-characters">("characters");
+
+  // Handle character ID from URL parameter
+  useEffect(() => {
+    if (characterIdFromUrl && characters.length > 0) {
+      const char = characters.find(c => c.id === characterIdFromUrl);
+      if (char) {
+        setCurrentCharacter(characterIdFromUrl);
+        setShowCharacterSelect(false);
+      }
+    }
+  }, [characterIdFromUrl, characters, setCurrentCharacter]);
 
   // Side character state
   const [sideCharacters, setSideCharacters] = useState<SideCharacter[]>([]);
