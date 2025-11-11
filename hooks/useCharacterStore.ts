@@ -103,37 +103,43 @@ useCharacterStore.subscribe(
     // Set saving state immediately
     useCharacterStore.setState({ isSaving: true });
 
-    lastSavePromise = lastSavePromise.then(async () => {
-      const prevChars = prev?.characters ?? [];
-      const prevId = prev?.currentCharacterId;
+    lastSavePromise = lastSavePromise
+      .then(async () => {
+        const prevChars = prev?.characters ?? [];
+        const prevId = prev?.currentCharacterId;
 
-      const prevMap = new Map(prevChars.map(c => [c.id, c]));
-      const currMap = new Map(characters.map(c => [c.id, c]));
+        const prevMap = new Map(prevChars.map(c => [c.id, c]));
+        const currMap = new Map(characters.map(c => [c.id, c]));
 
-      const operations: Promise<void>[] = [];
+        const operations: Promise<void>[] = [];
 
-      for (const char of characters) {
-        const prevChar = prevMap.get(char.id);
-        if (!prevChar || !isEqual(prevChar, char)) {
-          operations.push(saveCharacterToDB(char));
+        for (const char of characters) {
+          const prevChar = prevMap.get(char.id);
+          if (!prevChar || !isEqual(prevChar, char)) {
+            operations.push(saveCharacterToDB(char));
+          }
         }
-      }
 
-      for (const prevChar of prevChars) {
-        if (!currMap.has(prevChar.id)) {
-          operations.push(deleteCharacterFromDB(prevChar.id));
+        for (const prevChar of prevChars) {
+          if (!currMap.has(prevChar.id)) {
+            operations.push(deleteCharacterFromDB(prevChar.id));
+          }
         }
-      }
 
-      if (currentCharacterId !== prevId) {
-        operations.push(setCurrentCharacterIdInDB(currentCharacterId));
-      }
+        if (currentCharacterId !== prevId) {
+          operations.push(setCurrentCharacterIdInDB(currentCharacterId));
+        }
 
-      await Promise.all(operations);
+        await Promise.all(operations);
 
-      // Update save state after completion
-      useCharacterStore.setState({ isSaving: false, lastSaved: new Date() });
-    });
+        // Update save state after completion
+        useCharacterStore.setState({ isSaving: false, lastSaved: new Date() });
+      })
+      .catch(error => {
+        // Always reset saving state on error
+        console.error("Error saving character data:", error);
+        useCharacterStore.setState({ isSaving: false });
+      });
   }
 );
 
