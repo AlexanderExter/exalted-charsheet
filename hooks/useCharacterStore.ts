@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
+import { shallow } from "zustand/shallow";
 import isEqual from "fast-deep-equal";
 import { createNewCharacter } from "@/lib/character-defaults";
 import { CharacterSchema, type Character } from "@/lib/character-types";
@@ -140,7 +141,8 @@ useCharacterStore.subscribe(
         console.error("Error saving character data:", error);
         useCharacterStore.setState({ isSaving: false });
       });
-  }
+  },
+  { equalityFn: shallow }
 );
 
 export const waitForCharacterStoreSave = () => lastSavePromise;
