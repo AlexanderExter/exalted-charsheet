@@ -77,7 +77,7 @@ const ExaltedCharacterManager = () => {
         setCurrentSideCharacter(sideChar);
         setShowSideCharacterSelect(false);
         setSelectionView("side-characters");
-        setShowCharacterSelect(true); // Keep character select screen hidden
+        setShowCharacterSelect(false); // Hide character select to show side character editor
       }
     }
   }, [sideCharacterIdFromUrl, sideCharacters]);
