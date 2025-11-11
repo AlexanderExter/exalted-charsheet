@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Plus, Trash2, Users, Search } from "lucide-react";
+import { Plus, Trash2, Users, Search, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -97,6 +97,16 @@ export const SideCharacterSelect: React.FC<SideCharacterSelectProps> = ({
                     </div>
                   </div>
                   <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={e => {
+                        e.stopPropagation();
+                        window.open(`/?sideCharacter=${sideCharacter.id}`, '_blank', 'noopener,noreferrer');
+                      }}
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </Button>
                     <Button
                       variant="destructive"
                       size="sm"

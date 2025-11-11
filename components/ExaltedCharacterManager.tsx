@@ -23,6 +23,7 @@ import { toast } from "sonner";
 const ExaltedCharacterManager = () => {
   const searchParams = useSearchParams();
   const characterIdFromUrl = searchParams.get('character');
+  const sideCharacterIdFromUrl = searchParams.get('sideCharacter');
 
   // Zustand selectors - only subscribe to what we need
   const characters = useCharacterStore(state => state.characters);
@@ -44,6 +45,7 @@ const ExaltedCharacterManager = () => {
       if (char) {
         setCurrentCharacter(characterIdFromUrl);
         setShowCharacterSelect(false);
+        setSelectionView("characters");
       }
     }
   }, [characterIdFromUrl, characters, setCurrentCharacter]);
@@ -66,6 +68,19 @@ const ExaltedCharacterManager = () => {
     };
     loadSideChars();
   }, []);
+
+  // Handle side character ID from URL parameter
+  useEffect(() => {
+    if (sideCharacterIdFromUrl && sideCharacters.length > 0) {
+      const sideChar = sideCharacters.find(sc => sc.id === sideCharacterIdFromUrl);
+      if (sideChar) {
+        setCurrentSideCharacter(sideChar);
+        setShowSideCharacterSelect(false);
+        setSelectionView("side-characters");
+        setShowCharacterSelect(true); // Keep character select screen hidden
+      }
+    }
+  }, [sideCharacterIdFromUrl, sideCharacters]);
 
   const createCharacter = (name: string) => {
     if (!name.trim()) return;
