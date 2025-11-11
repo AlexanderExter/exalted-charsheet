@@ -10,18 +10,9 @@ export const metadata: Metadata = {
   title: "Exalted: Essence Character Manager",
   description:
     "A comprehensive digital character sheet manager for the Exalted: Essence tabletop RPG system",
-  manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "Exalted Manager",
-  },
 };
 
 export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
   themeColor: "#000000",
 };
 

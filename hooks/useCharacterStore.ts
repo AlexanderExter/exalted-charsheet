@@ -17,6 +17,8 @@ interface CharacterState {
   characters: Character[];
   currentCharacterId: string | null;
   currentCharacter: Character | null;
+  isSaving: boolean;
+  lastSaved: Date | null;
   addCharacter: (name: string) => void;
   updateCurrentCharacter: (updates: Partial<Character>) => void;
   deleteCharacter: (id: string) => void;
@@ -29,6 +31,8 @@ export const useCharacterStore = create<CharacterState>()(
     characters: [],
     currentCharacterId: null,
     currentCharacter: null,
+    isSaving: false,
+    lastSaved: null,
     addCharacter: name => {
       const char = createNewCharacter(name);
       set(state => ({
@@ -96,6 +100,9 @@ useCharacterStore.subscribe(
     currentCharacterId: state.currentCharacterId,
   }),
   ({ characters, currentCharacterId }, prev) => {
+    // Set saving state immediately
+    useCharacterStore.setState({ isSaving: true });
+
     lastSavePromise = lastSavePromise.then(async () => {
       const prevChars = prev?.characters ?? [];
       const prevId = prev?.currentCharacterId;
@@ -123,6 +130,9 @@ useCharacterStore.subscribe(
       }
 
       await Promise.all(operations);
+
+      // Update save state after completion
+      useCharacterStore.setState({ isSaving: false, lastSaved: new Date() });
     });
   }
 );

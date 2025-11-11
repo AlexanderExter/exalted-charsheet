@@ -14,13 +14,18 @@ import { useCharacterContext } from "@/hooks/CharacterContext";
 export const CombatTab: React.FC = () => {
   const { character, updateCharacter, calculations } = useCharacterContext();
 
-  const {
-    getHighestAttribute,
-    getTotalHealthLevels,
-    addDramaticInjury,
-    updateDramaticInjury,
-    deleteDramaticInjury,
-  } = useCombat({ character, updateCharacter, calculations });
+  const { addDramaticInjury, updateDramaticInjury, deleteDramaticInjury } = useCombat({
+    character,
+    updateCharacter,
+  });
+
+  // Calculate values directly
+  const highestAttribute = calculations.highestAttribute;
+  const totalHealthLevels =
+    calculations.healthLevels.zero +
+    calculations.healthLevels.minusOne +
+    calculations.healthLevels.minusTwo +
+    calculations.healthLevels.incap;
 
   return (
     <div className="space-y-6">
@@ -32,7 +37,7 @@ export const CombatTab: React.FC = () => {
       <CombatRolls
         character={character}
         updateCharacter={updateCharacter}
-        getHighestAttribute={getHighestAttribute}
+        highestAttribute={highestAttribute}
       />
 
       <StaticValuesPanel
@@ -45,7 +50,7 @@ export const CombatTab: React.FC = () => {
         character={character}
         updateCharacter={updateCharacter}
         calculations={calculations}
-        getTotalHealthLevels={getTotalHealthLevels}
+        totalHealthLevels={totalHealthLevels}
         addDramaticInjury={addDramaticInjury}
         updateDramaticInjury={updateDramaticInjury}
         deleteDramaticInjury={deleteDramaticInjury}

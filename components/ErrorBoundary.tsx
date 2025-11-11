@@ -4,11 +4,14 @@ import React, { Component, type ReactNode } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, AlertTriangle } from "lucide-react";
-import { logError } from "@/lib/logger";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
   fallback?: ReactNode;
+  /** Compact mode for inline errors (e.g., tabs). Displays error in a card instead of full page. */
+  compact?: boolean;
+  /** Title to display in compact mode (e.g., "Core Stats Tab") */
+  title?: string;
 }
 
 interface ErrorBoundaryState {
@@ -34,7 +37,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     });
 
     // Log error in development environment
-    logError("Error Boundary caught an error:", error, errorInfo);
+    const context = this.props.compact && this.props.title ? ` in ${this.props.title}` : "";
+    console.error(`Error Boundary caught an error${context}:`, error, errorInfo);
   }
 
   handleRetry = () => {
@@ -51,6 +55,38 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         return this.props.fallback;
       }
 
+      // Compact mode for inline errors (tabs, etc.)
+      if (this.props.compact) {
+        return (
+          <Card className="border-destructive/30 bg-destructive/10">
+            <CardHeader>
+              <CardTitle className="text-destructive">
+                {this.props.title ? `Error in ${this.props.title}` : "Error"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-foreground/80">
+                Something went wrong while rendering this component. The error has been logged.
+              </p>
+              {this.state.error && (
+                <div className="bg-white p-3 rounded border border-destructive/20">
+                  <p className="text-xs font-mono text-destructive">{this.state.error.message}</p>
+                </div>
+              )}
+              <Button
+                onClick={this.handleRetry}
+                variant="outline"
+                size="sm"
+                className="border-destructive/30 text-destructive hover:bg-destructive/10"
+              >
+                Try Again
+              </Button>
+            </CardContent>
+          </Card>
+        );
+      }
+
+      // Full-page error display
       return (
         <div className="min-h-screen flex items-center justify-center bg-background p-4">
           <Card className="w-full max-w-md">
@@ -106,9 +142,15 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 }
 
 // Functional component wrapper for easier use
-export const ErrorBoundaryWrapper: React.FC<{ children: ReactNode; fallback?: ReactNode }> = ({
-  children,
-  fallback,
-}) => {
-  return <ErrorBoundary fallback={fallback}>{children}</ErrorBoundary>;
+export const ErrorBoundaryWrapper: React.FC<{
+  children: ReactNode;
+  fallback?: ReactNode;
+  compact?: boolean;
+  title?: string;
+}> = ({ children, fallback, compact, title }) => {
+  return (
+    <ErrorBoundary fallback={fallback} compact={compact} title={title}>
+      {children}
+    </ErrorBoundary>
+  );
 };

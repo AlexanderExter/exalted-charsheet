@@ -54,22 +54,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-This is a Next.js 16 application using the App Router pattern with Turbopack for an Exalted: Essence character sheet manager.
+This is a Next.js 16 application using the App Router pattern with Turbopack for an Exalted: Essence character sheet manager. **This is a desktop-focused application** optimized for larger screens and keyboard/mouse interaction.
 
 ### Core Architecture Patterns
 
-**State Management**: Uses Zustand with persistence middleware for character data storage in localStorage (`hooks/useCharacterStore.ts`)
+**State Management**: Uses Zustand for in-memory state management with automatic persistence to IndexedDB via Dexie (`hooks/useCharacterStore.ts`, `lib/db.ts`). Changes to character data trigger immediate background saves with change detection via deep equality checks.
 
 **Component Structure**:
 
 - `ExaltedCharacterManager` - Main application component handling character selection and management
 - `CharacterProvider` - Context provider wrapping character editing functionality
 - Tabbed interface with 7 main sections: Core Stats, Combat, Equipment, Powers, Social, Advancement, Rulings
+- `ErrorBoundary` - Unified error boundary supporting both full-page and compact (tab-level) error displays
 
 **Data Flow**:
 
-- Character data stored in Zustand store with localStorage persistence
-- Auto-save functionality via `useAutoSave` hook
+- Character data stored in Zustand store with automatic IndexedDB synchronization
+- Auto-save functionality built into the Zustand store subscription (immediate saves on any change)
+- Save status (`isSaving`, `lastSaved`) tracked in the store for UI feedback
 - Import/Export system for JSON character data
 - Real-time calculations for derived stats (defense, soak, health, etc.)
 

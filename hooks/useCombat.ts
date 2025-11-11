@@ -7,21 +7,7 @@ interface UseCombatProps {
   calculations: CharacterCalculations;
 }
 
-export function useCombat({ character, updateCharacter, calculations }: UseCombatProps) {
-  const getHighestAttribute = () => {
-    if (!character?.attributes) return 0;
-    return calculations.highestAttribute;
-  };
-
-  const getTotalHealthLevels = () => {
-    return (
-      calculations.healthLevels.zero +
-      calculations.healthLevels.minusOne +
-      calculations.healthLevels.minusTwo +
-      calculations.healthLevels.incap
-    );
-  };
-
+export function useCombat({ character, updateCharacter }: Omit<UseCombatProps, "calculations">) {
   const addDramaticInjury = () => {
     if (!character) return;
 
@@ -68,8 +54,6 @@ export function useCombat({ character, updateCharacter, calculations }: UseComba
   };
 
   return {
-    getHighestAttribute,
-    getTotalHealthLevels,
     addDramaticInjury,
     updateDramaticInjury,
     deleteDramaticInjury,
