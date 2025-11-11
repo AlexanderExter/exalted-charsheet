@@ -158,8 +158,24 @@ const ExaltedCharacterManager = () => {
     toast.success("Side character deleted");
   };
 
-  // Show selection screens
-  if (showCharacterSelect || !currentCharacter) {
+  // Show side character editor
+  if (selectionView === "side-characters" && currentSideCharacter && !showSideCharacterSelect) {
+    return (
+      <div className="max-w-5xl mx-auto p-6">
+        <SideCharacterEditor
+          sideCharacter={currentSideCharacter}
+          onUpdate={updateSideCharacter}
+          onBack={() => {
+            setCurrentSideCharacter(null);
+            setShowSideCharacterSelect(true);
+          }}
+        />
+      </div>
+    );
+  }
+
+  // Show selection screens - but not if we're viewing a side character
+  if ((showCharacterSelect || !currentCharacter) && !(selectionView === "side-characters" && currentSideCharacter)) {
     return (
       <div className="max-w-5xl mx-auto p-6">
         <Tabs value={selectionView} onValueChange={(v: any) => setSelectionView(v)}>
@@ -199,20 +215,10 @@ const ExaltedCharacterManager = () => {
     );
   }
 
-  // Show side character editor
-  if (selectionView === "side-characters" && currentSideCharacter && !showSideCharacterSelect) {
-    return (
-      <div className="max-w-5xl mx-auto p-6">
-        <SideCharacterEditor
-          sideCharacter={currentSideCharacter}
-          onUpdate={updateSideCharacter}
-          onBack={() => {
-            setCurrentSideCharacter(null);
-            setShowSideCharacterSelect(true);
-          }}
-        />
-      </div>
-    );
+  // Show regular character editor - should only reach here if we have a currentCharacter
+  if (!currentCharacter) {
+    // Fallback - shouldn't normally reach here, but handle it gracefully
+    return null;
   }
 
   return (
