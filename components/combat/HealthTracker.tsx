@@ -26,7 +26,7 @@ interface HealthTrackerProps {
   character: Character;
   updateCharacter: (updates: Partial<Character>) => void;
   calculations: CharacterCalculations;
-  getTotalHealthLevels: () => number;
+  totalHealthLevels: number;
   addDramaticInjury: () => void;
   updateDramaticInjury: <K extends keyof DramaticInjury>(
     id: string,
@@ -40,7 +40,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
   character,
   updateCharacter,
   calculations,
-  getTotalHealthLevels,
+  totalHealthLevels,
   addDramaticInjury,
   updateDramaticInjury,
   deleteDramaticInjury,
@@ -121,7 +121,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const val = e.target.value;
       setValues(prev => ({ ...prev, [field]: val }));
-      const total = getTotalHealthLevels();
+      const total = totalHealthLevels;
       const otherDamage =
         field === "bashingDamage"
           ? (character?.health?.lethalDamage || 0) + (character?.health?.aggravatedDamage || 0)
@@ -310,7 +310,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 min={0}
                 max={Math.max(
                   0,
-                  getTotalHealthLevels() -
+                  totalHealthLevels -
                     ((character?.health?.lethalDamage || 0) +
                       (character?.health?.aggravatedDamage || 0))
                 )}
@@ -330,7 +330,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 min={0}
                 max={Math.max(
                   0,
-                  getTotalHealthLevels() -
+                  totalHealthLevels -
                     ((character?.health?.bashingDamage || 0) +
                       (character?.health?.aggravatedDamage || 0))
                 )}
@@ -350,7 +350,7 @@ export const HealthTracker: React.FC<HealthTrackerProps> = ({
                 min={0}
                 max={Math.max(
                   0,
-                  getTotalHealthLevels() -
+                  totalHealthLevels -
                     ((character?.health?.bashingDamage || 0) +
                       (character?.health?.lethalDamage || 0))
                 )}

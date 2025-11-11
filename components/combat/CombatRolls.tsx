@@ -12,13 +12,13 @@ import { DEFAULT_MODIFIER_MAX, DEFAULT_MODIFIER_MIN } from "@/lib/character-defa
 interface CombatRollsProps {
   character: Character;
   updateCharacter: (updates: Partial<Character>) => void;
-  getHighestAttribute: () => number;
+  highestAttribute: number;
 }
 
 export const CombatRolls: React.FC<CombatRollsProps> = ({
   character,
   updateCharacter,
-  getHighestAttribute,
+  highestAttribute,
 }) => {
   return (
     <Card>
@@ -79,7 +79,7 @@ export const CombatRolls: React.FC<CombatRollsProps> = ({
               <div className="text-center p-2 bg-info/20 rounded">
                 <div className="text-lg font-bold text-info">
                   Roll{" "}
-                  {getHighestAttribute() +
+                  {highestAttribute +
                     Math.max(
                       calculateStatTotal(
                         character?.abilities?.closeCombat || { base: 0, added: 0, bonus: 0 }

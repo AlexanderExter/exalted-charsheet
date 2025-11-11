@@ -11,7 +11,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { logError } from "@/lib/logger";
 
 // Dynamic import - only loads when modals are opened
 const ReactMarkdown = lazy(() => import("react-markdown"));
@@ -33,7 +32,7 @@ export default function SiteFooter() {
         const legalText = await legalResponse.text();
         setLegalContent(legalText);
       } catch (error) {
-        logError(error);
+        console.error(error);
         toast.error("Failed to load footer content.");
         setAboutContent("# About\n\nInformation about this application could not be loaded.");
         setLegalContent("# Legal\n\nLegal information could not be loaded.");

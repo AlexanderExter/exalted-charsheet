@@ -1,7 +1,6 @@
 import { CharacterSchema, type Character } from "@/lib/character-types";
 import { db, getAllCharacters } from "@/lib/db";
 import { waitForCharacterStoreSave } from "@/hooks/useCharacterStore";
-import { logError } from "@/lib/logger";
 
 /**
  * Triggers a browser download for a Blob with the specified filename
@@ -43,7 +42,7 @@ export async function importCharacters(file: File): Promise<Character[]> {
   try {
     importedData = JSON.parse(text);
   } catch (err) {
-    logError("Failed to parse character data:", err);
+    console.error("Failed to parse character data:", err);
     throw new Error("Unable to parse character data");
   }
   const parsed = Array.isArray(importedData)

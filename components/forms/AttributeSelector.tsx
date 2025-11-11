@@ -6,7 +6,9 @@ import { FormField, FormItem, FormLabel, FormMessage, FormControl } from "@/comp
 import { useFormContext } from "react-hook-form";
 import { calculateStatTotal } from "@/lib/exalted-utils";
 import { useCharacterContext } from "@/hooks/CharacterContext";
-import type { DicePoolFormValues } from "@/lib/form-schemas";
+import type { DicePool } from "@/lib/character-types";
+
+type DicePoolFormValues = DicePool;
 
 const attributes = [
   {

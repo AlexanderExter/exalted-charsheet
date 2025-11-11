@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { DEFAULT_MODIFIER_MAX } from "@/lib/character-defaults";
 import { useFormContext } from "react-hook-form";
-import type { DicePoolFormValues } from "@/lib/form-schemas";
+import type { DicePool } from "@/lib/character-types";
+
+type DicePoolFormValues = DicePool;
 
 export const ModifierInputs: React.FC = () => {
   const { control } = useFormContext<DicePoolFormValues>();

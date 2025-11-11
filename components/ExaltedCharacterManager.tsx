@@ -5,12 +5,10 @@ import CharacterSelect from "@/components/CharacterSelect";
 import CharacterToolbar from "@/components/CharacterToolbar";
 import CharacterTabs from "@/components/CharacterTabs";
 import { CharacterProvider } from "@/hooks/CharacterContext";
-import { useAutoSave } from "@/hooks/useAutoSave";
 import { useCharacterStore } from "@/hooks/useCharacterStore";
 import type { Character } from "@/lib/character-types";
 import { importCharacters, exportCharacter } from "@/lib/character-storage";
 import { toast } from "sonner";
-import { logError } from "@/lib/logger";
 
 const ExaltedCharacterManager = () => {
   // Zustand selectors - only subscribe to what we need
@@ -25,9 +23,10 @@ const ExaltedCharacterManager = () => {
   const [showCharacterSelect, setShowCharacterSelect] = useState(!currentCharacter);
   const [activeTab, setActiveTab] = useState("core");
 
-  const fileInputRef = useRef<HTMLInputElement>(null!);
+  const isSaving = useCharacterStore(state => state.isSaving);
+  const lastSaved = useCharacterStore(state => state.lastSaved);
 
-  const { isSaving, lastSaved } = useAutoSave(characters);
+  const fileInputRef = useRef<HTMLInputElement>(null!);
 
   const createCharacter = (name: string) => {
     if (!name.trim()) return;
@@ -48,7 +47,7 @@ const ExaltedCharacterManager = () => {
     try {
       await exportCharacter(character);
     } catch (err) {
-      logError(err);
+      console.error(err);
       toast.error("Failed to export character. Please try again.");
     }
   };
@@ -62,7 +61,7 @@ const ExaltedCharacterManager = () => {
       }
       toast.success(`Successfully imported ${imported.length} character(s)`);
     } catch (err) {
-      logError(err);
+      console.error(err);
       toast.error(
         "Failed to import character(s). Please ensure the file is a valid character export."
       );
