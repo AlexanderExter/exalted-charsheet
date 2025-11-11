@@ -5,7 +5,6 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
@@ -185,28 +184,18 @@ export function StatTable<T extends string>({
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [globalFilter, setGlobalFilter] = React.useState("");
 
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, globalFilter },
+    state: { sorting },
     onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: "includesString",
   });
 
   return (
     <div className={wrapperClass}>
-      <Input
-        placeholder="Filter stats..."
-        value={globalFilter}
-        onChange={e => setGlobalFilter(e.target.value)}
-        className="mb-2"
-      />
       <table className="w-full">
         <thead className={theadClass}>
           {table.getHeaderGroups().map(headerGroup => (

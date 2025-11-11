@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
@@ -60,7 +58,7 @@ export default function SiteFooter() {
                   </a>
                 </Button>
                 <Button asChild size="sm">
-                  <a href="https://discord.gg/exalted" target="_blank" rel="noopener noreferrer">
+                  <a href="javascript:void(0)">
                     Official Discord
                   </a>
                 </Button>
@@ -99,9 +97,6 @@ export default function SiteFooter() {
 
       <Dialog open={showAboutModal} onOpenChange={setShowAboutModal}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>About</DialogTitle>
-          </DialogHeader>
           <div className="prose prose-sm max-w-none text-foreground">
             <Suspense fallback={<div className="text-center py-8 text-muted-foreground">Loading...</div>}>
               <ReactMarkdown>{aboutContent}</ReactMarkdown>
@@ -117,9 +112,6 @@ export default function SiteFooter() {
 
       <Dialog open={showLegalModal} onOpenChange={setShowLegalModal}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Legal Information</DialogTitle>
-          </DialogHeader>
           <div className="prose prose-sm max-w-none text-foreground">
             <Suspense fallback={<div className="text-center py-8 text-muted-foreground">Loading...</div>}>
               <ReactMarkdown>{legalContent}</ReactMarkdown>

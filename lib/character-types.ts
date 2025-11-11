@@ -176,6 +176,9 @@ export const CombatSchema = z.object({
   power: z.number(),
   joinBattleDiceBonus: z.number(),
   joinBattleSuccessBonus: z.number(),
+  joinBattleAttribute: AttributeTypeSchema.optional(),
+  joinBattleAbility: AbilityTypeSchema.optional(),
+  selectedWeaponId: z.string().optional(),
   decisiveExtraDice: z.number(),
   decisiveExtraSuccess: z.number(),
 });
@@ -280,3 +283,58 @@ export type AnimaLevel = z.infer<typeof AnimaLevelSchema>;
 export type CharacterUpdate = Partial<Character>;
 export type AttributeUpdate = Partial<Attributes>;
 export type AbilityUpdate = Partial<Abilities>;
+
+// Side Character Types
+export const DicePoolTypeSchema = z.enum(["primary", "secondary", "tertiary"]);
+
+export const DicePoolWithActionSchema = z.object({
+  id: z.string(),
+  value: z.number().int().min(0),
+  action: z.string(),
+  type: DicePoolTypeSchema,
+});
+
+export const BattlegroupSchema = z.object({
+  size: z.number().int().min(0),
+  drill: z.number().int().min(0),
+});
+
+export const QualitySchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string(),
+  category: z.enum(["trait", "ability", "limitation"]),
+  dateCreated: z.string(),
+});
+
+export const SideCharacterEssenceSchema = z.object({
+  motes: z.number().int().min(0),
+  commitments: z.number().int().min(0),
+  spent: z.number().int().min(0),
+  rating: z.number().int().min(1),
+});
+
+export const SideCharacterSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  pools: z.array(DicePoolWithActionSchema),
+  essence: SideCharacterEssenceSchema,
+  healthLevels: HealthLevelsSchema,
+  defense: z.number().int().min(0),
+  hardness: z.number().int().min(0),
+  soak: z.number().int().min(0),
+  resolve: z.number().int().min(0),
+  qualities: z.array(QualitySchema),
+  battlegroup: BattlegroupSchema.nullable(),
+  bashingDamage: z.number().int().min(0),
+  lethalDamage: z.number().int().min(0),
+  aggravatedDamage: z.number().int().min(0),
+});
+
+// Inferred types for Side Characters
+export type DicePoolType = z.infer<typeof DicePoolTypeSchema>;
+export type DicePoolWithAction = z.infer<typeof DicePoolWithActionSchema>;
+export type Battlegroup = z.infer<typeof BattlegroupSchema>;
+export type Quality = z.infer<typeof QualitySchema>;
+export type SideCharacterEssence = z.infer<typeof SideCharacterEssenceSchema>;
+export type SideCharacter = z.infer<typeof SideCharacterSchema>;
