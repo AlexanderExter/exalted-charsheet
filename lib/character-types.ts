@@ -324,6 +324,8 @@ export const SideCharacterSchema = z.object({
   hardness: z.number().int().min(0),
   soak: z.number().int().min(0),
   resolve: z.number().int().min(0),
+  weaponNotes: z.string().optional(),
+  armorNotes: z.string().optional(),
   qualities: z.array(QualitySchema),
   battlegroup: BattlegroupSchema.nullable(),
   bashingDamage: z.number().int().min(0),

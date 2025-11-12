@@ -23,6 +23,8 @@ export function createDefaultSideCharacter(name: string): SideCharacter {
     hardness: 0,
     soak: 2,
     resolve: 1,
+    weaponNotes: "",
+    armorNotes: "",
     qualities: [],
     battlegroup: null,
     bashingDamage: 0,
