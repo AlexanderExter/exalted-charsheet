@@ -21,6 +21,7 @@ interface CharacterState {
   isSaving: boolean;
   lastSaved: Date | null;
   addCharacter: (name: string) => void;
+  updateCharacter: (id: string, updates: Partial<Character>) => void;
   updateCurrentCharacter: (updates: Partial<Character>) => void;
   deleteCharacter: (id: string) => void;
   setCurrentCharacter: (id: string) => void;
@@ -42,9 +43,7 @@ export const useCharacterStore = create<CharacterState>()(
         currentCharacter: char,
       }));
     },
-    updateCurrentCharacter: updates => {
-      const id = get().currentCharacterId;
-      if (!id) return;
+    updateCharacter: (id, updates) => {
       set(state => {
         const updatedCharacters = state.characters.map(c =>
           c.id === id ? { ...c, ...updates } : c
@@ -52,9 +51,14 @@ export const useCharacterStore = create<CharacterState>()(
         const updatedChar = updatedCharacters.find(c => c.id === id) ?? null;
         return {
           characters: updatedCharacters,
-          currentCharacter: updatedChar,
+          currentCharacter: state.currentCharacterId === id ? updatedChar : state.currentCharacter,
         };
       });
+    },
+    updateCurrentCharacter: updates => {
+      const id = get().currentCharacterId;
+      if (!id) return;
+      get().updateCharacter(id, updates);
     },
     deleteCharacter: id => {
       set(state => {

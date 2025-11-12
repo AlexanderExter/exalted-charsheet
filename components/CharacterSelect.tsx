@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Plus, Trash2, User, Download, Upload, Search, RefreshCw, Save } from "lucide-react";
+import { Plus, Trash2, User, Download, Upload, Search, RefreshCw, Save, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { exportCharacters } from "@/lib/character-storage";
@@ -162,6 +162,16 @@ export const CharacterSelect: React.FC<CharacterSelectProps> = ({
                         }}
                       >
                         <Download className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={e => {
+                          e.stopPropagation();
+                          window.open(`/?character=${character.id}`, '_blank', 'noopener,noreferrer');
+                        }}
+                      >
+                        <ExternalLink className="w-4 h-4" />
                       </Button>
                       <Button
                         variant="destructive"

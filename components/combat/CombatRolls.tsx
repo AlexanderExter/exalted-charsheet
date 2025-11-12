@@ -5,9 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { Character } from "@/lib/character-types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { Character, AttributeType, AbilityType } from "@/lib/character-types";
 import { calculateStatTotal } from "@/lib/exalted-utils";
 import { DEFAULT_MODIFIER_MAX, DEFAULT_MODIFIER_MIN } from "@/lib/character-defaults";
+import { attributeConfig, abilityConfig } from "@/lib/stat-config";
 
 interface CombatRollsProps {
   character: Character;
@@ -30,11 +38,54 @@ export const CombatRolls: React.FC<CombatRollsProps> = ({
           {/* Join Battle */}
           <div className="space-y-3">
             <h3 className="font-semibold text-foreground/80">Join Battle</h3>
-            <div className="p-3 bg-white rounded border">
-              <div className="text-sm text-muted-foreground mb-3">
-                Best Attribute + Best of Close/Ranged Combat + Modifiers
+            <div className="p-3 bg-white rounded border space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-muted-foreground">Attribute</Label>
+                  <Select
+                    value={character?.combat?.joinBattleAttribute || ""}
+                    onValueChange={(value: AttributeType) => {
+                      updateCharacter({
+                        combat: { ...character.combat, joinBattleAttribute: value },
+                      });
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select attribute" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {attributeConfig.map(attr => (
+                        <SelectItem key={attr.key} value={attr.key}>
+                          {attr.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">Ability</Label>
+                  <Select
+                    value={character?.combat?.joinBattleAbility || ""}
+                    onValueChange={(value: AbilityType) => {
+                      updateCharacter({
+                        combat: { ...character.combat, joinBattleAbility: value },
+                      });
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select ability" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {abilityConfig.map(ability => (
+                        <SelectItem key={ability.key} value={ability.key}>
+                          {ability.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-3 mb-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs text-muted-foreground">Extra Dice</Label>
                   <Input
@@ -76,27 +127,26 @@ export const CombatRolls: React.FC<CombatRollsProps> = ({
                   <div className="text-xs text-muted-foreground/70">±5 cap</div>
                 </div>
               </div>
-              <div className="text-center p-2 bg-info/20 rounded">
-                <div className="text-lg font-bold text-info">
-                  Roll{" "}
-                  {highestAttribute +
-                    Math.max(
-                      calculateStatTotal(
-                        character?.abilities?.closeCombat || { base: 0, added: 0, bonus: 0 }
-                      ),
-                      calculateStatTotal(
-                        character?.abilities?.rangedCombat || { base: 0, added: 0, bonus: 0 }
-                      )
+              {character?.combat?.joinBattleAttribute && character?.combat?.joinBattleAbility && (
+                <div className="text-center p-2 bg-info/20 rounded">
+                  <div className="text-lg font-bold text-info">
+                    Roll{" "}
+                    {calculateStatTotal(
+                      character.attributes[character.combat.joinBattleAttribute]
                     ) +
-                    (character?.combat?.joinBattleDiceBonus || 0)}
-                  {(character?.combat?.joinBattleSuccessBonus || 0) !== 0 &&
-                    `, ${
-                      character?.combat?.joinBattleSuccessBonus > 0 ? "+" : ""
-                    }${character?.combat?.joinBattleSuccessBonus} success in`}
-                  , TN 7 Double 10s
+                      calculateStatTotal(
+                        character.abilities[character.combat.joinBattleAbility]
+                      ) +
+                      (character?.combat?.joinBattleDiceBonus || 0)}
+                    {(character?.combat?.joinBattleSuccessBonus || 0) !== 0 &&
+                      `, ${
+                        character?.combat?.joinBattleSuccessBonus > 0 ? "+" : ""
+                      }${character?.combat?.joinBattleSuccessBonus} success`}
+                    , TN 7 Double 10s
+                  </div>
+                  <div className="text-sm text-info">Join Battle</div>
                 </div>
-                <div className="text-sm text-info">Join Battle</div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -104,7 +154,31 @@ export const CombatRolls: React.FC<CombatRollsProps> = ({
           <div className="space-y-3">
             <h3 className="font-semibold text-foreground/80">Power Tracker</h3>
             <div className="p-3 bg-white rounded border space-y-3">
-              <div className="text-sm text-muted-foreground mb-2">Track power gained from attacks</div>
+              <div className="text-sm text-muted-foreground">Track power gained from attacks</div>
+              {character?.weapons && character.weapons.length > 0 && (
+                <div>
+                  <Label className="text-xs text-muted-foreground">Selected Weapon</Label>
+                  <Select
+                    value={character?.combat?.selectedWeaponId || ""}
+                    onValueChange={(value: string) => {
+                      updateCharacter({
+                        combat: { ...character.combat, selectedWeaponId: value },
+                      });
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select weapon" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {character.weapons.map(weapon => (
+                        <SelectItem key={weapon.id} value={weapon.id}>
+                          {weapon.name} (Acc+{weapon.accuracy}, Dmg+{weapon.damage})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
               <div className="flex items-center justify-center gap-4">
                 <Button
                   onClick={() =>

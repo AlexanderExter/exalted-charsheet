@@ -1,16 +1,30 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import CharacterSelect from "@/components/CharacterSelect";
+import SideCharacterSelect from "@/components/SideCharacterSelect";
+import SideCharacterEditor from "@/components/SideCharacterEditor";
 import CharacterToolbar from "@/components/CharacterToolbar";
 import CharacterTabs from "@/components/CharacterTabs";
 import { CharacterProvider } from "@/hooks/CharacterContext";
 import { useCharacterStore } from "@/hooks/useCharacterStore";
-import type { Character } from "@/lib/character-types";
+import type { Character, SideCharacter } from "@/lib/character-types";
 import { importCharacters, exportCharacter } from "@/lib/character-storage";
+import { createDefaultSideCharacter } from "@/lib/side-character-defaults";
+import {
+  getAllSideCharacters,
+  saveSideCharacter,
+  deleteSideCharacter,
+} from "@/lib/db";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 const ExaltedCharacterManager = () => {
+  const searchParams = useSearchParams();
+  const characterIdFromUrl = searchParams.get('character');
+  const sideCharacterIdFromUrl = searchParams.get('sideCharacter');
+
   // Zustand selectors - only subscribe to what we need
   const characters = useCharacterStore(state => state.characters);
   const currentCharacter = useCharacterStore(state => state.currentCharacter);
@@ -22,11 +36,51 @@ const ExaltedCharacterManager = () => {
 
   const [showCharacterSelect, setShowCharacterSelect] = useState(!currentCharacter);
   const [activeTab, setActiveTab] = useState("core");
+  const [selectionView, setSelectionView] = useState<"characters" | "side-characters">("characters");
+
+  // Handle character ID from URL parameter
+  useEffect(() => {
+    if (characterIdFromUrl && characters.length > 0) {
+      const char = characters.find(c => c.id === characterIdFromUrl);
+      if (char) {
+        setCurrentCharacter(characterIdFromUrl);
+        setShowCharacterSelect(false);
+        setSelectionView("characters");
+      }
+    }
+  }, [characterIdFromUrl, characters, setCurrentCharacter]);
+
+  // Side character state
+  const [sideCharacters, setSideCharacters] = useState<SideCharacter[]>([]);
+  const [currentSideCharacter, setCurrentSideCharacter] = useState<SideCharacter | null>(null);
+  const [showSideCharacterSelect, setShowSideCharacterSelect] = useState(true);
 
   const isSaving = useCharacterStore(state => state.isSaving);
   const lastSaved = useCharacterStore(state => state.lastSaved);
 
   const fileInputRef = useRef<HTMLInputElement>(null!);
+
+  // Load side characters on mount
+  useEffect(() => {
+    const loadSideChars = async () => {
+      const sideChars = await getAllSideCharacters();
+      setSideCharacters(sideChars);
+    };
+    loadSideChars();
+  }, []);
+
+  // Handle side character ID from URL parameter
+  useEffect(() => {
+    if (sideCharacterIdFromUrl && sideCharacters.length > 0) {
+      const sideChar = sideCharacters.find(sc => sc.id === sideCharacterIdFromUrl);
+      if (sideChar) {
+        setCurrentSideCharacter(sideChar);
+        setShowSideCharacterSelect(false);
+        setSelectionView("side-characters");
+        setShowCharacterSelect(false); // Hide character select to show side character editor
+      }
+    }
+  }, [sideCharacterIdFromUrl, sideCharacters]);
 
   const createCharacter = (name: string) => {
     if (!name.trim()) return;
@@ -68,24 +122,103 @@ const ExaltedCharacterManager = () => {
     }
   };
 
-  if (showCharacterSelect || !currentCharacter) {
+  // Side character handlers
+  const createSideCharacter = async (name: string) => {
+    const newSideChar = createDefaultSideCharacter(name);
+    await saveSideCharacter(newSideChar);
+    setSideCharacters([...sideCharacters, newSideChar]);
+    setCurrentSideCharacter(newSideChar);
+    setShowSideCharacterSelect(false);
+    toast.success(`Created side character: ${name}`);
+  };
+
+  const selectSideCharacter = (id: string) => {
+    const sideChar = sideCharacters.find(sc => sc.id === id);
+    if (sideChar) {
+      setCurrentSideCharacter(sideChar);
+      setShowSideCharacterSelect(false);
+    }
+  };
+
+  const updateSideCharacter = async (updates: Partial<SideCharacter>) => {
+    if (!currentSideCharacter) return;
+    const updated = { ...currentSideCharacter, ...updates };
+    await saveSideCharacter(updated);
+    setSideCharacters(sideCharacters.map(sc => (sc.id === updated.id ? updated : sc)));
+    setCurrentSideCharacter(updated);
+  };
+
+  const handleDeleteSideCharacter = async (id: string) => {
+    await deleteSideCharacter(id);
+    setSideCharacters(sideCharacters.filter(sc => sc.id !== id));
+    if (currentSideCharacter?.id === id) {
+      setCurrentSideCharacter(null);
+      setShowSideCharacterSelect(true);
+    }
+    toast.success("Side character deleted");
+  };
+
+  // Show side character editor
+  if (selectionView === "side-characters" && currentSideCharacter && !showSideCharacterSelect) {
     return (
-      <CharacterSelect
-        characters={characters}
-        onCreateCharacter={createCharacter}
-        onSelectCharacter={selectCharacter}
-        onDeleteCharacter={deleteCharacter}
-        onExportCharacter={handleExport}
-        importCharacter={async e => {
-          const file = e.target.files?.[0];
-          if (file) await handleImport(file);
-          e.target.value = "";
-        }}
-        isSaving={isSaving}
-        lastSaved={lastSaved}
-        fileInputRef={fileInputRef}
-      />
+      <div className="max-w-5xl mx-auto p-6">
+        <SideCharacterEditor
+          sideCharacter={currentSideCharacter}
+          onUpdate={updateSideCharacter}
+          onBack={() => {
+            setCurrentSideCharacter(null);
+            setShowSideCharacterSelect(true);
+          }}
+        />
+      </div>
     );
+  }
+
+  // Show selection screens - but not if we're viewing a side character
+  if ((showCharacterSelect || !currentCharacter) && !(selectionView === "side-characters" && currentSideCharacter)) {
+    return (
+      <div className="max-w-5xl mx-auto p-6">
+        <Tabs value={selectionView} onValueChange={(v: any) => setSelectionView(v)}>
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="characters">Characters</TabsTrigger>
+            <TabsTrigger value="side-characters">Side Characters</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="characters">
+            <CharacterSelect
+              characters={characters}
+              onCreateCharacter={createCharacter}
+              onSelectCharacter={selectCharacter}
+              onDeleteCharacter={deleteCharacter}
+              onExportCharacter={handleExport}
+              importCharacter={async e => {
+                const file = e.target.files?.[0];
+                if (file) await handleImport(file);
+                e.target.value = "";
+              }}
+              isSaving={isSaving}
+              lastSaved={lastSaved}
+              fileInputRef={fileInputRef}
+            />
+          </TabsContent>
+
+          <TabsContent value="side-characters">
+            <SideCharacterSelect
+              sideCharacters={sideCharacters}
+              onCreateSideCharacter={createSideCharacter}
+              onSelectSideCharacter={selectSideCharacter}
+              onDeleteSideCharacter={handleDeleteSideCharacter}
+            />
+          </TabsContent>
+        </Tabs>
+      </div>
+    );
+  }
+
+  // Show regular character editor - should only reach here if we have a currentCharacter
+  if (!currentCharacter) {
+    // Fallback - shouldn't normally reach here, but handle it gracefully
+    return null;
   }
 
   return (
