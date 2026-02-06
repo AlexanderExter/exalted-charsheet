@@ -60,8 +60,7 @@ This app implements core **Exalted: Essence** mechanics, including:
 **Current limitations:**
 
 - IndexedDB quota limits (browser-dependent)
-- Basic markdown rendering (headers, paragraphs, lists)
-- Mobile optimization ongoing
+- Some edge cases handled via text fields
 
 ---
 
