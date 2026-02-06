@@ -40,12 +40,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run deps:audit` - Audit dependencies for vulnerabilities
 - `npm run deps:audit:fix` - Fix dependency vulnerabilities
 
-### Utilities
-
-- `npm run postinstall` - Show setup message after install
-- `npm run validate` - Run linting/type check and build
-- `npm run validate:strict` - Run strict checks and build
-
 ### CI/CD
 
 - `npm run ci:build` - Production build for CI
@@ -54,40 +48,53 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-This is a Next.js 16 application using the App Router pattern with Turbopack for an Exalted: Essence character sheet manager. **This is a desktop-focused application** optimized for larger screens and keyboard/mouse interaction.
+This is a Next.js 16 application using the App Router pattern with Turbopack for an Exalted: Essence character sheet manager. **This is a desktop-focused application** optimized for larger screens and keyboard/mouse interaction. Deployed as a static export to Vercel.
 
 ### Core Architecture Patterns
 
-**State Management**: Uses Zustand for in-memory state management with automatic persistence to IndexedDB via Dexie (`hooks/useCharacterStore.ts`, `lib/db.ts`). Changes to character data trigger immediate background saves with change detection via deep equality checks.
+**State Management**: Zustand store (`hooks/useCharacterStore.ts`) for in-memory state with automatic persistence to IndexedDB via Dexie (`lib/db.ts`). All form components read from and write to Zustand directly — there is no form library. Zod schemas in `lib/character-types.ts` define the data model and are used for validation at system boundaries (import, IndexedDB load).
+
+**Derived Calculations**: `hooks/useCharacterCalculations/` contains memoized hooks for combat, health, social, and dice pool calculations. These depend on `[character]` as a single dependency — do not micro-optimize with individual field dependencies (this caused exhaustive-deps bugs previously).
 
 **Component Structure**:
 
 - `ExaltedCharacterManager` - Main application component handling character selection and management
-- `CharacterProvider` - Context provider wrapping character editing functionality
+- `CharacterProvider` - Context provider wrapping character editing functionality and derived calculations
 - Tabbed interface with 7 main sections: Core Stats, Combat, Equipment, Powers, Social, Advancement, Rulings
 - `ErrorBoundary` - Unified error boundary supporting both full-page and compact (tab-level) error displays
 
 **Data Flow**:
 
 - Character data stored in Zustand store with automatic IndexedDB synchronization
-- Auto-save functionality built into the Zustand store subscription (immediate saves on any change)
+- Auto-save via Zustand store subscription with deep equality change detection
 - Save status (`isSaving`, `lastSaved`) tracked in the store for UI feedback
+- Schema validation uses `safeParse` on load to gracefully handle corrupted/outdated data
 - Import/Export system for JSON character data
-- Real-time calculations for derived stats (defense, soak, health, etc.)
 
 ### Key Directories
 
-- `app/` - Next.js App Router pages and layout
+- `app/` - Next.js App Router pages and layout (single route, static export)
 - `components/` - React components organized by feature
   - `character-tabs/` - Individual tab components
   - `combat/` - Combat-related components
   - `equipment/` - Weapon and armor management
-  - `forms/` - Reusable form components
-  - `ui/` - shadcn/ui components
-- `hooks/` - Custom React hooks for state management
+  - `forms/` - Reusable form components (StatTable, DicePoolEditor, etc.)
+  - `common/` - Shared components (GenericList, SortableList)
+  - `ui/` - shadcn/ui components (React 19 style, no forwardRef)
+- `hooks/` - Custom React hooks
+  - `useCharacterStore.ts` - Zustand store with IndexedDB persistence
+  - `useCharacterCalculations/` - Memoized derived stat calculations
+  - `CharacterContext.tsx` - React context provider
+  - `useEntityCRUD.ts` - Generic CRUD operations for nested entities
 - `lib/` - Utility functions, types, and game logic
-  - `character-types.ts` - Complete TypeScript definitions for game mechanics
-  - `exalted-utils/` - Game-specific calculations and utilities
+  - `character-types.ts` - Zod schemas and TypeScript types for game mechanics
+  - `exalted-utils/` - Pure game-specific calculation functions
+  - `db.ts` - Dexie IndexedDB setup
+  - `stat-config.ts` - Attribute/ability configuration data
+
+### Styling
+
+**Tailwind CSS 4** with CSS-first configuration. All theme tokens defined in `@theme inline` block in `app/globals.css`. No `tailwind.config.ts` — Tailwind v4 doesn't need one. Colors use oklch color space. No dark mode (light theme only). Game-specific semantic colors: `fortitude`, `finesse`, `force`, `success`, `warning`, `info`.
 
 ### Data Model
 
@@ -101,6 +108,19 @@ The character data model in `lib/character-types.ts` represents the complete Exa
 - Social mechanics (Virtues, Intimacies, Backgrounds)
 - Advancement tracking with milestone system
 
-### UI Framework
+### Dependencies — Design Decisions
 
-Built with shadcn/ui components based on Radix UI primitives, styled with Tailwind CSS 4. Uses Geist font family and includes toast notifications via Sonner.
+The following dependencies were **intentionally removed** during the architecture audit. Do not re-add them:
+
+- **react-hook-form / @hookform/resolvers**: Removed. All forms use direct Zustand state + Zod validation. One consistent pattern across the app.
+- **react-markdown**: Removed. About/Legal content is inline JSX in SiteFooter. Static content doesn't need a runtime markdown parser.
+- **@tanstack/react-table**: Removed. StatTable and EquipmentTagReference use simple state-managed sorting/filtering. The tables don't need pagination, virtualization, or column resizing.
+- **tailwind.config.ts**: Deleted. Was dead code from incomplete v3→v4 migration (hsl wrapping around oklch values). Tailwind v4 uses `@theme inline` in CSS.
+
+### Code Standards
+
+- **ESLint**: Flat config (ESLint 9) with explicit React 19 version, `@typescript-eslint/no-explicit-any` as warning, `@typescript-eslint/no-unused-vars` with `_` prefix pattern. Config files exempt from `no-console`.
+- **TypeScript**: Strict mode enabled. Prefer specific types over `any`. Use `_` prefix for intentionally unused parameters.
+- **React 19**: No `forwardRef` (ref is a regular prop). No `displayName` needed.
+- **Memoization**: Use `[character]` as the single dependency for calculation hooks. Don't micro-optimize with individual field dependencies — it causes exhaustive-deps bugs and the calculations aren't expensive enough to justify it.
+- **Components.json**: `rsc: false` — this is a client-side app with static export. shadcn components should be generated for client components.
