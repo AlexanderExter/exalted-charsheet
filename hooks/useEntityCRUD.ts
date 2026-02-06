@@ -73,7 +73,7 @@ export function useNestedEntityCRUD<T extends EntityWithId>(
   createDefault: () => T
 ): UseEntityCRUDReturn<T> {
   // Get parent object and nested items array
-  const parent = character[parentKey] as any;
+  const parent = character[parentKey] as Record<string, unknown>;
   const items = (parent?.[nestedKey] as T[] | undefined) ?? [];
 
   const add = () => {

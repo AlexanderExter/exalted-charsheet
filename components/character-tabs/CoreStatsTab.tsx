@@ -18,7 +18,6 @@ export const CoreStatsTab: React.FC = () => {
     character,
     updateCharacter,
     calculateAbilityTotal,
-    calculateDicePool,
     globalAbilityAttribute,
     setGlobalAbilityAttribute,
   } = useCharacterContext();

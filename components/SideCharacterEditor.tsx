@@ -40,7 +40,7 @@ export const SideCharacterEditor: React.FC<SideCharacterEditorProps> = ({
     onUpdate({ pools: [...sideCharacter.pools, newPool] });
   };
 
-  const updatePool = (id: string, field: keyof DicePoolWithAction, value: any) => {
+  const updatePool = (id: string, field: keyof DicePoolWithAction, value: string | number) => {
     onUpdate({
       pools: sideCharacter.pools.map(p => (p.id === id ? { ...p, [field]: value } : p)),
     });
@@ -62,7 +62,7 @@ export const SideCharacterEditor: React.FC<SideCharacterEditorProps> = ({
     onUpdate({ qualities: [...sideCharacter.qualities, newQuality] });
   };
 
-  const updateQuality = (id: string, field: keyof Quality, value: any) => {
+  const updateQuality = (id: string, field: keyof Quality, value: string) => {
     onUpdate({
       qualities: sideCharacter.qualities.map(q => (q.id === id ? { ...q, [field]: value } : q)),
     });

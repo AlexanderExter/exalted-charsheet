@@ -22,5 +22,5 @@ export const useSocialCalculations = (character: Character | null): SocialCalcul
     return {
       resolve,
     };
-  }, [character?.abilities.integrity, character?.staticValues.resolveModifier]);
+  }, [character]);
 };

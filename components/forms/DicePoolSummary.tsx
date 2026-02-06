@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import { useCharacterContext } from "@/hooks/CharacterContext";
 
 export const DicePoolSummary: React.FC = () => {
-  const { character, calculateDicePool } = useCharacterContext();
-  const dicePool = useMemo(() => calculateDicePool(), [calculateDicePool]);
+  const { character, calculations } = useCharacterContext();
+  const dicePool = calculations.dicePoolResult;
 
   return (
     <div className="mt-6 p-4 bg-info/10 rounded-lg">

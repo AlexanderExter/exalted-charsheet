@@ -16,16 +16,18 @@ export interface CombatCalculations {
   hardness: number;
 }
 
+const DEFAULTS: CombatCalculations = {
+  defense: 0,
+  evasion: 0,
+  parry: 0,
+  soak: 1,
+  hardness: 3,
+};
+
 export const useCombatCalculations = (character: Character | null): CombatCalculations => {
   return useMemo(() => {
     if (!character) {
-      return {
-        defense: 0,
-        evasion: 0,
-        parry: 0,
-        soak: 1,
-        hardness: 3,
-      };
+      return DEFAULTS;
     }
 
     const evasion = calculateEvasion(
@@ -54,24 +56,6 @@ export const useCombatCalculations = (character: Character | null): CombatCalcul
       character.staticValues.hardnessModifier
     );
 
-    return {
-      defense,
-      evasion,
-      parry,
-      soak,
-      hardness,
-    };
-  }, [
-    character?.abilities.athletics,
-    character?.abilities.closeCombat,
-    character?.abilities.physique,
-    character?.attributes,
-    character?.armor,
-    character?.essence.rating,
-    character?.staticValues.evasionModifier,
-    character?.staticValues.parryModifier,
-    character?.staticValues.defenseModifier,
-    character?.staticValues.soakModifier,
-    character?.staticValues.hardnessModifier,
-  ]);
+    return { defense, evasion, parry, soak, hardness };
+  }, [character]);
 };

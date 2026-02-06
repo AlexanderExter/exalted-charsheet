@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { type StatBlock } from "@/lib/character-types";
 import type { StatConfig } from "@/lib/stat-config";
