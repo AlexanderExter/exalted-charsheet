@@ -12,13 +12,15 @@ export interface HealthCalculations {
   healthPenalty: number;
 }
 
+const DEFAULTS: HealthCalculations = {
+  healthLevels: { zero: 2, minusOne: 2, minusTwo: 2, incap: 1 },
+  healthPenalty: 0,
+};
+
 export const useHealthCalculations = (character: Character | null): HealthCalculations => {
   return useMemo(() => {
     if (!character) {
-      return {
-        healthLevels: { zero: 2, minusOne: 2, minusTwo: 2, incap: 1 },
-        healthPenalty: 0,
-      };
+      return DEFAULTS;
     }
 
     const healthLevels = calculateHealthLevels(
@@ -34,16 +36,6 @@ export const useHealthCalculations = (character: Character | null): HealthCalcul
       character.health.aggravatedDamage
     );
 
-    return {
-      healthLevels,
-      healthPenalty,
-    };
-  }, [
-    character?.health.baseline,
-    character?.health.oxBodyLevels,
-    character?.health.exaltType,
-    character?.health.bashingDamage,
-    character?.health.lethalDamage,
-    character?.health.aggravatedDamage,
-  ]);
+    return { healthLevels, healthPenalty };
+  }, [character]);
 };

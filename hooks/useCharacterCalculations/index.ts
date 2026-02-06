@@ -4,7 +4,7 @@ export { useHealthCalculations, type HealthCalculations } from "./useHealthCalcu
 export { useSocialCalculations, type SocialCalculations } from "./useSocialCalculations";
 export { useDicePoolCalculation } from "./useDicePoolCalculation";
 
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import type { Character, AttributeType, AbilityType } from "@/lib/character-types";
 import { calculateStatTotal, getHighestAttributeValue } from "@/lib/exalted-utils";
 import { useCombatCalculations, type CombatCalculations } from "./useCombatCalculations";
@@ -17,18 +17,15 @@ export interface CharacterCalculations
   extends CombatCalculations,
     HealthCalculations,
     SocialCalculations {
-  // Attribute/ability helpers
   highestAttribute: number;
   getAttributeTotal: (attributeKey: AttributeType) => number;
   getAbilityTotal: (abilityKey: AbilityType) => number;
-
-  // Dice pool calculation
   dicePoolResult: DicePoolResult;
 }
 
 /**
- * Combined character calculations hook
- * Delegates to domain-specific hooks for better performance
+ * Combined character calculations hook.
+ * Delegates to domain-specific hooks for organization.
  */
 export const useCharacterCalculations = (character: Character | null): CharacterCalculations => {
   const combatCalcs = useCombatCalculations(character);
@@ -36,31 +33,34 @@ export const useCharacterCalculations = (character: Character | null): Character
   const socialCalcs = useSocialCalculations(character);
   const dicePoolResult = useDicePoolCalculation(character);
 
-  // Helper functions
-  const getAttributeTotal = useMemo(
-    () =>
-      (attributeKey: AttributeType): number => {
-        if (!character) return 0;
-        const attribute = character.attributes[attributeKey];
-        return attribute ? calculateStatTotal(attribute) : 0;
-      },
-    [character?.attributes]
+  const getAttributeTotal = useCallback(
+    (attributeKey: AttributeType): number => {
+      if (!character) {
+        return 0;
+      }
+      const attribute = character.attributes[attributeKey];
+      return attribute ? calculateStatTotal(attribute) : 0;
+    },
+    [character]
   );
 
-  const getAbilityTotal = useMemo(
-    () =>
-      (abilityKey: AbilityType): number => {
-        if (!character) return 0;
-        const ability = character.abilities[abilityKey];
-        return ability ? calculateStatTotal(ability) : 0;
-      },
-    [character?.abilities]
+  const getAbilityTotal = useCallback(
+    (abilityKey: AbilityType): number => {
+      if (!character) {
+        return 0;
+      }
+      const ability = character.abilities[abilityKey];
+      return ability ? calculateStatTotal(ability) : 0;
+    },
+    [character]
   );
 
   const highestAttribute = useMemo(() => {
-    if (!character) return 1;
+    if (!character) {
+      return 1;
+    }
     return getHighestAttributeValue(character.attributes);
-  }, [character?.attributes]);
+  }, [character]);
 
   return {
     ...combatCalcs,

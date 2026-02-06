@@ -178,7 +178,7 @@ const ExaltedCharacterManager = () => {
   if ((showCharacterSelect || !currentCharacter) && !(selectionView === "side-characters" && currentSideCharacter)) {
     return (
       <div className="max-w-5xl mx-auto p-6">
-        <Tabs value={selectionView} onValueChange={(v: any) => setSelectionView(v)}>
+        <Tabs value={selectionView} onValueChange={v => setSelectionView(v as "characters" | "side-characters")}>
           <TabsList className="grid w-full grid-cols-2 mb-6">
             <TabsTrigger value="characters">Characters</TabsTrigger>
             <TabsTrigger value="side-characters">Side Characters</TabsTrigger>

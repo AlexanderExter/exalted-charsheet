@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -67,38 +65,6 @@
   --success: oklch(0.6 0.15 145);
   --warning: oklch(0.75 0.15 85);
   --info: oklch(0.6 0.15 250);
-}
-
-.dark {
-  --background: oklch(0.147 0.004 49.25);
-  --foreground: oklch(0.985 0.001 106.423);
-  --card: oklch(0.216 0.006 56.043);
-  --card-foreground: oklch(0.985 0.001 106.423);
-  --popover: oklch(0.216 0.006 56.043);
-  --popover-foreground: oklch(0.985 0.001 106.423);
-  --primary: oklch(0.923 0.003 48.717);
-  --primary-foreground: oklch(0.216 0.006 56.043);
-  --secondary: oklch(0.268 0.007 34.298);
-  --secondary-foreground: oklch(0.985 0.001 106.423);
-  --muted: oklch(0.268 0.007 34.298);
-  --muted-foreground: oklch(0.709 0.01 56.259);
-  --accent: oklch(0.268 0.007 34.298);
-  --accent-foreground: oklch(0.985 0.001 106.423);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0.001 106.423);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.553 0.013 58.071);
-
-  /* Semantic game colors - Exalted Attributes (slightly brighter for dark mode) */
-  --fortitude: oklch(0.7 0.15 145);
-  --finesse: oklch(0.7 0.15 250);
-  --force: oklch(0.7 0.15 25);
-
-  /* Status colors */
-  --success: oklch(0.7 0.15 145);
-  --warning: oklch(0.8 0.15 85);
-  --info: oklch(0.7 0.15 250);
 }
 
 @layer base {

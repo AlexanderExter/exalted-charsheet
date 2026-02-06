@@ -19,8 +19,6 @@ export const CombatTab: React.FC = () => {
     updateCharacter,
   });
 
-  // Calculate values directly
-  const highestAttribute = calculations.highestAttribute;
   const totalHealthLevels =
     calculations.healthLevels.zero +
     calculations.healthLevels.minusOne +
@@ -37,7 +35,6 @@ export const CombatTab: React.FC = () => {
       <CombatRolls
         character={character}
         updateCharacter={updateCharacter}
-        highestAttribute={highestAttribute}
       />
 
       <StaticValuesPanel

@@ -3,16 +3,18 @@ import type { Character, AttributeType, AbilityType } from "@/lib/character-type
 import { calculateStatTotal } from "@/lib/exalted-utils";
 import { calculateDicePool, type DicePoolResult } from "@/lib/exalted-utils/dice";
 
+const DEFAULTS: DicePoolResult = {
+  basePool: 0,
+  extraDice: 0,
+  totalPool: 0,
+  cappedBonusDice: 0,
+  actionPhrase: "Roll 0, TN 7 Double 10s",
+};
+
 export const useDicePoolCalculation = (character: Character | null): DicePoolResult => {
   return useMemo(() => {
     if (!character) {
-      return {
-        basePool: 0,
-        extraDice: 0,
-        totalPool: 0,
-        cappedBonusDice: 0,
-        actionPhrase: "Roll 0, TN 7 Double 10s",
-      };
+      return DEFAULTS;
     }
 
     const getAttributeTotal = (attributeKey: AttributeType): number => {
@@ -39,17 +41,5 @@ export const useDicePoolCalculation = (character: Character | null): DicePoolRes
       character.dicePool.extraSuccessNonBonus,
       character.dicePool.isStunted
     );
-  }, [
-    character?.attributes,
-    character?.abilities,
-    character?.dicePool.attribute,
-    character?.dicePool.ability,
-    character?.dicePool.targetNumber,
-    character?.dicePool.doublesThreshold,
-    character?.dicePool.extraDiceBonus,
-    character?.dicePool.extraDiceNonBonus,
-    character?.dicePool.extraSuccessBonus,
-    character?.dicePool.extraSuccessNonBonus,
-    character?.dicePool.isStunted,
-  ]);
+  }, [character]);
 };

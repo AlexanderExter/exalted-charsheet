@@ -20,13 +20,11 @@ import { attributeConfig, abilityConfig } from "@/lib/stat-config";
 interface CombatRollsProps {
   character: Character;
   updateCharacter: (updates: Partial<Character>) => void;
-  highestAttribute: number;
 }
 
 export const CombatRolls: React.FC<CombatRollsProps> = ({
   character,
   updateCharacter,
-  highestAttribute,
 }) => {
   return (
     <Card>

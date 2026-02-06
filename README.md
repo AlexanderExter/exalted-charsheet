@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/badge/version-0.0.6-orange.svg)](https://github.com/AlexanderExter/exalted-charsheet/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![React](https://img.shields.io/badge/React-19.2.0-blue.svg)](https://react.dev/)
-[![Next.js](https://img.shields.io/badge/Next.js-16.0.0-black.svg)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black.svg)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
 
 > **🎲 A comprehensive digital character sheet manager for the Exalted: Essence tabletop RPG system**
@@ -52,8 +52,7 @@
 
 ### User Experience
 
-- Organized tabbed interface
-- Mobile-responsive design
+- Organized tabbed interface (desktop-focused)
 - Real-time calculations
 - Game-accurate terminology
 - Data validation and error prevention
@@ -64,8 +63,8 @@
 
 **Prerequisites:**
 
-- Node.js 20.9+ (required for Next.js 16)
-- npm 9+ or yarn
+- Node.js 18.18+ / 20.10+ / 22+ (see `engines` in package.json)
+- npm 9+
 
 ---
 
@@ -121,13 +120,13 @@ access, and versioned migrations beyond localStorage limits.
 - **Framework**: Next.js 16 (App Router)
 - **Build**: Turbopack (default bundler)
 - **UI**: shadcn/ui, Radix UI primitives
-- **Forms**: React Hook Form v7 + @hookform/resolvers v5 (Zod)
 - **Drag & Drop**: @dnd-kit v10
-- **Styling**: Tailwind CSS 4 with CSS variables
+- **Styling**: Tailwind CSS 4 (CSS-first config, oklch colors)
 - **Icons**: Lucide React
-- **State**: Zustand v5 with Immer middleware
+- **State**: Zustand v5 with subscribeWithSelector middleware
+- **Validation**: Zod v4 (schema validation at system boundaries)
 - **Storage**: Dexie v4 (IndexedDB wrapper)
-- **Deployment**: Static export (GitHub Pages, Vercel, etc.)
+- **Deployment**: Static export (Vercel)
 
 ---
 
@@ -160,7 +159,6 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 ## 🐛 Known Issues
 
 - Storage limited by browser IndexedDB quotas
-- Basic markdown support only
 - Combat steps are static (not dynamic)
 - Some edge cases handled via text fields
 

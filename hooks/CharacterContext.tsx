@@ -6,14 +6,11 @@ import {
   type CharacterCalculations,
 } from "@/hooks/useCharacterCalculations";
 
-type DicePoolResult = CharacterCalculations["dicePoolResult"];
-
 interface CharacterContextValue {
   character: Character;
   updateCharacter: (updates: Partial<Character>) => void;
   calculations: CharacterCalculations;
   calculateAbilityTotal: (abilityKey: AbilityType) => number;
-  calculateDicePool: () => DicePoolResult;
   globalAbilityAttribute: AttributeType | "none";
   setGlobalAbilityAttribute: (attr: AttributeType | "none") => void;
 }
@@ -45,11 +42,12 @@ export function CharacterProvider({
       calculateAbilityTotal: (abilityKey: AbilityType) => {
         const ability = character.abilities[abilityKey];
         const abilityTotal = calculateStatTotal(ability);
-        if (globalAbilityAttribute === "none") return abilityTotal;
+        if (globalAbilityAttribute === "none") {
+          return abilityTotal;
+        }
         const attribute = character.attributes[globalAbilityAttribute];
         return abilityTotal + calculateStatTotal(attribute);
       },
-      calculateDicePool: () => calculations.dicePoolResult,
       globalAbilityAttribute,
       setGlobalAbilityAttribute,
     }),

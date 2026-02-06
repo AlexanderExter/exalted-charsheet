@@ -1,14 +1,6 @@
 "use client";
 
-import React from "react";
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-} from "@tanstack/react-table";
+import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { type StatBlock } from "@/lib/character-types";
 import type { StatConfig } from "@/lib/stat-config";
@@ -23,6 +15,9 @@ interface StatTableProps<T extends string> {
   scrollable?: boolean;
 }
 
+type SortKey = "label" | "base" | "added" | "bonus" | "total";
+type SortDir = "asc" | "desc";
+
 export function StatTable<T extends string>({
   config,
   stats,
@@ -35,197 +30,155 @@ export function StatTable<T extends string>({
   const wrapperClass = scrollable ? "max-h-96 overflow-y-auto" : "overflow-x-auto";
   const theadClass = scrollable ? "sticky top-0 bg-muted" : "bg-muted";
 
-  interface StatRow {
-    key: T;
-    label: string;
-    colorClass: string;
-    stat: StatBlock;
-  }
+  const [sortKey, setSortKey] = useState<SortKey | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
 
-  const data = React.useMemo<StatRow[]>(
-    () =>
-      config.map(item => ({
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir(prev => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
+  const rows = useMemo(() => {
+    const mapped = config.map(item => {
+      const stat = stats[item.key] ?? { base: minBase, added: 0, bonus: 0 };
+      return {
         key: item.key,
         label: item.label,
         colorClass: item.colorClass || "text-foreground",
-        stat: stats[item.key] ?? { base: minBase, added: 0, bonus: 0 },
-      })),
-    [config, stats, minBase]
-  );
+        stat,
+        total: getTotal(item.key),
+      };
+    });
 
-  const columns = React.useMemo<ColumnDef<StatRow>[]>(
-    () => [
-      {
-        accessorKey: "label",
-        header: ({ column }) => (
-          <button
-            className="text-left"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Name
-          </button>
-        ),
-        cell: ({ row }) => (
-          <span className={`font-medium text-sm capitalize ${row.original.colorClass}`}>
-            {row.getValue<string>("label")}
-          </span>
-        ),
-      },
-      {
-        id: "base",
-        accessorFn: row => row.stat.base,
-        header: ({ column }) => (
-          <button
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="w-full text-center"
-          >
-            Base
-          </button>
-        ),
-        cell: ({ row }) => {
-          const stat = row.original.stat ?? { base: minBase, added: 0, bonus: 0 };
-          return (
-            <Input
-              type="number"
-              value={stat.base}
-              onChange={e => {
-                const value = Math.max(
-                  minBase,
-                  Math.min(5, Number.parseInt(e.target.value) || minBase)
-                );
-                onChange(row.original.key, { ...stat, base: value });
-              }}
-              className="w-16 text-center text-sm"
-              min={minBase}
-              max={5}
-            />
-          );
-        },
-      },
-      {
-        id: "added",
-        accessorFn: row => row.stat.added,
-        header: ({ column }) => (
-          <button
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="w-full text-center"
-          >
-            Added
-          </button>
-        ),
-        cell: ({ row }) => {
-          const stat = row.original.stat ?? { base: minBase, added: 0, bonus: 0 };
-          const maxAdded = Math.max(0, 5 - stat.base);
-          return (
-            <Input
-              type="number"
-              value={stat.added}
-              onChange={e => {
-                const value = Math.min(maxAdded, Math.max(0, Number.parseInt(e.target.value) || 0));
-                onChange(row.original.key, { ...stat, added: value });
-              }}
-              className="w-16 text-center text-sm"
-              min={0}
-              max={maxAdded}
-            />
-          );
-        },
-      },
-      {
-        id: "bonus",
-        accessorFn: row => row.stat.bonus,
-        header: ({ column }) => (
-          <button
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="w-full text-center"
-          >
-            Bonus
-          </button>
-        ),
-        cell: ({ row }) => {
-          const stat = row.original.stat ?? { base: minBase, added: 0, bonus: 0 };
-          return (
-            <Input
-              type="number"
-              value={stat.bonus}
-              onChange={e => {
-                const value = Math.max(0, Number.parseInt(e.target.value) || 0);
-                onChange(row.original.key, { ...stat, bonus: value });
-              }}
-              className="w-16 text-center text-sm"
-              min={0}
-            />
-          );
-        },
-      },
-      {
-        id: "total",
-        accessorFn: row => getTotal(row.key),
-        header: ({ column }) => (
-          <button
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="w-full text-center"
-          >
-            Total
-          </button>
-        ),
-        cell: ({ row }) => (
-          <span
-            className={`font-bold text-center text-sm ${
-              totalColorClass || row.original.colorClass
-            }`}
-          >
-            {row.getValue<number>("total")}
-          </span>
-        ),
-      },
-    ],
-    [minBase, onChange, getTotal, totalColorClass]
-  );
+    if (!sortKey) {
+      return mapped;
+    }
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+    return [...mapped].sort((a, b) => {
+      let aVal: string | number;
+      let bVal: string | number;
+      switch (sortKey) {
+        case "label":
+          aVal = a.label;
+          bVal = b.label;
+          break;
+        case "base":
+          aVal = a.stat.base;
+          bVal = b.stat.base;
+          break;
+        case "added":
+          aVal = a.stat.added;
+          bVal = b.stat.added;
+          break;
+        case "bonus":
+          aVal = a.stat.bonus;
+          bVal = b.stat.bonus;
+          break;
+        case "total":
+          aVal = a.total;
+          bVal = b.total;
+          break;
+      }
+      const cmp = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+  }, [config, stats, minBase, getTotal, sortKey, sortDir]);
 
-  const table = useReactTable({
-    data,
-    columns,
-    state: { sorting },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-  });
+  const sortIndicator = (key: SortKey) => {
+    if (sortKey !== key) {
+      return null;
+    }
+    return sortDir === "asc" ? " ▲" : " ▼";
+  };
 
   return (
     <div className={wrapperClass}>
       <table className="w-full">
         <thead className={theadClass}>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th key={header.id} className="py-2 px-3 text-sm">
-                  {header.isPlaceholder ? null : (
-                    <div
-                      className={header.column.getCanSort() ? "cursor-pointer select-none" : ""}
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                      {{ asc: " ▲", desc: " ▼" }[header.column.getIsSorted() as string] ?? null}
-                    </div>
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
+          <tr>
+            <th className="py-2 px-3 text-sm">
+              <button className="text-left cursor-pointer select-none" onClick={() => handleSort("label")}>
+                Name{sortIndicator("label")}
+              </button>
+            </th>
+            {(["base", "added", "bonus", "total"] as const).map(col => (
+              <th key={col} className="py-2 px-3 text-sm">
+                <button
+                  className="w-full text-center cursor-pointer select-none"
+                  onClick={() => handleSort(col)}
+                >
+                  {col.charAt(0).toUpperCase() + col.slice(1)}
+                  {sortIndicator(col)}
+                </button>
+              </th>
+            ))}
+          </tr>
         </thead>
         <tbody>
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id} className="border-b border-border">
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id} className="py-2 px-3 text-center text-sm">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          {rows.map(row => {
+            const stat = row.stat;
+            const maxAdded = Math.max(0, 5 - stat.base);
+            return (
+              <tr key={row.key} className="border-b border-border">
+                <td className="py-2 px-3 text-sm">
+                  <span className={`font-medium capitalize ${row.colorClass}`}>{row.label}</span>
                 </td>
-              ))}
-            </tr>
-          ))}
+                <td className="py-2 px-3 text-center text-sm">
+                  <Input
+                    type="number"
+                    value={stat.base}
+                    onChange={e => {
+                      const value = Math.max(
+                        minBase,
+                        Math.min(5, Number.parseInt(e.target.value) || minBase)
+                      );
+                      onChange(row.key, { ...stat, base: value });
+                    }}
+                    className="w-16 text-center text-sm"
+                    min={minBase}
+                    max={5}
+                  />
+                </td>
+                <td className="py-2 px-3 text-center text-sm">
+                  <Input
+                    type="number"
+                    value={stat.added}
+                    onChange={e => {
+                      const value = Math.min(
+                        maxAdded,
+                        Math.max(0, Number.parseInt(e.target.value) || 0)
+                      );
+                      onChange(row.key, { ...stat, added: value });
+                    }}
+                    className="w-16 text-center text-sm"
+                    min={0}
+                    max={maxAdded}
+                  />
+                </td>
+                <td className="py-2 px-3 text-center text-sm">
+                  <Input
+                    type="number"
+                    value={stat.bonus}
+                    onChange={e => {
+                      const value = Math.max(0, Number.parseInt(e.target.value) || 0);
+                      onChange(row.key, { ...stat, bonus: value });
+                    }}
+                    className="w-16 text-center text-sm"
+                    min={0}
+                  />
+                </td>
+                <td className="py-2 px-3 text-center text-sm">
+                  <span className={`font-bold ${totalColorClass || row.colorClass}`}>
+                    {row.total}
+                  </span>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       <div className="mt-2 text-xs text-muted-foreground italic">Base + Added cannot exceed 5</div>

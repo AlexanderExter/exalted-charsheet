@@ -1,6 +1,6 @@
 // Default values and factory functions for Side Characters
 
-import type { SideCharacter, SideCharacterEssence, HealthLevels } from "./character-types";
+import type { SideCharacter } from "./character-types";
 
 export function createDefaultSideCharacter(name: string): SideCharacter {
   return {
