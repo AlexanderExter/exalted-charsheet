@@ -80,17 +80,30 @@ export const useCharacterStore = create<CharacterState>()(
       }));
     },
     loadCharacters: async () => {
-      const [charsFromDB, currentId] = await Promise.all([
-        getAllCharacters(),
-        getCurrentCharacterId(),
-      ]);
-      const parsed = CharacterSchema.array().parse(charsFromDB) as Character[];
-      const currentChar = parsed.find(c => c.id === currentId) ?? parsed[0] ?? null;
-      set({
-        characters: parsed,
-        currentCharacterId: currentChar?.id ?? null,
-        currentCharacter: currentChar,
-      });
+      try {
+        const [charsFromDB, currentId] = await Promise.all([
+          getAllCharacters(),
+          getCurrentCharacterId(),
+        ]);
+        const result = CharacterSchema.array().safeParse(charsFromDB);
+        if (!result.success) {
+          console.error("Stored character data failed validation:", result.error);
+          console.error(
+            "IndexedDB data may be from an incompatible schema version. " +
+            "Clear browser data or export/reimport characters to resolve."
+          );
+          return;
+        }
+        const parsed = result.data as Character[];
+        const currentChar = parsed.find(c => c.id === currentId) ?? parsed[0] ?? null;
+        set({
+          characters: parsed,
+          currentCharacterId: currentChar?.id ?? null,
+          currentCharacter: currentChar,
+        });
+      } catch (error) {
+        console.error("Failed to load characters from IndexedDB:", error);
+      }
     },
   }))
 );
