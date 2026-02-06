@@ -117,6 +117,22 @@ The following dependencies were **intentionally removed** during the architectur
 - **@tanstack/react-table**: Removed. StatTable and EquipmentTagReference use simple state-managed sorting/filtering. The tables don't need pagination, virtualization, or column resizing.
 - **tailwind.config.ts**: Deleted. Was dead code from incomplete v3→v4 migration (hsl wrapping around oklch values). Tailwind v4 uses `@theme inline` in CSS.
 
+### Supporting Files & Scripts
+
+- **`scripts/sync-version.js`**: Syncs the version from `package.json` into badge URLs in `README.md`. Run via `npm run sync:version` or automatically on `npm version`. Only targets README.md (about.md was deleted).
+- **`public/content/rules.md`**: Placeholder "Coming Soon" file linked from SiteHeader. The only remaining file in `public/content/` — `about.md` and `legal.md` were deleted (content moved inline to SiteFooter).
+- **`IMPROVEMENTS.md`**: Deleted. Was entirely obsolete after the architecture audit. Do not recreate.
+- **Dark mode**: Fully removed (CSS variables, `.dark` selectors, `dark:` utility classes). Can rebuild from a clean baseline if needed in the future.
+
+### Deferred Items
+
+These were identified during the audit but intentionally deferred:
+
+- **Testing suite**: Waiting for complete game rules spec from a separate team
+- **Magic number extraction**: Same dependency on spec
+- **Data migration system**: Design when schema stabilizes
+- **Vite migration**: Feasible but low priority while on Vercel/Next.js
+
 ### Code Standards
 
 - **ESLint**: Flat config (ESLint 9) with explicit React 19 version, `@typescript-eslint/no-explicit-any` as warning, `@typescript-eslint/no-unused-vars` with `_` prefix pattern. Config files exempt from `no-console`.
