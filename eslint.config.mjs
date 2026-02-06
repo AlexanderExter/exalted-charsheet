@@ -24,10 +24,13 @@ const eslintConfig = [
   // Base configs
   js.configs.recommended,
   nextPlugin.configs["core-web-vitals"],
-  reactPlugin.configs.flat.recommended,
+  {
+    ...reactPlugin.configs.flat.recommended,
+    settings: { react: { version: "19" } },
+  },
   reactPlugin.configs.flat["jsx-runtime"],
 
-  // Enhanced configuration for all files
+  // All source files: shared settings and rules
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
     plugins: {
@@ -41,40 +44,70 @@ const eslintConfig = [
     },
     settings: {
       react: {
-        version: "detect",
+        version: "19",
       },
     },
     rules: {
       // React Hooks
-      "react-hooks/exhaustive-deps": "warn",
       "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
 
-      // Code Quality
-      "no-unused-vars": "warn",
-      "no-console": "warn", // Allow console in development code when properly guarded
-      "no-debugger": process.env.NODE_ENV === "production" ? "error" : "warn",
+      // Code quality
+      "no-console": ["warn", { allow: ["warn", "error"] }],
+      "no-debugger": "warn",
       "prefer-const": "warn",
       "no-var": "error",
-
-      // Import/Export
       "no-duplicate-imports": "error",
 
-      // Best Practices
-      "eqeqeq": ["warn", "always"],
-      "curly": ["warn", "all"],
+      // Best practices
+      eqeqeq: ["warn", "always"],
+      curly: ["warn", "all"],
       "no-implicit-coercion": "warn",
       "prefer-template": "warn",
 
-      // React specific
-      "react/prop-types": "off", // Using TypeScript instead
+      // React
+      "react/prop-types": "off",
       "react/self-closing-comp": "warn",
       "react/jsx-boolean-value": ["warn", "never"],
+      "react/jsx-no-target-blank": "error",
+      "react/no-array-index-key": "warn",
     },
   },
 
-  // Configuration files (Node.js style)
+  // TypeScript files: parser, plugin, and TS-specific rules
   {
-    files: ["*.config.{js,mjs,ts}", "eslint.config.mjs"],
+    files: ["**/*.{ts,tsx}"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
+    },
+    plugins: {
+      "@typescript-eslint": tsPlugin,
+    },
+    rules: {
+      // Disable base rules that TS handles
+      "no-undef": "off",
+      "no-unused-vars": "off",
+
+      // TypeScript equivalents
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
+      "@typescript-eslint/no-explicit-any": "warn",
+    },
+  },
+
+  // Config and script files: Node.js context
+  {
+    files: ["*.config.{js,mjs,ts}", "eslint.config.mjs", "scripts/**/*.js"],
     languageOptions: {
       sourceType: "module",
       globals: {
@@ -83,19 +116,8 @@ const eslintConfig = [
         __filename: "readonly",
       },
     },
-  },
-
-  // TypeScript specific overrides
-  {
-    files: ["**/*.{ts,tsx}"],
-    languageOptions: {
-      parser: tsParser,
-    },
-    plugins: { "@typescript-eslint": tsPlugin },
     rules: {
-      "no-undef": "off",
-      "no-unused-vars": "off", // Handled by TypeScript compiler
-      "@typescript-eslint/no-unused-vars": "off", // Will be handled by tsc
+      "no-console": "off",
     },
   },
 
